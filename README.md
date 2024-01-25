@@ -32,19 +32,17 @@ GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org
 <a href="https://www.buymeacoffee.com/dadosdelaplace" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
 
-<img width="700" alt="image" src="https://github.com/dadosdelaplace/docencia-R-datascience-2324/assets/26646492/a8ca9f4d-d29e-4601-af10-469c6c840623">
+Este repositorio contiene el **material docente** usados en el aula en la asignatura de **Aprendizaje Supervisado I** en el **Grado de Ciencia de Datos Aplicada** (Facultad de Estudios Estadísticos, Universidad Complutense de Madrid)
 
-Este repositorio contiene el **material docente** usados en el aula en la asignatura de **Software II** en el **Grado de Ciencia de Datos Aplicada** (Facultad de Estudios Estadísticos, Universidad Complutense de Madrid)
+* Diapositivas: <https://javieralvarezliebana.es/docencia-R-supervisado-2324/diapos>
 
-* Diapositivas: <https://javieralvarezliebana.es/docencia-R-datascience-2324/diapos>
+* Código diapositivas: <https://github.com/dadosdelaplace/docencia-R-supervisado-2324>
 
-* Código diapositivas: <https://github.com/dadosdelaplace/docencia-R-datascience-2324>
+* Documentación paquetes: <https://github.com/dadosdelaplace/docencia-R-supervisado-2324/tree/main/fichas%20paquetes>
 
-* Documentación paquetes: <https://github.com/dadosdelaplace/docencia-R-datascience-2324/tree/main/fichas%20paquetes>
+* Entregas: <https://github.com/dadosdelaplace/docencia-R-supervisado-2324/tree/main/entregas>
 
-* Entregas: <https://github.com/dadosdelaplace/docencia-R-datascience-2324/tree/main/entregas>
-
-* Scripts y material extra: <https://github.com/dadosdelaplace/docencia-R-datascience-2324/tree/main/material>
+* Scripts y material extra: <https://github.com/dadosdelaplace/docencia-R-supervisado-2324/tree/main/material>
 
 Los códigos aquí subidos han sido principalmente realizados con los paquetes del entorno [`{tidyverse}`](https://www.tidyverse.org/packages/) y [`{tidymodels}`](https://www.tidymodels.org/), así como [`{rmarkdown}`](https://rmarkdown.rstudio.com/). Para presentaciones se ha usado como guía los recursos de Y. Xie et al. [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/), A. Hill [Meet xaringan: making slides in R Markdown](https://arm.rbind.io/slides/xaringan.html#1), Y. Xie [Presentation Ninja with xaringan](https://slides.yihui.org/xaringan/#1) and G. Aden-Buie [Your Slides are So Extra! Extra-Special Presentations with xaringanExtra](https://slides.garrickadenbuie.com/extra-special-xaringan/?panelset1=enjoy2#1).
 
