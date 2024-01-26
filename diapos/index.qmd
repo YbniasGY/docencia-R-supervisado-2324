@@ -27,6 +27,13 @@ execute:
 
 [**Vamos a juntar las piezas del puzzle para hacer «magia»**]{style="color:#444442;"}
 
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(tidyverse)
+```
+
 ---
 
 ## ¡Buenas!
@@ -638,6 +645,156 @@ Tiene el [**mismo signo que la covarianza**]{.hl-yellow} (el denominador es siem
 ## Repaso: covarianza y correlación
 
 ![](img/correlaciones.jpg)
+
+
+# Clase 2: importancia del dataviz {#clase-2}
+
+[**¿Basta con calcular la correlación para cuantificar si un ajuste es adecuado?**]{style="color:#444442;"}
+
+
+---
+
+## Conjunto anscombe
+
+En el paquete `{datasets}` se encuentra el dataset conocido como [**cuarteto de Anscombe**]{.hl-yellow}, un dataset que cuenta con 4 conjuntos de datos.
+
+```{r}
+anscombe_tb <- as_tibble(datasets::anscombe)
+anscombe_tb
+```
+
+. . .
+
+[**Primera tarea: convierte a tidydata**]{.hl-yellow}
+
+---
+
+## Conjunto anscombe
+
+```{r}
+anscombe_x <- 
+  anscombe_tb |>
+  pivot_longer(cols = x1:x4, names_to = "dataset", values_to = "x") |> 
+  select(-contains("y")) |> 
+  mutate(dataset = str_remove_all(dataset, "x"))
+
+anscombe_y <- 
+  anscombe_tb |>
+  pivot_longer(cols = y1:y4, names_to = "dataset", values_to = "y") |> 
+  select(-contains("x"), -dataset)
+
+anscombe_tidy <-
+  anscombe_x |> mutate("y" = anscombe_y$y)
+anscombe_tidy
+```
+
+---
+
+## Conjunto anscombe
+
+[**¿Qué características muestrales tienen?**]{.hl-yellow} Calcula la media, varianza, desv. típica, covarianza y correlación en cada dataset
+
+. . .
+
+```{r}
+anscombe_tidy |> 
+  summarise(mean_x = mean(x), mean_y = mean(y),
+            var_x = var(x), var_y = var(y),
+            sd_x = sd(x), sd_y = sd(y),
+            cov = cov(x, y), cor = cor(x, y), .by = dataset)
+```
+
+. . .
+
+Si te fijas [**todos los datasets tienen los mismos momentos**]{.hl-yellow} muestrales, incluso tendrían el mismo ajuste de regresión...¿serán el mismo dataset desordenado?
+
+---
+
+## Conjunto anscombe
+
+[**Visualiza los 4 datasets**]{.hl-yellow}
+
+. . .
+
+```{r}
+#| code-fold: true
+ggplot(anscombe_tidy) +
+  geom_point(aes(x = x, y = y, color = dataset), size = 3, alpha = 0.7) +
+  ggthemes::scale_color_colorblind() +
+  facet_wrap(~dataset) + theme_minimal()
+```
+
+---
+
+## Conjunto anscombe
+
+```{r}
+#| echo: false
+ggplot(anscombe_tidy) +
+  geom_point(aes(x = x, y = y, color = dataset), size = 3, alpha = 0.7) +
+  ggthemes::scale_color_colorblind() +
+  facet_wrap(~dataset) + theme_minimal()
+```
+
+
+Por suerte o por desgracia [**no todo son matemáticas**]{.hl-red}: antes de pensar que modelo es mejor para nuestros datos, es importantísimo realizar un [**análisis exploratorio**]{.hl-yellow} de los datos (incluyendo visualización)
+
+---
+
+## Datasaurus
+
+Podemos visualizarlo de manera aún más extrema con el dataset `datasaurus_dozen` del paquete `{datasauRus}` (ver más en <https://www.research.autodesk.com/publications/same-stats-different-graphs/>)
+
+```{r}
+library(datasauRus)
+datasaurus_dozen |>
+  summarise(mean_x = mean(x), mean_y = mean(y),
+            var_x = var(x), var_y = var(y),
+            sd_x = sd(x), sd_y = sd(y),
+            cov = cov(x, y), cor = cor(x, y), .by = dataset)
+```
+
+---
+
+## Datasaurus
+
+```{r}
+#| code-fold: true
+ggplot(datasaurus_dozen |> filter(dataset != "wide_lines"),
+       aes(x = x, y = y, color = dataset)) +
+  geom_point(size = 2.5, alpha = 0.75) +
+  geom_smooth(method = "lm", se = FALSE)  +
+  facet_wrap(~dataset, ncol = 3) +
+  theme_minimal()
+```
+
+# Clase 3: intro al aprendizaje supervisado {#clase-3}
+
+[**Aprendizaje supervisado vs no supervisado. Sesgo vs varianza. Clasificación vs predicción**]{style="color:#444442;"}
+
+
+---
+
+## Correlación lineal: sin agrupar
+
+---
+
+## Correlación lineal: datos agrupados
+
+
+---
+
+## Correlación lineal: en R
+
+---
+
+## Correlación vs dependencia
+
+---
+
+## Dependencia vs causalidad
+
+
 
 # El mundo Github
 
