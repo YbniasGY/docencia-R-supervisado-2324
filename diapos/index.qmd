@@ -159,8 +159,16 @@ Para el curso los únicos requisitos serán:
 5. [**Recomendable**]{.hl-yellow}: saber usar la calculadora en modo estadístico.
 
 
+---
 
-# Clase 1: repaso {#clase-1-repaso}
+## Listado de clases
+
+* [**Clase 1**](#clase-1): repaso de descriptiva
+* [**Clase 2**](#clase-2): importancia de la visualización
+* [**Clase 3**](#clase-3): intro al aprendizaje estadístico. Sesgo vs varianza. Supervisado vs no supervisado. Correlación vs dependencia vs causalidad.
+
+
+# Clase 1: repaso {#clase-1}
 
 [**Objetivo de la predicción lineal. Concepto de linealidad. Repaso de estadística descriptiva**]{style="color:#444442;"}
 
