@@ -776,33 +776,245 @@ ggplot(datasaurus_dozen |> filter(dataset != "wide_lines"),
   theme_minimal()
 ```
 
-# Clase 3: intro al aprendizaje supervisado {#clase-3}
+---
 
-[**Aprendizaje supervisado vs no supervisado. Sesgo vs varianza. Clasificación vs predicción**]{style="color:#444442;"}
+# Clase 3: profundizando en la correlación {#clase-3}
+
+[**Matrices de correlación y covarianza. Correlación vs causalidad vs dependencia**]{style="color:#444442;"}
 
 
 ---
 
 ## Correlación lineal: sin agrupar
 
+
+Como decíamos, la idea detrás de la [**covarianza**]{.hl-yellow} es una "varianza" entre dos variales (la varianza es una covarianza de una variable consigo misma), midiendo el **promedio de lo que se desvía cada una respecto a su media**
+
+$$s_{xy} = \frac{1}{n} \sum_{i=1}^{n} \left(x_i - \overline{x} \right)\left(y_i - \overline{y} \right) = \overline{x*y} - \overline{x}*\overline{y}$$
+
+. . .
+
+Para calcularla en `R` basta con usar la función `cov()`
+
+```{r}
+starwars |> 
+  drop_na(mass, height) |> 
+  summarise(cov(mass, height))
+```
+
+---
+
+## Correlación lineal: sin agrupar
+
+Vamos a practicar una vez más como [**hacerlo a mano con el siguiente ejercicio**]{.hl-yellow}.
+
+---
+
+## Cor lineal: sin agrupar
+
+En la tabla inferior se han recopilado (del 2013 al 2022) la **temperatura media en el mes de abril en Madrid (variable X, en ºC)** y el **número de días (variable Y) en el que el nivel de ozono superó las 0.20 ppm (partes por millón)**
+
+* ¿Cuál fue media de días en los que se superó umbral de ozono de 0.20 ppm?
+* ¿Cuál fue media de días en los que se superó umbral de ozono en los años que la temperatura media en marzo superó los 17.4ºC?
+* ¿Cuál es su covarianza?
+
+![](img/tabla-ej-covarianza-sin-agrupar.png)
+
+---
+
+
+## Correlación lineal: sin agrupar
+
+Repite el ejercicio con pocas líneas de código `R`
+
+* ¿Cuál fue la media de días en los que se superó el umbral de ozono de 0.20 ppm?
+* ¿Cuál fue la media de días en los que se superó el umbral de ozono en los años que la temperatura media en marzo superó los 17.4ºC?
+* ¿Cuál es su covarianza?
+
+![](img/tabla-ej-covarianza-sin-agrupar.png)
+
+
+---
+
+
+## Correlación lineal: sin agrupar
+
+Realiza lo que consideres tanto a mano como en `R`
+
+* ¿Existe alguna **relación de dependencia entre las variables**? ¿De qué tipo? ¿Cómo de fuerte o débil es dicha relación? ¿En qué dirección es dicha relación?
+
+
+$$s_{xy} = \frac{1}{n} \sum_{i=1}^{n} \left(x_i - \overline{x} \right)\left(y_i - \overline{y} \right) = \overline{x*y} - \overline{x}*\overline{y}$$
+
+$$r_{xy} = \rho_{xy} = \frac{s_{xy}}{s_x s_y}$$
+
+---
+
+## Correlación lineal: sin agrupar
+
+No sé si te has fijado qué sucede cuando intentamos [**calcular la covarianza/correlación de varias variables**]{.hl-yellow}, por ejemplo vamos a calcular la (cuasi)covarianza de todas las variables numéricas de starwars.
+
+. . .
+
+```{r}
+starwars |> 
+  select(where(is.numeric)) |> 
+  drop_na() |>
+  cov()
+```
+
+. . .
+
+Podemos usar la función `cov()` sin más, fuera de un resumen, obteniendo lo que se conoce como [**matriz de (cuasi)covarianzas**]{.hl-yellow} y que tendrá un papel fundamental en estadística ya que contiene la información (= varianza) del dataset.
+
+---
+
+## Matriz de covarianzas
+
+
+```{r}
+starwars |> 
+  select(where(is.numeric)) |> 
+  drop_na() |>
+  cov()
+```
+
+Además de ser [**simétrica**]{.hl-yellow}...¿qué tenemos en la [**diagonal**]{.hl-yellow}?
+
+. . .
+
+La [**matriz de (cuasi)covarianzas**]{.hl-yellow} se denota como $\Sigma$ y sus elementos se define como $\Sigma_{ii} = s_{x_i}^{2}$ para la diagonal y $\Sigma_{ij} = \Sigma_{ji} = s_{x_i x_j}$ fuera de ella.
+
+. . .
+
+::: callout-important
+## Importante
+
+Recuerda que los softwares estadísticos nos devuelven siempre la [**cuasi covarianza**]{.hl-purple}, dividido entre $n-1$ y no entre $n$. La cuasivarianza y la cuasicovarianza son los [**mejores estimadores muestrales (insesgados)**]{.hl-yellow} de los respectivos parámetros poblaciones
+
+:::
+
+---
+
+## Matriz de correlaciones
+
+De la misma manera con `cor()` podemos [**calcular la matriz de correlaciones**]{.hl-yellow} (en este caso sin el `cuasi` ya que se cancelan denominadores)
+
+. . .
+
+```{r}
+starwars |> 
+  select(where(is.numeric)) |> 
+  drop_na() |>
+  cor()
+```
+
+. . .
+
+La [**matriz de correlaciones**]{.hl-yellow} se denota como $R$ y sus elementos se define como $r_{ii} = 1$ para la diagonal y $r_{ij} = r_{x_ix_j}$ fuera de ella, y nos proporciona la dependencia lineal entre variables ya de manera **estandarizada**.
+
+---
+
+## Matriz de correlaciones
+
+[**¿Se te ocurre alguna manera de calcular la matriz de correlaciones a partir de la de covarianzas?**]{.hl-yellow}
+
 ---
 
 ## Correlación lineal: datos agrupados
 
+Imagina ahora que queremos calcular la covarianza/correlación de los siguientes datos que representan 24 tiradas de dados
+
+![](img/dados.png)
+
+¿Cómo calcular la covarianza/correlación agrupando los datos?
 
 ---
 
-## Correlación lineal: en R
+## Correlación lineal: datos agrupados
+
+![](img/tabla-bi-freq.png)
+---
+
+## Correlación lineal: datos agrupados
 
 ---
 
 ## Correlación vs dependencia
+
+
+Podemos tener [**variables incorreladas**]{.hl-red}, con correlación nula, pero que [**exista dependencia entre ellas**]{.hl-green}: la covarianza/correlación [**SOLO CAPTURA relaciones lineales**]{.hl-yellow}, nada más.
+
+. . .
+
+Veamos un ejemplo sencillo con $X = \left\lbrace -1, 0, 1 \right\rbrace$ y $Y = X^2 =  \left\lbrace 1, 0, 1 \right\rbrace$. 
+
+* La media de ambas es nula
+* La media del producto es la media de $XY = \left\lbrace -1, 0, 1 \right\rbrace$, que es de nuevo nula
+* Así la covarianza $\overline{x*y} - \overline{x}*\overline{y}$ es nula a pesar de tener la mayor dependencia posible (dependencia funcional)
+
+---
+
+## Correlación vs dependencia
+
+![](img/covarianza-no-lineal.png)
+
+En relaciones no lineales como la de la imagen, la **correlación estará cercana a cero** (ya que no hay relación lineal) pero existe una [**dependencia**]{.hl-yellow}. Diremos que [**dos variables son dependientes entre sí**]{.hl-yellow} cuando existe un **patrón numérico que las relaciona**
+
+. . .
+
+* [**Independencia implica incorrelación**]{.hl-green}
+* [**Incorrelación NO implica independencia**]{.hl-red}
+
+---
+
+## Correlación vs dependencia
+
+![](img/escenarios-covarianza.png)
+
+---
+
+## Dependencia vs causalidad
+
+![](img/helados-moreno.jpg)
+
+Si $X$ e $Y$ fuesen variables dependientes (lineales o no)...[**¿implicaría que el ascenso/descenso de una provoca el ascenso/descenso de la otra?**]{.hl-yellow}
+
+. . .
+
+Imagina por ejemplo dos variables: nivel de bronceado (X) y consumo de helados (Y). ¿Son dependientes? Aparentemente sí ya que su comportamiento es similar. **¿Una causa la otra?**
+
+---
+
+## Dependencia vs causalidad
+
+![](img/helados-moreno.jpg)
+
+Diremos que dos variables tienen una [**relación causal o de causalidad**]{.hl-yellow} cuando una variable es la CAUSA del comportamiento de la otra, algo que no sabremos solo con estadística (sino con conocimiento experto, en este caso de nutricionistas y médicos)
+
+. . .
+
+[**Correlación NO IMPLICA causalidad**]{.hl-red} (al menos no tiene por qué)
 
 ---
 
 ## Dependencia vs causalidad
 
 
+![](img/chocolate-correlacion.jpg)
+
+
+Este fenómeno es conocido como [**correlaciones espúreas**]{.hl-yellow}, y aparece cuando dos variables presentan una [**relación matemática**]{.hl-green} pero sin [**ningún tipo de relación causal o lógica**]{.hl-red}. Puedes ver más en <https://www.tylervigen.com/spurious-correlations>
+
+---
+
+## Dependencia vs causalidad
+
+![](img/confounder.jpg)
+
+Dicho patrón matemático puede deberse al mero azar o la existencia de lo que se conoce como [**variables de confusión**]{.hl-yellow} (en el caso del helado, el verano es el que causa ambas).
+
+La rama que se dedica al [**estudio de la causalidad**]{.hl-yellow}, combinando las ramas de la **estadística, filosofía, sociología y psicología** se le conoce como [**inferencia causal**]{.hl-yellow} y es fundamental en un análisis más profunde de las relaciones entre las variables (sobre todo en campos como la economía o la sociología)
 
 # El mundo Github
 
