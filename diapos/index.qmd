@@ -1016,6 +1016,221 @@ Dicho patrón matemático puede deberse al mero azar o la existencia de lo que s
 
 La rama que se dedica al [**estudio de la causalidad**]{.hl-yellow}, combinando las ramas de la **estadística, filosofía, sociología y psicología** se le conoce como [**inferencia causal**]{.hl-yellow} y es fundamental en un análisis más profunde de las relaciones entre las variables (sobre todo en campos como la economía o la sociología)
 
+
+# Clase 4: primeras regresiones {#clase-4}
+
+[**Historia regresión. Aprendizaje supervisado. Regresión lineal univariante**]{style="color:#444442;"}
+
+---
+
+## Historia de la reg
+
+> Hay una regla universal: cualquier pariente tuyo es probablemente más mediocre que tú»
+
+La [**historia de regresión**]{.hl-yellow} se remonta a **Francis Galton**, primo de Charles Darwin, que además de estadístico fue psicólogo, geógrafo y, por desgracia, el primer eugenésico (de hecho acuñó el termino)
+
+. . .
+
+También fue el primero en proponer métodos de clasificación de huellas en medicina forense e incluso se le atribuye el primer mapa meteorológico de la historia
+
+---
+
+## Regresión y Darwin
+
+Galton mostró fascinación por «El origen de la especies» de su primo. Sin embargo, [**Galton no se centraba en los mejor adaptados sino en los que él llama mediocres**]{.hl-yellow}
+
+. . .
+
+Según Galton, las sociedades estaban fomentando la mediocridad, interfiriendo en la selección natural, así que empezó a **estudiar si el talento era o no hereditario**.
+
+
+. . .
+
+¿Su conclusión? El [**talento se disipaba**]{.hl-yellow} a lo largo de las generaciones
+
+---
+
+## Regresión a la mediocridad
+
+En 1886 publicó «Regression towards mediocrity in hereditary stature», un artículo que cambiaría la estadística: fue el [**primer uso documentado de lo que hoy conocemos como recta de regresión**]{.hl-yellow} 
+
+. . .
+
+:::: columns
+::: {.column width="38%"}
+
+![](img/reg_dalton.jpg)
+
+:::
+
+::: {.column width="62%"}
+
+Galton analizó la estatura de 205 hijos y padres, observando que, de nuevo, los valores extremos se disipaban: a lo largo de las generaciones había una [**regresión (un retroceso) a la mediocridad (entendida como la media)**]{.hl-yellow} 
+
+
+:::
+::::
+
+Hijos de altos eran algo más bajitos, e hijos de bajitos eran algo más altos.
+
+---
+
+## Regresión a la mediocridad
+
+:::: columns
+::: {.column width="60%"}
+
+![](img/reg-galton-coef.jpg)
+
+:::
+
+::: {.column width="40%"}
+
+Galton no solo observó que las [**estaturas «regresaban» a un valor medio sino que lo hacían con un patrón**]{.hl-yellow}, con un factor constante de $2/3$: si los padres se desviaban $+3$ por encima de la media, los hijos se desviaban solo $(2/3)*3 = +2$ por encima de la media.
+
+:::
+::::
+
+---
+
+## Aprendizaje estadístico
+
+La regresión lineal es el modelo más simple de lo que se conoce como [**aprendizaje estadístico (Machine Learning)**]{.hl-yellow}, en concreto del conocido como [**aprendizaje supervisado**]{.hl-yellow}
+
+![](img/ml.jpg)
+
+
+---
+
+## Ciencia de Datos
+
+
+La [**ciencia de datos**]{.hl-yellow} es precisamente la rama que integra las matemáticas, la estadística, la probabilidad, el Machine Learning e incluso el Big Data
+
+![](img/stats-ml.jpg)
+
+---
+
+## Aprendizaje ¿supervisado?
+
+![](img/unsupervised-learning.jpg)
+
+---
+
+## Aprendizaje ¿supervisado?
+
+En el campo del Machine Learning hay principalmente dos tipos de metodologías:
+
+:::: columns
+::: {.column width="50%"}
+
+* [**Aprendizaje supervisado**]{.hl-purple}: tendremos dos tipos de variables, la [**variable dependiente (output/target)**]{.hl-yellow} que se quiere predecir/clasificar, normalmente denotada como $Y$, y las [**variables independientes (inputs) o explicativas o predictoras**]{.hl-yellow}, que contienen la información disponible. Ejemplos: regresión, knn, árboles, etc.
+ 
+
+:::
+
+::: {.column width="50%"}
+
+![](img/supervised.jpg)
+:::
+::::
+
+---
+
+## Aprendizaje ¿supervisado?
+
+En el campo del Machine Learning hay principalmente dos tipos de metodologías:
+
+:::: columns
+::: {.column width="50%"}
+
+* [**Aprendizaje no supervisado**]{.hl-purple}: no existe la distinción entre target y variables explicativas ya que [**no tenemos etiquetados los datos**]{.hl-yellow}, no sabemos a priori la respuesta correcta. El aprendizaje no supervisado [**buscará patrones**]{.hl-yellow} basados en similitudes/diferencias. Ejemplos: PCA, clustering, redes neuronales, etc.
+
+:::
+
+
+::: {.column width="50%"}
+
+![](img/unsupervised.jpg)
+
+:::
+::::
+
+---
+
+## Clasificación vs predicción
+
+Como hemos comentado, la [**regresión lineal**]{.hl-yellow} se enmarca dentro del [**predicción supervisada**]{.hl-yellow}
+
+* [**Predicción**]{.hl-purple}: la [**variable objetivo es una variable cuantitativa continua**]{.hl-yellow} (por ejemplo, precio, glucosa, peso, etc).
+
+* [**Clasificación**]{.hl-purple}: la [**variable objetivo es una variable cualitativa**]{.hl-yellow} (por ejemplo, especie de flor, ausencia/presencia de enfermedad, si/no, etc) o **cuantitativa discreta** (por ejemplo, número de accidentes). La etiqueta tomará un valor dentro del conjunto de modalidades permitidas, pudiendo ser **binaria** (si/no) o **multiclase** (A, B, C, D).
+
+&nbsp;
+
+📚 Ver «The elements of Statistical Learning» (Hastie et al., 2008)
+
+---
+
+## Modelo predictivo
+
+Dentro del marco de la [**predicción supervisada**]{.hl-yellow} un modelo tendrá siempre la siguiente forma:
+
+$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon$$
+* $X$ serán los [**datos**]{.hl-yellow}
+
+* $f(\cdot)$ será nuestro [**modelo**]{.hl-yellow}
+
+* $\mathbf{X} = \left(X_1, \ldots, X_p \right)$ serán nuestras [**predictoras o variables independientes**]{.hl-yellow}
+
+* $\varepsilon$ será el [**error o ruido**]{.hl-yellow}, que debería ser reducido a **algo aleatorio (irreducible)** (en estadística SIEMPRE nos vamos a equivocar, si no existiese estaríamos en análisis).
+
+---
+
+## Modelo predictivo
+
+$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon$$
+
+El objetivo es intentar [**estimar dicha variable objetivo**]{.hl-yellow} minimizando al máximo el error cometido (la parte que podemos evitar).
+
+. . .
+
+El [**modelo estimado**]{.hl-yellow} se definirá como
+
+$$\hat{Y} = \hat{f}(\mathbf{X})  = \hat{f}\left(X_1, \ldots, X_p \right), \quad \hat{\varepsilon} = \hat{Y} - Y$$
+* $\hat{Y}$ serán las [**estimaciones**]{.hl-yellow}
+
+* $\hat{f}$ será el [**modelo estimado**]{.hl-yellow}
+
+* $\hat{\varepsilon}$ los [**errores estimados**]{.hl-yellow}
+
+
+---
+
+## Reg. lineal univariante
+
+En el caso concreto de la [**regresión lineal**]{.hl-yellow} tendremos:
+
+$$Y = f(\mathbf{X}) + \varepsilon = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p  + \varepsilon$$
+
+$$\hat{Y} = \hat{f}(\mathbf{X}) = \hat{\beta_0} + \hat{\beta_1} X_1 + \ldots + \hat{\beta_p} X_p $$
+
+* El modelo $f(\cdot)$ será una [**recta/polinomio lineal**]{.hl-yellow}
+
+* En el caso de la regresión lineal [**univariante**]{.hl-yellow} tendremos por tanto $f(X) = \beta_0 + \beta_1X$ ($p = 1$)
+
+* El objetivo será obtener la estimación de los $\hat{\beta}$ tal que minimicemos $\hat{\varepsilon} = Y - \left( \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p \right)$
+
+---
+
+desarrollo sesgo vs varianza (sin entrar en train y test aún)
+
+o bien
+
+minimos cuadrados
+
+---
+
 # El mundo Github
 
 [**Trabajar ordenados, publicar resultados, replicabilidad de lo realizado**]{style="color:#444442;"}
