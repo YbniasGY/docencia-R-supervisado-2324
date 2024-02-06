@@ -1180,7 +1180,7 @@ Como hemos comentado, la [**regresión lineal**]{.hl-yellow} se enmarca dentro d
 
 Dentro del marco de la [**predicción supervisada**]{.hl-yellow} un modelo tendrá siempre la siguiente forma:
 
-$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad {\rm E} \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) $$
+$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad E \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) $$
 
 * $X$ serán los [**datos**]{.hl-yellow}
 
@@ -1188,13 +1188,13 @@ $$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilo
 
 * $\mathbf{X} = \left(X_1, \ldots, X_p \right)$ serán nuestras [**predictoras o variables independientes**]{.hl-yellow}
 
-* $\varepsilon$ será el [**error o ruido**]{.hl-yellow}, una [**variable aleatoria de media 0**]{.hl-yellow} ${\rm E} \left[\varepsilon | \boldsymbol{X} = x \right] = 0$ (el error debería ser reducido a **algo aleatorio (irreducible)**, aunque en estadística SIEMPRE nos vamos a equivocar).
+* $\varepsilon$ será el [**error o ruido**]{.hl-yellow}, una [**variable aleatoria de media 0**]{.hl-yellow} $E \left[\varepsilon | \boldsymbol{X} = x \right] = 0$ (el error debería ser reducido a **algo aleatorio (irreducible)**, aunque en estadística SIEMPRE nos vamos a equivocar).
 
 ---
 
 ## Modelo predictivo
 
-$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad {\rm E} \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) $$
+$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad E \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) $$
 
 
 El objetivo es intentar [**estimar dicha variable objetivo**]{.hl-yellow} minimizando al máximo el error cometido (la parte que podemos evitar).
@@ -1203,7 +1203,7 @@ El objetivo es intentar [**estimar dicha variable objetivo**]{.hl-yellow} minimi
 
 El [**modelo estimado**]{.hl-yellow} se definirá como
 
-$$\widehat{Y} := \widehat{{\rm E} \left[Y | \boldsymbol{X} = x \right]}  = \widehat{f}\left(X_1, \ldots, X_p \right), \quad \widehat{\varepsilon} = \widehat{Y} - Y$$
+$$\widehat{Y} := \widehat{E \left[Y | \boldsymbol{X} = x \right]}  = \widehat{f}\left(X_1, \ldots, X_p \right), \quad \widehat{\varepsilon} = \widehat{Y} - Y$$
 
 * $\widehat{Y}$ serán las [**estimaciones**]{.hl-yellow}, definidas como la estimación del [**valor esperado de $Y$**]{.hl-yellow} con la información que tenemos.
 
@@ -1218,17 +1218,17 @@ $$\widehat{Y} := \widehat{{\rm E} \left[Y | \boldsymbol{X} = x \right]}  = \wide
 
 En el caso concreto de la [**regresión lineal**]{.hl-yellow} nuestro modelo será un **hiperplano lineal** (en el caso de una variable, una simple recta):
 
-$${\rm E} \left[Y | \boldsymbol{X} = x \right]  = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p$$
+$$E \left[Y | \boldsymbol{X} = x \right]  = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p$$
 
 . . .
 
 Su estimación será por tanto
 
-$$\widehat{Y} := \widehat{{\rm E} \left[Y | \boldsymbol{X} = x \right]} = \widehat{f}(\mathbf{X}) = \widehat{\beta_0} + \widehat{\beta_1} X_1 + \ldots + \widehat{\beta_p} X_p $$
+$$\widehat{Y} := \widehat{E \left[Y | \boldsymbol{X} = x \right]} = \widehat{f}(\mathbf{X}) = \widehat{\beta_0} + \widehat{\beta_1} X_1 + \ldots + \widehat{\beta_p} X_p $$
 
 * El modelo $\widehat{f}(\cdot)$ será una [**recta/hiperplano lineal**]{.hl-yellow}
 
-* En el caso de la regresión lineal [**univariante**]{.hl-yellow} tendremos por tanto ${\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1X$ ($p = 1$)
+* En el caso de la regresión lineal [**univariante**]{.hl-yellow} tendremos por tanto $E \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1X$ ($p = 1$)
 
 * El objetivo será obtener la estimación de los $\widehat{\beta}$ tal que **minimicemos el error**
 
@@ -1466,11 +1466,11 @@ Da igual lo bueno que sea el modelo: las [**predicciones fuera del rango de las 
 ## Repaso
 
 
-* [**Modelo lineal**]{.hl-yellow}: descrito como $Y = \beta_0 +  \beta_1 X_1 + \ldots + \beta_p X_p + \varepsilon$, buscamos estimar el **valor esperado**  ${\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 +  \beta_1 X_1 + \ldots + \beta_p x_p$, donde $\boldsymbol{X}$ es la población y $x$ la muestra.
+* [**Modelo lineal**]{.hl-yellow}: descrito como $Y = \beta_0 +  \beta_1 X_1 + \ldots + \beta_p X_p + \varepsilon$, buscamos estimar el **valor esperado**  $E \left[Y | \boldsymbol{X} = x \right] = \beta_0 +  \beta_1 X_1 + \ldots + \beta_p x_p$, donde $\boldsymbol{X}$ es la población y $x$ la muestra.
 
 . . .
 
-* [**Caso univariante**]{.hl-yellow}: $p = 1$ tal que ${\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 +  \beta_1 x$.
+* [**Caso univariante**]{.hl-yellow}: $p = 1$ tal que $E \left[Y | \boldsymbol{X} = x \right] = \beta_0 +  \beta_1 x$.
 
 . . .
 
@@ -1502,7 +1502,7 @@ En el caso de la regresión lineal univariante pediremos [**4 hipótesis**]{.hl-
 
 . . .
 
-1. [**Linealidad**]{.hl-green}: el valor esperado de $Y$ es ${\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 x$
+1. [**Linealidad**]{.hl-green}: el valor esperado de $Y$ es $E \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 x$
 
 . . .
 
@@ -1516,7 +1516,7 @@ En el caso de la regresión lineal univariante pediremos [**4 hipótesis**]{.hl-
 
 4. [**Independencia**]{.hl-green}: los errores $\left\lbrace \varepsilon_i \right\rbrace_{i=1}^{n}$ deben ser independientes entre sí (el error en una observación no depende de otras). En particular, serán **incorrelados**
 
-$${\rm Cor}_{\varepsilon_i \varepsilon_j} = {\rm E} \left[\varepsilon_i \varepsilon_j \right] - {\rm E} \left[\varepsilon_i \right] {\rm E} \left[\varepsilon_j \right] = {\rm E} \left[\varepsilon_i \varepsilon_j \right] = 0, \quad i \neq j$$
+$${\rm Cor}_{\varepsilon_i \varepsilon_j} = E \left[\varepsilon_i \varepsilon_j \right] - E \left[\varepsilon_i \right] E \left[\varepsilon_j \right] = E \left[\varepsilon_i \varepsilon_j \right] = 0, \quad i \neq j$$
 
 ---
 
@@ -1576,7 +1576,7 @@ $$SE \left(\widehat{\beta}_0\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n}\left[
 
 . . .
 
-* [**Insesgados**]{.hl-yellow}: ambos son [**estimadores insesgados**]{.hl-green} ya que la esperanza de la estimación es el valor a estimar. ${\rm E} \left[ \widehat{\beta}_j \right] = \beta_j$
+* [**Insesgados**]{.hl-yellow}: ambos son [**estimadores insesgados**]{.hl-green} ya que la esperanza de la estimación es el valor a estimar. $E \left[ \widehat{\beta}_j \right] = \beta_j$
 
 . . .
  

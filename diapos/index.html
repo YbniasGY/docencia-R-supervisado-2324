@@ -1350,21 +1350,21 @@ birth_year -0.4090274 0.4781391  1.0000000</code></pre>
 <section id="modelo-predictivo" class="slide level2">
 <h2>Modelo predictivo</h2>
 <p>Dentro del marco de la <span class="hl-yellow"><strong>predicción supervisada</strong></span> un modelo tendrá siempre la siguiente forma:</p>
-<p><span class="math display">\[Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad {\rm E} \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) \]</span></p>
+<p><span class="math display">\[Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad E \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) \]</span></p>
 <ul>
 <li><p><span class="math inline">\(X\)</span> serán los <span class="hl-yellow"><strong>datos</strong></span></p></li>
 <li><p><span class="math inline">\(f(\cdot)\)</span> será nuestro <span class="hl-yellow"><strong>modelo</strong></span>, es decir, el <span class="hl-yellow"><strong>valor esperado de <span class="math inline">\(Y\)</span></strong></span> con la información que tenemos.</p></li>
 <li><p><span class="math inline">\(\mathbf{X} = \left(X_1, \ldots, X_p \right)\)</span> serán nuestras <span class="hl-yellow"><strong>predictoras o variables independientes</strong></span></p></li>
-<li><p><span class="math inline">\(\varepsilon\)</span> será el <span class="hl-yellow"><strong>error o ruido</strong></span>, una <span class="hl-yellow"><strong>variable aleatoria de media 0</strong></span> <span class="math inline">\({\rm E} \left[\varepsilon | \boldsymbol{X} = x \right] = 0\)</span> (el error debería ser reducido a <strong>algo aleatorio (irreducible)</strong>, aunque en estadística SIEMPRE nos vamos a equivocar).</p></li>
+<li><p><span class="math inline">\(\varepsilon\)</span> será el <span class="hl-yellow"><strong>error o ruido</strong></span>, una <span class="hl-yellow"><strong>variable aleatoria de media 0</strong></span> <span class="math inline">\(E \left[\varepsilon | \boldsymbol{X} = x \right] = 0\)</span> (el error debería ser reducido a <strong>algo aleatorio (irreducible)</strong>, aunque en estadística SIEMPRE nos vamos a equivocar).</p></li>
 </ul>
 </section>
 <section id="modelo-predictivo-1" class="slide level2">
 <h2>Modelo predictivo</h2>
-<p><span class="math display">\[Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad {\rm E} \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) \]</span></p>
+<p><span class="math display">\[Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad E \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) \]</span></p>
 <p>El objetivo es intentar <span class="hl-yellow"><strong>estimar dicha variable objetivo</strong></span> minimizando al máximo el error cometido (la parte que podemos evitar).</p>
 <div class="fragment">
 <p>El <span class="hl-yellow"><strong>modelo estimado</strong></span> se definirá como</p>
-<p><span class="math display">\[\widehat{Y} := \widehat{{\rm E} \left[Y | \boldsymbol{X} = x \right]}  = \widehat{f}\left(X_1, \ldots, X_p \right), \quad \widehat{\varepsilon} = \widehat{Y} - Y\]</span></p>
+<p><span class="math display">\[\widehat{Y} := \widehat{E \left[Y | \boldsymbol{X} = x \right]}  = \widehat{f}\left(X_1, \ldots, X_p \right), \quad \widehat{\varepsilon} = \widehat{Y} - Y\]</span></p>
 <ul>
 <li><p><span class="math inline">\(\widehat{Y}\)</span> serán las <span class="hl-yellow"><strong>estimaciones</strong></span>, definidas como la estimación del <span class="hl-yellow"><strong>valor esperado de <span class="math inline">\(Y\)</span></strong></span> con la información que tenemos.</p></li>
 <li><p><span class="math inline">\(\widehat{f}\)</span> será el <span class="hl-yellow"><strong>modelo estimado</strong></span></p></li>
@@ -1375,13 +1375,13 @@ birth_year -0.4090274 0.4781391  1.0000000</code></pre>
 <section id="reg.-lineal-univariante" class="slide level2">
 <h2>Reg. lineal univariante</h2>
 <p>En el caso concreto de la <span class="hl-yellow"><strong>regresión lineal</strong></span> nuestro modelo será un <strong>hiperplano lineal</strong> (en el caso de una variable, una simple recta):</p>
-<p><span class="math display">\[{\rm E} \left[Y | \boldsymbol{X} = x \right]  = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p\]</span></p>
+<p><span class="math display">\[E \left[Y | \boldsymbol{X} = x \right]  = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p\]</span></p>
 <div class="fragment">
 <p>Su estimación será por tanto</p>
-<p><span class="math display">\[\widehat{Y} := \widehat{{\rm E} \left[Y | \boldsymbol{X} = x \right]} = \widehat{f}(\mathbf{X}) = \widehat{\beta_0} + \widehat{\beta_1} X_1 + \ldots + \widehat{\beta_p} X_p \]</span></p>
+<p><span class="math display">\[\widehat{Y} := \widehat{E \left[Y | \boldsymbol{X} = x \right]} = \widehat{f}(\mathbf{X}) = \widehat{\beta_0} + \widehat{\beta_1} X_1 + \ldots + \widehat{\beta_p} X_p \]</span></p>
 <ul>
 <li><p>El modelo <span class="math inline">\(\widehat{f}(\cdot)\)</span> será una <span class="hl-yellow"><strong>recta/hiperplano lineal</strong></span></p></li>
-<li><p>En el caso de la regresión lineal <span class="hl-yellow"><strong>univariante</strong></span> tendremos por tanto <span class="math inline">\({\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1X\)</span> (<span class="math inline">\(p = 1\)</span>)</p></li>
+<li><p>En el caso de la regresión lineal <span class="hl-yellow"><strong>univariante</strong></span> tendremos por tanto <span class="math inline">\(E \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1X\)</span> (<span class="math inline">\(p = 1\)</span>)</p></li>
 <li><p>El objetivo será obtener la estimación de los <span class="math inline">\(\widehat{\beta}\)</span> tal que <strong>minimicemos el error</strong></p></li>
 </ul>
 </div>
@@ -1660,11 +1660,11 @@ F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 <section id="repaso" class="slide level2">
 <h2>Repaso</h2>
 <ul>
-<li><span class="hl-yellow"><strong>Modelo lineal</strong></span>: descrito como <span class="math inline">\(Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p + \varepsilon\)</span>, buscamos estimar el <strong>valor esperado</strong> <span class="math inline">\({\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 X_1 + \ldots + \beta_p x_p\)</span>, donde <span class="math inline">\(\boldsymbol{X}\)</span> es la población y <span class="math inline">\(x\)</span> la muestra.</li>
+<li><span class="hl-yellow"><strong>Modelo lineal</strong></span>: descrito como <span class="math inline">\(Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p + \varepsilon\)</span>, buscamos estimar el <strong>valor esperado</strong> <span class="math inline">\(E \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 X_1 + \ldots + \beta_p x_p\)</span>, donde <span class="math inline">\(\boldsymbol{X}\)</span> es la población y <span class="math inline">\(x\)</span> la muestra.</li>
 </ul>
 <div class="fragment">
 <ul>
-<li><span class="hl-yellow"><strong>Caso univariante</strong></span>: <span class="math inline">\(p = 1\)</span> tal que <span class="math inline">\({\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 x\)</span>.</li>
+<li><span class="hl-yellow"><strong>Caso univariante</strong></span>: <span class="math inline">\(p = 1\)</span> tal que <span class="math inline">\(E \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 x\)</span>.</li>
 </ul>
 </div>
 <div class="fragment">
@@ -1693,7 +1693,7 @@ F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 <p>En el caso de la regresión lineal univariante pediremos <span class="hl-yellow"><strong>4 hipótesis</strong></span></p>
 <div class="fragment">
 <ol type="1">
-<li><span class="hl-green"><strong>Linealidad</strong></span>: el valor esperado de <span class="math inline">\(Y\)</span> es <span class="math inline">\({\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 x\)</span></li>
+<li><span class="hl-green"><strong>Linealidad</strong></span>: el valor esperado de <span class="math inline">\(Y\)</span> es <span class="math inline">\(E \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 x\)</span></li>
 </ol>
 </div>
 <div class="fragment">
@@ -1710,7 +1710,7 @@ F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 <ol start="4" type="1">
 <li><span class="hl-green"><strong>Independencia</strong></span>: los errores <span class="math inline">\(\left\lbrace \varepsilon_i \right\rbrace_{i=1}^{n}\)</span> deben ser independientes entre sí (el error en una observación no depende de otras). En particular, serán <strong>incorrelados</strong></li>
 </ol>
-<p><span class="math display">\[{\rm Cor}_{\varepsilon_i \varepsilon_j} = {\rm E} \left[\varepsilon_i \varepsilon_j \right] - {\rm E} \left[\varepsilon_i \right] {\rm E} \left[\varepsilon_j \right] = {\rm E} \left[\varepsilon_i \varepsilon_j \right] = 0, \quad i \neq j\]</span></p>
+<p><span class="math display">\[{\rm Cor}_{\varepsilon_i \varepsilon_j} = E \left[\varepsilon_i \varepsilon_j \right] - E \left[\varepsilon_i \right] E \left[\varepsilon_j \right] = E \left[\varepsilon_i \varepsilon_j \right] = 0, \quad i \neq j\]</span></p>
 </div>
 </section>
 <section id="diagnosis-2" class="slide level2">
@@ -1746,7 +1746,7 @@ F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 <p><span class="math display">\[SE \left(\widehat{\beta}_0\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n}\left[ 1+ \frac{\overline{x}^2}{s_{x}^2} \right], \quad SE \left(\widehat{\beta}_1\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n s_{x}^2}\]</span></p>
 <div class="fragment">
 <ul>
-<li><span class="hl-yellow"><strong>Insesgados</strong></span>: ambos son <span class="hl-green"><strong>estimadores insesgados</strong></span> ya que la esperanza de la estimación es el valor a estimar. <span class="math inline">\({\rm E} \left[ \widehat{\beta}_j \right] = \beta_j\)</span></li>
+<li><span class="hl-yellow"><strong>Insesgados</strong></span>: ambos son <span class="hl-green"><strong>estimadores insesgados</strong></span> ya que la esperanza de la estimación es el valor a estimar. <span class="math inline">\(E \left[ \widehat{\beta}_j \right] = \beta_j\)</span></li>
 </ul>
 </div>
 <div class="fragment">
