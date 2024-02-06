@@ -1170,26 +1170,32 @@ Como hemos comentado, la [**regresión lineal**]{.hl-yellow} se enmarca dentro d
 
 📚 Ver «The elements of Statistical Learning» (Hastie et al., 2008)
 
+# Clase 5: ajuste de regresión {#clase-5}
+
+[**Interpretación de coeficientes. Método mínimos cuadrados**]{style="color:#444442;"}
+
 ---
 
 ## Modelo predictivo
 
 Dentro del marco de la [**predicción supervisada**]{.hl-yellow} un modelo tendrá siempre la siguiente forma:
 
-$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon$$
+$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad {\rm E} \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) $$
+
 * $X$ serán los [**datos**]{.hl-yellow}
 
-* $f(\cdot)$ será nuestro [**modelo**]{.hl-yellow}
+* $f(\cdot)$ será nuestro [**modelo**]{.hl-yellow}, es decir, el [**valor esperado de $Y$**]{.hl-yellow} con la información que tenemos.
 
 * $\mathbf{X} = \left(X_1, \ldots, X_p \right)$ serán nuestras [**predictoras o variables independientes**]{.hl-yellow}
 
-* $\varepsilon$ será el [**error o ruido**]{.hl-yellow}, que debería ser reducido a **algo aleatorio (irreducible)** (en estadística SIEMPRE nos vamos a equivocar, si no existiese estaríamos en análisis).
+* $\varepsilon$ será el [**error o ruido**]{.hl-yellow}, una [**variable aleatoria de media 0**]{.hl-yellow} ${\rm E} \left[\varepsilon | \boldsymbol{X} = x \right] = 0$ (el error debería ser reducido a **algo aleatorio (irreducible)**, aunque en estadística SIEMPRE nos vamos a equivocar).
 
 ---
 
 ## Modelo predictivo
 
-$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon$$
+$$Y = f(\mathbf{X}) + \varepsilon = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad {\rm E} \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right) $$
+
 
 El objetivo es intentar [**estimar dicha variable objetivo**]{.hl-yellow} minimizando al máximo el error cometido (la parte que podemos evitar).
 
@@ -1197,37 +1203,609 @@ El objetivo es intentar [**estimar dicha variable objetivo**]{.hl-yellow} minimi
 
 El [**modelo estimado**]{.hl-yellow} se definirá como
 
-$$\hat{Y} = \hat{f}(\mathbf{X})  = \hat{f}\left(X_1, \ldots, X_p \right), \quad \hat{\varepsilon} = \hat{Y} - Y$$
-* $\hat{Y}$ serán las [**estimaciones**]{.hl-yellow}
+$$\widehat{Y} := \widehat{{\rm E} \left[Y | \boldsymbol{X} = x \right]}  = \widehat{f}\left(X_1, \ldots, X_p \right), \quad \widehat{\varepsilon} = \widehat{Y} - Y$$
 
-* $\hat{f}$ será el [**modelo estimado**]{.hl-yellow}
+* $\widehat{Y}$ serán las [**estimaciones**]{.hl-yellow}, definidas como la estimación del [**valor esperado de $Y$**]{.hl-yellow} con la información que tenemos.
 
-* $\hat{\varepsilon}$ los [**errores estimados**]{.hl-yellow}
+* $\widehat{f}$ será el [**modelo estimado**]{.hl-yellow}
+
+* $\widehat{\varepsilon}$ los [**errores estimados**]{.hl-yellow} (con media muestral igual a cero).
 
 
 ---
 
 ## Reg. lineal univariante
 
-En el caso concreto de la [**regresión lineal**]{.hl-yellow} tendremos:
+En el caso concreto de la [**regresión lineal**]{.hl-yellow} nuestro modelo será un **hiperplano lineal** (en el caso de una variable, una simple recta):
 
-$$Y = f(\mathbf{X}) + \varepsilon = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p  + \varepsilon$$
+$${\rm E} \left[Y | \boldsymbol{X} = x \right]  = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p$$
 
-$$\hat{Y} = \hat{f}(\mathbf{X}) = \hat{\beta_0} + \hat{\beta_1} X_1 + \ldots + \hat{\beta_p} X_p $$
+. . .
 
-* El modelo $f(\cdot)$ será una [**recta/polinomio lineal**]{.hl-yellow}
+Su estimación será por tanto
 
-* En el caso de la regresión lineal [**univariante**]{.hl-yellow} tendremos por tanto $f(X) = \beta_0 + \beta_1X$ ($p = 1$)
+$$\widehat{Y} := \widehat{{\rm E} \left[Y | \boldsymbol{X} = x \right]} = \widehat{f}(\mathbf{X}) = \widehat{\beta_0} + \widehat{\beta_1} X_1 + \ldots + \widehat{\beta_p} X_p $$
 
-* El objetivo será obtener la estimación de los $\hat{\beta}$ tal que minimicemos $\hat{\varepsilon} = Y - \left( \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p \right)$
+* El modelo $\widehat{f}(\cdot)$ será una [**recta/hiperplano lineal**]{.hl-yellow}
+
+* En el caso de la regresión lineal [**univariante**]{.hl-yellow} tendremos por tanto ${\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1X$ ($p = 1$)
+
+* El objetivo será obtener la estimación de los $\widehat{\beta}$ tal que **minimicemos el error**
 
 ---
 
-desarrollo sesgo vs varianza (sin entrar en train y test aún)
+## Varianza residual
 
-o bien
+Como ya hemos comentado, una manera de cuantificar lo que nuestro modelo se equivoca es lo que llamamos [**varianza residual o error cuadrático medio**]{.hl-yellow} (varianza del error), que podemos estimar como sigue (ya que la [**media muestral de los errores será cero**]{.hl-purple})
 
-minimos cuadrados
+$$s_{r}^{2} = \frac{1}{n} \displaystyle \sum_{i=1}^{n} \left( \widehat{\varepsilon}_{i} - \overline{\widehat{\varepsilon}}_{i}\right)^2 = \frac{1}{n} \displaystyle \sum_{i=1}^{n} \widehat{\varepsilon}_{i}^{2} $$
+¿Cómo quedaría la fórmula si **desarrollo lo que vale los errores estimados** $\widehat{\varepsilon}$?
+
+. . .
+
+
+$$s_{r}^{2} := s_{r}^{2}\left(\widehat{\beta}_0, \widehat{\beta}_1 \right)= \frac{1}{n} \sum_{i=1}^{n} \left(Y_i - \widehat{Y}_i \right)^2 = \frac{1}{n} \sum_{i=1}^{n} \left[Y_i - \left(\widehat{\beta}_0 + \widehat{\beta}_1X_i \right)\right]^2$$
+
+---
+
+## Método mínimos cuadrados
+
+El [**método de los mínimos cuadrados**]{.hl-yellow}, originariamente planteado a la vez por Legendre y Gauss, consiste en establecer que los [**parámetros óptimos**]{.hl-yellow} serán aquellos $\left(\widehat{\beta}_0, \widehat{\beta}_1 \right)$ que minimicen dicha suma de cuadrados (que minimicen la varianza residual)
+
+$$\widehat{\boldsymbol{\beta}} = \left(\widehat{\beta}_0, \widehat{\beta}_1 \right) = \arg \min_{\left(\beta_0, \beta_1 \right) \in \mathbb{R}^2} s_{r}^{2}\left(\beta_0, \beta_1 \right) = \arg \min_{\left(\beta_0, \beta_1 \right) \in \mathbb{R}^2} n*s_{r}^{2}\left(\beta_0, \beta_1 \right)$$
+
+Vamos a desarrollar ese cuadrado...
+
+--- 
+
+
+## Método mínimos cuadrados
+
+$$s_{r}^{2}\left(\beta_0, \beta_1 \right) = \frac{1}{n} \sum_{i=1}^{n} \left[Y_i - \left(\beta_0 + \beta_1 X_i \right)\right]^2$$ 
+Vamos a desarrollar ese cuadrado...
+
+. . .
+
+$$\begin{eqnarray} s_{r}^{2}\left(\beta_0, \beta_1 \right) &=& \frac{1}{n} \sum_{i=1}^{n} \left[Y_{i}^{2} + \left(\beta_0 + \beta_1 X_i \right)^2 - 2Y_{i}\left(\beta_0 + \beta_1 X_i \right)\right] \nonumber \\  &=& \sum_{i=1}^{n} \left[Y_{i}^{2} + \left(\beta_{0}^{2} + \beta_{1}^{2}X_{i}^{2} + 2\beta_{0}\beta_{1} X_i \right) - 2Y_{i}\beta_{0} - 2Y_{i}\beta_{1} X_i  \right] \end{eqnarray}$$
+
+
+
+
+---
+
+## Método mínimos cuadrados
+
+$$\begin{eqnarray} s_{r}^{2}\left(\beta_0, \beta_1 \right) &=& \frac{1}{n} \sum_{i=1}^{n} \left[Y_{i}^{2} + \left(\beta_0 + \beta_1 X_i \right)^2 - 2Y_{i}\left(\beta_0 + \beta_1 X_i \right)\right] \nonumber \\  &=& \sum_{i=1}^{n} \left[Y_{i}^{2} + \left(\beta_{0}^{2} + \beta_{1}^{2}X_{i}^{2} + 2\beta_{0}\beta_{1} X_i \right) - 2Y_{i}\beta_{0} - 2Y_{i}\beta_{1} X_i  \right] \end{eqnarray}$$
+
+¿Cómo encontrar el mínimo de una función?
+
+. . .
+
+Efectivamente, derivando.
+
+$$\frac{\partial s_{r}^{2}}{\partial \beta_0} = \frac{1}{n} \sum_{i=1}^{n} \left[ 2\beta_{0} + 2 \beta_1 X_i - 2Y_i \right] = 2 \left( \beta_{0} + \beta_{1} \overline{x} - \overline{y} \right)$$ 
+
+$$\frac{\partial s_{r}^{2}}{\partial \beta_1} = \frac{1}{n} \sum_{i=1}^{n} \left[ 2\beta_{1}X_{i}^{2} + 2 \beta_0 X_i - 2Y_iX_i \right] = 2 \left( \beta_{1} \overline{x^2}+\beta_{0}\overline{x} - \overline{xy} \right)$$ 
+
+---
+
+## Método mínimos cuadrados
+
+
+Si lo agrupamos en un sistema y lo [**igualamos a cero**]{.hl-yellow} para encontrar el óptimo tenemos
+
+$$\left\{\beta_{0} + \beta_{1} \overline{x}   = \overline{y} \atop \overline{x} \beta_{0} + \overline{x^2} \beta_{1} = \overline{xy} \right.$$ 
+
+¿Cómo resolver un sistema?
+
+. . .
+
+Haciendo la regla de Cramer tenemos que
+
+$$\widehat{\beta}_1 = \frac{\overline{xy} - \overline{x}*\overline{y}}{\overline{x^2} - \overline{x}^2} = \frac{s_{xy}}{s_{x}^{2}}$$
+
+$$\widehat{\beta}_0 = \frac{\overline{y}*\overline{x^2} - \overline{x}*\overline{xy}}{\overline{x^2} - \overline{x}^2}  = \overline{y} + \frac{\overline{y}*\overline{x}^2- \overline{x}*\overline{xy}}{\overline{x^2} - \overline{x}^2} = \overline{y} - \widehat{\beta}_1 \overline{x}$$
+
+
+---
+
+## Estimación reg. univariante
+
+
+Los [**estimadores de los parámetros de una regresión lineal univariante**]{.hl-yellow} serán por tanto $\widehat{\beta}_1 = \frac{s_{xy}}{s_{x}^{2}}$ ([**pendiente de la recta**]{.hl-purple}) y $\widehat{\beta}_0 = \overline{y} - \widehat{\beta}_1 \overline{x}$ ([**ordenada en el origen**]{.hl-purple})
+
+. . .
+
+Es importante [**distinguir lo población de lo muestral**]{.hl-yellow}
+
+* Los parámetros $\left( \beta_0, \beta_1 \right)$ son desconocidos, los [**parámetros poblacionales**]{.hl-yellow}
+
+* Los parámetros $\left( \widehat{\beta}_0, \widehat{\beta}_1 \right)$ son estimados a partir de los datos, son [**variables aleatorias**]{.hl-yellow} ya que han sido calculados en función de una muestra aleatoria $\left\lbrace \left(x_i, y_i \right) \right\rbrace_{i=1}^{n}$ de la población $\left(X, Y \right) $
+
+---
+
+## Estimación reg. univariante
+
+Los [**estimadores de los parámetros de una regresión lineal univariante**]{.hl-yellow} serán por tanto $\widehat{\beta}_1 = \frac{s_{xy}}{s_{x}^{2}}$ ([**pendiente de la recta**]{.hl-purple}) y $\widehat{\beta}_0 = \overline{y} - \widehat{\beta}_1 \overline{x}$ ([**ordenada en el origen**]{.hl-purple})
+
+¿Cuál es su [**interpretación**]{.hl-yellow}?
+
+. . .
+
+* [**Ordenada en el origen**]{.hl-yellow}: también llamado **intercepto**, y denotado como $\beta_0$ su valor real, es el valor de $Y$ cuando $X=0$. Es decir, $\widehat{\beta}_0$ se puede interpretar como la estimación $\widehat{Y}$ cuando $X = 0$ (cuando dicha estimación tenga sentido).
+
+
+. . .
+
+* [**Pendiente**]{.hl-yellow}: denotado com $\beta_1$ su valor real, cuantifica el incremento de $Y$ cuando $X$ aumenta una unidad. Es decir, $\widehat{\beta}_1$ se puede interpretar como la variación de la **estimación $\widehat{Y}$ cuando $X$ tiene un incremento unitario**.
+
+---
+
+## Regresión en R
+
+Para hacer un [**ajuste de regresión lineal univarainte en R**]{.hl-yellow} solo necesitamos utilizar la función `lm()` (de linear model) con dos argumentos:
+
+* `data = ...`: los datos de los que queremos sacar el ajuste (sin ausentes de momento)
+* `formula = ...`: la fórmula del ajuste (y frente a x, expresado como `y ~ x`)
+
+```{r}
+datos <- 
+  starwars |>
+  drop_na(mass, height) 
+ajuste_lineal <- lm(data = datos, formula = mass ~ height)
+```
+
+---
+
+## Regresión en R
+
+Una vez realizado el ajuste podemos [**resumirlo**]{.hl-yellow} con `summary()`
+
+```{r}
+ajuste_lineal |> summary()
+```
+
+. . .
+
+¿Qué representa cada bloque de la salida?
+
+---
+
+## Regresión en R
+
+```{r}
+ajuste_lineal |> summary()
+```
+
+* `Call: ...`: la orden que hemos ejecutado
+
+* `Residuals: ...`: un resumen en forma de [**cuartiles de los residuales**]{.hl-yellow}, es decir, de los [**errores**]{.hl-yellow} (fíjate que aunque la media de los errores siempre es 0, no tiene porque serlo la mediana, de hecho que no lo sea ya nos indica que normales no van a ser seguramente).
+
+
+---
+
+## Regresión en R
+
+```{r}
+ajuste_lineal |> summary()
+```
+
+
+* `Coefficients: ...`: de momento solo nos interesa la columna [**Estimate**]{.hl-yellow} que nos da las estimaciones de los parámetros. En la fila `Intercept` siempre irá $\widehat{\beta}_0$, y el resto de filas tendrá el nombre de la variable predictora a la que multiplica el parámetro (en este caso la fila `height` corresponde a la estimación $\widehat{\beta}_1$).
+
+---
+
+
+## Regresión en R
+
+```{r}
+ajuste_lineal |> summary()
+```
+
+En nuestro caso particular, el [**ajuste de regresión**]{.hl-yellow} viene dado por $\widehat{Y} = \widehat{\beta}_0 + \widehat{\beta}_1 X = -11.4868 + 0.6240*X$, donde $X$ es la estatura: por cada cm extra que mida un personaje, el modelo estima que el peso aumenta 0.6240 kg, y la estimación de peso para un persona que mida 0 cm es de -11.4868 kg (obviamente esta estimación mucho sentido no tiene)
+
+---
+
+## Regresión en R
+
+```{r}
+ajuste_lineal |> summary()
+```
+
+* `Multiple R-squared: ...` (de momento lo demás lo ignoramos): es el conocido como $R^2$ o bondad de ajuste. Hablaremos de él en las próximas clases, pero de momento, nos basta saber que es una [**métrica de calidad del ajuste**]{.hl-yellow} que va de 0 (peor) a 1 (mejor).
+
+---
+
+## Predicción en R
+
+Una vez estimado el modelo (sus coeficientes) podemos usarlo, bien para  [**estimar valores que el modelo conoce**]{.hl-yellow} (de los que aprendió) o para [**predecir nuevos valores**]{.hl-yellow} de los que el modelo no ha aprendido
+
+. . .
+
+Simplemente necesitamos la función `predict(modelo, nuevos_datos)`, usando como argumentos el **modelo entrenado** y un [**nuevo dataset que contenga una/s columna/s llamadas igual que nuestras variables predictores**]{.hl-yellow} con los valores de la predictora para los que queremos predecir
+
+```{r}
+predicciones <- 
+  tibble("height" = c(15, 81.3, 153.1, 189.3, 210.3),
+         "mass_predict" = predict(ajuste_lineal, tibble("height" = height)))
+predicciones
+```
+
+---
+
+## Rango de fiabilidad
+
+Aunque hablaremos en profundidad de la bondad de ajuste, supongamos que tenemos un **modelo extremadamente bueno**, con una bondad de ajuste $R^2 = 0.99$. ¿Sería fiable nuestro modelo anterior para predecir el peso de un personaje con $X = 15$ cm?
+
+. . .
+
+```{r}
+predicciones
+```
+
+Si te fijas la [**¡predicción del peso es negativa!**]{.hl-red}: por muy bebé que sea, algo pesará. ¿Por qué sucede esto?
+
+---
+
+## Rango de fiabilidad
+
+
+![](img/rango_1.png)
+![](img/rango_2.png)
+
+Nuestro [**modelo solo puede aprender de los datos que conoce**]{.hl-yellow}: solo podremos predecir para valores nuevos de las predictoras [**dentro del rango de las predictoras con las que entrenamos**]{.hl-yellow} el modelo
+
+Da igual lo bueno que sea el modelo: las [**predicciones fuera del rango de las predictoras de entrenamiento**]{.hl-red} no serán fiables ya que el modelo no sabe lo que sucede fuera.
+
+# Clase 6: diagnosis  {#clase-6}
+
+[**Hipótesis e inferencia del modelo**]{style="color:#444442;"}
+
+---
+
+## Repaso
+
+
+* [**Modelo lineal**]{.hl-yellow}: descrito como $Y = \beta_0 +  \beta_1 X_1 + \ldots + \beta_p X_p + \varepsilon$, buscamos estimar el **valor esperado**  ${\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 +  \beta_1 X_1 + \ldots + \beta_p x_p$, donde $\boldsymbol{X}$ es la población y $x$ la muestra.
+
+. . .
+
+* [**Caso univariante**]{.hl-yellow}: $p = 1$ tal que ${\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 +  \beta_1 x$.
+
+. . .
+
+* [**Estimación**]{.hl-yellow}: $\widehat{Y}$ en función de $\left(\widehat{\beta}_0, \widehat{\beta}_1 \right)$. De todas las rectas posibles, queremos la [**recta de regresión mínimos-cuadrados**]{.hl-yellow}: **minimiza la varianza residual** (calculamos sus derivadas parciales, igualamos a cero y resolvemos el sistema). Esos estimadores serán $\widehat{\beta}_1 = \frac{s_{xy}}{s_{x}^{2}}$  y $\widehat{\beta}_0 = \overline{y} - \widehat{\beta}_1 \overline{x}$.
+
+. . .
+
+* [**Predicción**]{.hl-yellow}: podemos estimar o predecir valores con la recta $\widehat{Y} = \widehat{\beta}_0 + \widehat{\beta}_0 X$, siempre y cuando $X = x$ esté dentro del rango de valores de entrenamiento del modelo.
+
+---
+
+## Diagnosis
+
+Hasta ahora no hemos pedido nada a la muestra $\left\lbrace \left( X_i, Y_i \right) \right\rbrace_{i=1}^{n}$, ¿para qué necesitaríamos [**hipótesis**]{.hl-yellow} entonces?
+
+. . .
+
+La razón es que, hasta ahora, lo único que hemos podido realizar es una [**estimación puntual**]{.hl-yellow} de los parámetros, pero dado que dichos estimadores serán variables aleatorias, necesitaremos realizar [**inferencia estadística**]{.hl-yellow} sobre ellos (recuerda: los parámetros son simpleme estimaciones para esa muestra de la población, de forma que dada otra muestra, la recta será distinta).
+
+. . .
+
+Para poder cuantificar la [**variabilidad y precisión de nuestras estimaciones**]{.hl-yellow} necesitaremos que los datos cumplan ciertas [**hipótesis probabilísticas**]{.hl-purple}: lo interesante no es la estimación puntual de los parámetros a partir de la muestra sino lo que [**podamos inferir de ellos a la población**]{.hl-green}
+
+---
+
+## Diagnosis
+
+En el caso de la regresión lineal univariante pediremos [**4 hipótesis**]{.hl-yellow}
+
+. . .
+
+1. [**Linealidad**]{.hl-green}: el valor esperado de $Y$ es ${\rm E} \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 x$
+
+. . .
+
+2. [**Homocedasticidad**]{.hl-green}: el modelo no podrá explicar toda la información (a veces se equivocará por arriba y otras por abajo), pero necesitamos que la [**varianza del error sea finita y constante**]{.hl-yellow}, tal que $\sigma_{r}^2 = \sigma_{\varepsilon}^2 = {\rm Var} \left[\varepsilon | \boldsymbol{X} = x \right] = cte < \infty$, que no varíe según aumenta o disminuye la $X$.
+
+. . .
+
+3. [**Normalidad**]{.hl-green}: pediremos que $\varepsilon \sim N \left(0, \sigma_{r}^2 \right)$
+
+. . .
+
+4. [**Independencia**]{.hl-green}: los errores $\left\lbrace \varepsilon_i \right\rbrace_{i=1}^{n}$ deben ser independientes entre sí (el error en una observación no depende de otras). En particular, serán **incorrelados**
+
+$${\rm Cor}_{\varepsilon_i \varepsilon_j} = {\rm E} \left[\varepsilon_i \varepsilon_j \right] - {\rm E} \left[\varepsilon_i \right] {\rm E} \left[\varepsilon_j \right] = {\rm E} \left[\varepsilon_i \varepsilon_j \right] = 0, \quad i \neq j$$
+
+---
+
+
+## Diagnosis
+
+
+Las 4 hipótesis se pueden [**resumir de manera teórica**]{.hl-yellow} en
+
+$$Y | \boldsymbol{X} = x \sim N \left(\beta_0 + \beta_1x, \sigma_{\varepsilon}^2 \right)$$
+
+. . .
+
+Su [**versión muestral**]{.hl-purple} sería simplemente
+
+$$y_i | \boldsymbol{X} = x_i \sim N \left(\beta_0 + \beta_1x_i, \sigma_{\varepsilon}^2 \right), \quad i=1,\ldots,n$$
+
+---
+
+## Inferencia de los parámetros
+
+Las hipótesis nos permiten decir (lo demostraremos más adelante) que los [**parámetros estimados siguen una distribución (condicionada) normal**]{.hl-yellow} de [**media el parámetro**]{.hl-purple}  a estimar y de [**varianza el conocido como standard error**]{.hl-purple}
+
+$$\widehat{\beta}_j | \left( X=x \right) \sim N \left(\beta_j, SE \left(\widehat{\beta}_j\right)^2 \right), \quad j=0,1$$
+
+. . .
+
+Por las propiedades de la normal y el teorema central del límite 
+
+$$\frac{\widehat{\beta}_j - \beta_j}{SE \left(\widehat{\beta}_j\right)}| \left( X=x \right) \sim N \left(0, 1 \right), \quad j=0,1$$
+
+---
+
+## Inferencia de los parámetros
+
+
+$$\widehat{\beta}_j | \left( X=x \right) \sim N \left(\beta_j, SE \left(\widehat{\beta}_j\right)^2 \right), \quad j=0,1$$
+
+Veremos más adelante porqué pero de momento...estos son los $SE$
+
+$$SE \left(\widehat{\beta}_0\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n}\left[ 1+ \frac{\overline{x}^2}{s_{x}^2} \right], \quad SE \left(\widehat{\beta}_1\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n s_{x}^2}$$
+
+
+. . .
+
+¿Qué **propiedades** tienen estos estimadores?
+
+
+---
+
+## Inferencia de los parámetros
+
+$$\widehat{\beta}_j | \left( X=x \right) \sim N \left(\beta_j, SE \left(\widehat{\beta}_j\right)^2 \right), \quad j=0,1$$
+
+$$SE \left(\widehat{\beta}_0\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n}\left[ 1+ \frac{\overline{x}^2}{s_{x}^2} \right], \quad SE \left(\widehat{\beta}_1\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n s_{x}^2}$$
+
+
+. . .
+
+* [**Insesgados**]{.hl-yellow}: ambos son [**estimadores insesgados**]{.hl-green} ya que la esperanza de la estimación es el valor a estimar. ${\rm E} \left[ \widehat{\beta}_j \right] = \beta_j$
+
+. . .
+ 
+* [**Precisión vs tamaño muestral**]{.hl-yellow}: cuando $n \to \infty$, sus varianzas tienden a cero, es decir, $SE \left(\widehat{\beta}_j\right)^2 \to^{n \to \infty} 0$ ya que $n$ está dividiendo. Traducción: [**a más datos, mayor precision**]{.hl-green} (menos varianza tendrán los estimadores si repetimos la toma de muestras)
+
+
+---
+
+## Inferencia de los parámetros
+
+
+$$SE \left(\widehat{\beta}_0\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n}\left[ 1+ \frac{\overline{x}^2}{s_{x}^2} \right], \quad SE \left(\widehat{\beta}_1\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n s_{x}^2}$$
+
+. . .
+
+* [**Precisión vs var residual**]{.hl-yellow}: cuanto más grande sea la varianza del error $\sigma_{\varepsilon}^{2}$, $SE \left(\widehat{\beta}_j\right)^2$ crecerá (es decir, [**más ruido implicará más imprecisión**]{.hl-red})
+
+. . .
+
+* [**Precisión vs varianza de X**]{.hl-yellow}: cuanto más grande sea la varianza de la predictora $s_{x}^2$, $SE \left(\widehat{\beta}_j\right)^2$ decrecerá, tal que $SE \left(\widehat{\beta}_j\right)^2 \to^{s_{x}^2 \to \infty} 0$. Dicho de otra forma: cuánta [**más información (varianza) contenga nuestra tabla, mayor precisión**]{.hl-green}.
+
+. . .
+
+* [**Precisión vs media X**]{.hl-yellow}: solo afecta a la estimación de $\beta_0$, cuya [**precisión decrece cuando la media aumenta**]{.hl-red}. Esto tiene sentido ya que cuánto más grande en media sean los datos, menos fiable será la predicción para $X=0$.
+
+---
+
+## Inferencia de los parámetros
+
+$$\widehat{\beta}_j | \left( X=x \right) \sim N \left(\beta_j, SE \left(\widehat{\beta}_j\right)^2 \right), \quad j=0,1$$
+
+$$SE \left(\widehat{\beta}_0\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n}\left[ 1+ \frac{\overline{x}^2}{s_{x}^2} \right], \quad SE \left(\widehat{\beta}_1\right)^2 = \frac{\sigma_{\varepsilon}^{2}}{n s_{x}^2}$$
+
+
+Pero tenemos un problema: la [**varianza residual poblacional**]{.hl-yellow} (varianza población del error) $\sigma_{\varepsilon}^{2}$ es [**desconocida**]{.hl-yellow}. Como suele pasar, la [**sustituiremos por un estimador (insesgado)**]{.hl-yellow} de la misma (ya demostaremos...), donde $p$ es el número de variables (lo que R llama `std error` en la salida)
+
+. . .
+
+$$\widehat{\sigma_{\varepsilon}^{2}} = \frac{n}{n-p-1} s_{r}^{2} = \frac{1}{n-p-1} \displaystyle \sum_{i=1}^{n} \widehat{\varepsilon}_{i}^2 =_{p=1} \frac{1}{n-2} \displaystyle \sum_{i=1}^{n} \widehat{\varepsilon}_{i}^2$$
+---
+
+## Inferencia de los parámetros
+
+
+
+$$\frac{\widehat{\beta}_j - \beta_j}{SE \left(\widehat{\beta}_j\right)} | \left( X=x \right) \sim N \left(0, 1 \right), \quad j=0,1$$
+
+
+¿Qué suele suceder cuando en una normal **desconocemos la varianza real y la sustituimos por su estimador insesgado**?
+
+. . .
+
+Si [**sustituimos el error standard por su estimador**]{.hl-yellow} (sustituyendo la varianza residual por su estimador insesgado), obtenemos que sigue una **t-Student**
+
+$$\frac{\widehat{\beta}_j - \beta_j}{\widehat{SE} \left(\widehat{\beta}_j\right)} | \left( X=x \right) \sim t_{n-p-1} , \quad j=0,1$$
+donde $\widehat{SE} \left(\widehat{\beta}_0\right)^2 = \frac{\widehat{\sigma_{\varepsilon}^{2}}}{n}\left[ 1+ \frac{\overline{x}^2}{s_{x}^2} \right]$ y $\widehat{SE} \left(\widehat{\beta}_1\right)^2 = \frac{\widehat{\sigma_{\varepsilon}^{2}}}{n s_{x}^2}$
+
+---
+
+## Inferencia de los parámetros
+
+
+```{r}
+ajuste_lineal |> summary()
+```
+
+* `std error`: es lo que hemos denotado como $\widehat{SE} \left(\widehat{\beta}_j\right)^2$
+
+. . .
+
+* `t value`: es el estadístico $\frac{\widehat{\beta}_j - 0}{\widehat{SE} \left(\widehat{\beta}_j\right)}$ que hemos dicho que sigue una t-Student (fíjate que hemos puesto $\beta_j = 0$)
+
+## Inferencia de los parámetros
+
+
+```{r}
+ajuste_lineal |> summary()
+```
+
+* `Pr(>|t|)`: representa un p-valor. ¿De qué contraste se te ocurre?
+
+. . .
+
+* `Residual standard error`: es el estimador insesgado de la varianza residual, que hemos denotado como $\widehat{\sigma_{\varepsilon}^{2}}$
+
+---
+
+## Inferencia de los parámetros
+
+:::: columns
+::: {.column width="55%"}
+
+$$\frac{\widehat{\beta}_j - \beta_j}{\widehat{SE} \left(\widehat{\beta}_j\right)} | \left( X=x \right) \sim t_{n-p-1} , \quad j=0,1$$
+
+:::
+
+::: {.column width="45%"}
+
+![](img/tablas-intervalos.png)
+
+:::
+::::
+
+Si te acuerdas de inferencia, esto implica que los [**intervalos de confianza de nuestros parámetros**]{.hl-yellow} son
+
+$$IC \left(\alpha, \widehat{\beta}_j \right) = \left[\widehat{\beta}_j - t_{n-p-1; \alpha/2} \widehat{SE} \left(\widehat{\beta}_j\right), \widehat{\beta}_j + t_{n-p-1; \alpha/2} \widehat{SE} \left(\widehat{\beta}_j\right) \right]$$
+donde $t_{n-p-1; \alpha/2}$ es el cuantil $1-\alpha/2$ (deja a la izquierda una probabilidad de $1-\alpha/2$).
+
+---
+
+
+## Paréntesis: intervalos de confianza
+confint(
+---
+
+
+## Inferencia de los parámetros
+
+Y si tenemos inferencia, tenemos contrastes: ¿te acuerdas de los p-valores que devuelve la tabla para cada parámetro?
+
+. . .
+
+Para cada parámetro se realiza un [**contraste de significancia**]{.hl-yellow}: ¿cuánta evidencia hay en mis datos para poder decir que el [**valor estimado de mi parámetro es distinto de 0**]{.hl-yellow}?
+
+$$H_0:~\widehat{\beta}_j = 0 \quad vs \quad H_1:~\widehat{\beta}_j \neq 0$$
+
+. . .
+
+El estadístico usado es el [**t value**]{.hl-yellow} que devuelve `R` definido como $\frac{\widehat{\beta}_j - 0}{\widehat{SE} \left(\widehat{\beta}_j\right)}$ y que, [**BAJO EL SUPUESTO DE QUE LA HIPÓTESIS NULA SEA CIERTA**]{.hl-purple}, sigue una t-Student $t_{n-p-1}$
+
+---
+
+## Inferencia de los parámetros
+
+$$H_0:~\widehat{\beta}_j = 0 \quad vs \quad H_1:~\widehat{\beta}_j \neq 0$$
+
+Este contraste significancia en realidad **contesta a la siguiente pregunta**
+
+¿Tiene mi variable $X_j$ un [**efecto lineal SIGNIFICATIVO**]{.hl-yellow} en mi variable $Y$?
+
+. . .
+
+&nbsp;
+
+Esa pregunta puede ser respondida desde un punto de vista **frecuentista** haciendo uso de los [**p-valores**]{.hl-yellow}: si $p-value < \alpha$, entonces rechazamos la nula (rechazamos que la variable no tenga efecto lineal significativo, es decir, aceptamos que sí lo tiene); en caso contrario no podemos rechazar (que **no es lo mismo que aceptarla**, solo que no hay evidencias suficientes en los datos para decir que haya un efecto significativo)
+
+---
+
+## Paréntesis: p-valor
+
+---
+
+## Inferencia de los parámetros
+
+
+
+```{r}
+ajuste_lineal |> summary()
+```
+
+Si te fijas ambos p-valores están por encima de $\alpha = 0.05$ (valor adoptado habitualmente) los que nos dice que [**no hay evidencias en los datos para afirmar que haya efectos lineales significativos**]{.hl-yellow}
+
+. . .
+
+¿Y si probamos a quitar $\beta_0$ (es decir, la respuesta está centrada)?
+
+---
+
+## Inferencia de los parámetros
+
+Para ello basta añadir un `-1` antes de las variables predictoras.
+
+```{r}
+lm(data = datos, formula = mass ~ -1 + height) |> summary()
+```
+
+Fíjate que ahora, amén que [**hay un efecto lineal significativo de la altura**]{.hl-yellow} y de tener $R^2$ mayor, $\beta_1$ tiene una precisión mayor. En este caso [**solo podía quitar uno**]{.hl-yellow} (perderíamos $X$), pero veremos más adelante cómo decidir cuál quitar si tuviésemos varias variables.
+
+---
+
+siguiente clase 13/02: caso práctico
+
+* Análisis exploratorio (numérico y visualización, corrplot)
+
+* Estimación
+
+* Interpretación coeficientes
+
+* Diagnosis (herramientas en R)
+
+
+---
+
+siguiente clase 15/02:
+
+* otro caso real
+
+* evaluación (métricas, etc), significado R2
+
+* intervalos predicción (se)
+
+---
+
+siguiente clase 20/02:
+
+
+ANOVA
+
+caso con todo
+
+---
+
+siguiente clase 22/02:
+
+
+caso con todo a mano y en R
+
+
+---
+
+siguiente clase 27/02:
+
+entrega
+
+---
+
+siguiente clase 29/02:
+
+Regresión lineal multivariante
 
 ---
 
