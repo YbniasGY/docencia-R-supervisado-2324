@@ -1868,11 +1868,49 @@ F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 <p>Si te acuerdas de inferencia, esto implica que los <span class="hl-yellow"><strong>intervalos de confianza de nuestros parámetros</strong></span> son</p>
 <p><span class="math display">\[IC \left(\alpha, \widehat{\beta}_j \right) = \left[\widehat{\beta}_j - t_{n-p-1; \alpha/2} \widehat{SE} \left(\widehat{\beta}_j\right), \widehat{\beta}_j + t_{n-p-1; \alpha/2} \widehat{SE} \left(\widehat{\beta}_j\right) \right]\]</span> donde <span class="math inline">\(t_{n-p-1; \alpha/2}\)</span> es el cuantil <span class="math inline">\(1-\alpha/2\)</span> (deja a la izquierda una probabilidad de <span class="math inline">\(1-\alpha/2\)</span>).</p>
 </section>
-<section id="paréntesis-intervalos-de-confianza" class="slide level2">
-<h2>Paréntesis: intervalos de confianza</h2>
-<p>confint(</p>
-</section>
 <section id="inferencia-de-los-parámetros-9" class="slide level2">
+<h2>Inferencia de los parámetros</h2>
+<p>Podemos calcular los intervalos de confianza de los parámetros en <code>R</code> con <code>confint()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">confint</span>(ajuste_lineal, <span class="at">level =</span> <span class="fl">0.99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  0.5 %     99.5 %
+(Intercept) -310.022729 282.402102
+height        -1.029793   2.306935</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">confint</span>(ajuste_lineal, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   2.5 %     97.5 %
+(Intercept) -236.3934126 208.772785
+height        -0.6150891   1.892231</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">confint</span>(ajuste_lineal, <span class="at">level =</span> <span class="fl">0.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     5 %       95 %
+(Intercept) -199.6638922 172.043265
+height        -0.4082166   1.685359</code></pre>
+</div>
+</div>
+</section>
+<section id="inferencia-de-los-parámetros-10" class="slide level2">
+<h2>Inferencia de los parámetros</h2>
+<p><span class="hl-yellow"><strong>¿Qué significa realmente un intervalo de confianza?</strong></span></p>
+<div class="fragment">
+<p>La <strong>probabilidad de que el parámetro real</strong> caiga dentro <span class="hl-red"><strong>NO EXISTE</strong></span>: el parámetro es desconocido pero fijo, no aleatorio, así que no sentido calcular su probabilidad.</p>
+</div>
+<div class="fragment">
+<p>Si obtenemos para un parámetro un intervalo <span class="math inline">\([-1, 1]\)</span> al 95%, no significa que <span class="math inline">\(P(parametro \in [-1, 1]) = 0.95\)</span>: significa que <span class="hl-yellow"><strong>si tomamos 1000 muestras distintas de la población</strong></span> y calculamos para cada una el intervalo de confianza, <span class="hl-yellow"><strong>aproximadamente 950 intervalos de confianza contendrán dentro el parámetro real</strong></span></p>
+</div>
+<div class="fragment">
+<p>Un <span class="hl-yellow"><strong>intervalo al 95% implica que habrá una frecuencia esperada de 0.95</strong></span> de que intervalos que no conocemos (porque se derivan de muestras que no hemos tomado) contengan al parámetro real, pero <span class="hl-red"><strong>no es la probabilidad de que tu intervalo calculado contenga a dicho parámetro</strong></span>: nos habla la precisión de nuestra metodología de estimación, no del parámetro.</p>
+</div>
+</section>
+<section id="inferencia-de-los-parámetros-11" class="slide level2">
+<h2>Inferencia de los parámetros</h2>
+<p><span class="hl-yellow"><strong>Deberes</strong></span>. Dada una población normal <span class="math inline">\(\mu = 3\)</span> y <span class="math inline">\(\sigma = 1.2\)</span>, crea un código que genere 500 muestras distintas (tamaño <span class="math inline">\(n = 100\)</span> cada una), de manera que para cada una apliques un <code>t.test()</code> para calcular un IC para <span class="math inline">\(\mu\)</span>. Tras ello, gráfica los intervalos como se muestra en la imagen (haz uso de <code>geom_segment()</code>)</p>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
+<section id="inferencia-de-los-parámetros-12" class="slide level2">
 <h2>Inferencia de los parámetros</h2>
 <p>Y si tenemos inferencia, tenemos contrastes: ¿te acuerdas de los p-valores que devuelve la tabla para cada parámetro?</p>
 <div class="fragment">
@@ -1883,23 +1921,66 @@ F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 <p>El estadístico usado es el <span class="hl-yellow"><strong>t value</strong></span> que devuelve <code>R</code> definido como <span class="math inline">\(\frac{\widehat{\beta}_j - 0}{\widehat{SE} \left(\widehat{\beta}_j\right)}\)</span> y que, <span class="hl-purple"><strong>BAJO EL SUPUESTO DE QUE LA HIPÓTESIS NULA SEA CIERTA</strong></span>, sigue una t-Student <span class="math inline">\(t_{n-p-1}\)</span></p>
 </div>
 </section>
-<section id="inferencia-de-los-parámetros-10" class="slide level2">
+<section id="inferencia-de-los-parámetros-13" class="slide level2">
 <h2>Inferencia de los parámetros</h2>
 <p><span class="math display">\[H_0:~\widehat{\beta}_j = 0 \quad vs \quad H_1:~\widehat{\beta}_j \neq 0\]</span></p>
 <p>Este contraste significancia en realidad <strong>contesta a la siguiente pregunta</strong></p>
 <p>¿Tiene mi variable <span class="math inline">\(X_j\)</span> un <span class="hl-yellow"><strong>efecto lineal SIGNIFICATIVO</strong></span> en mi variable <span class="math inline">\(Y\)</span>?</p>
 <div class="fragment">
 <p>&nbsp;</p>
-<p>Esa pregunta puede ser respondida desde un punto de vista <strong>frecuentista</strong> haciendo uso de los <span class="hl-yellow"><strong>p-valores</strong></span>: si <span class="math inline">\(p-value &lt; \alpha\)</span>, entonces rechazamos la nula (rechazamos que la variable no tenga efecto lineal significativo, es decir, aceptamos que sí lo tiene); en caso contrario no podemos rechazar (que <strong>no es lo mismo que aceptarla</strong>, solo que no hay evidencias suficientes en los datos para decir que haya un efecto significativo)</p>
+<p>Esa pregunta puede ser respondida desde un punto de vista <strong>frecuentista</strong> haciendo uso de los <span class="hl-yellow"><strong>p-valores</strong></span>: si <span class="math inline">\(p-value &lt; \alpha\)</span>, se suele rechazar la nula (rechazamos que la variable no tenga efecto lineal significativo, es decir, aceptamos que sí lo tiene); en caso contrario no se suele rechazar (que <strong>no es lo mismo que aceptarla</strong>). Pero…</p>
 </div>
 </section>
 <section id="paréntesis-p-valor" class="slide level2">
 <h2>Paréntesis: p-valor</h2>
+<p><span class="hl-yellow"><strong>¿Qué representa un p-valor?</strong></span></p>
+<div class="fragment">
+<p>Hablaremos más adelante de ellos pero este es un <span class="hl-yellow"><strong>pequeño resumen respecto al consenso</strong></span> recogido en 2016 por la ASA (American Statistical Association) en su trabajo <a href="https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true" class="uri">https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true</a></p>
+</div>
+<div class="fragment">
+<ul>
+<li><span class="hl-yellow"><strong>Habla sobre los datos</strong></span>. Los p-valores nos pueden servir como indicadores de <strong>cómo de incompatible son los datos respecto a un modelo/hipotesis/explicación asumida</strong>: habla sobre los datos, no sobre la veracidad de la hipotesis nula per se o la probabilidad de que los datos hayan salido tan extremos por azar.</li>
+</ul>
+</div>
 </section>
-<section id="inferencia-de-los-parámetros-11" class="slide level2">
+<section id="paréntesis-p-valor-1" class="slide level2">
+<h2>Paréntesis: p-valor</h2>
+<p><span class="hl-yellow"><strong>¿Qué representa un p-valor?</strong></span></p>
+<p>Hablaremos más adelante de ellos pero este es un <span class="hl-yellow"><strong>pequeño resumen respecto al consenso</strong></span> recogido en 2016 por la ASA (American Statistical Association) en su trabajo <a href="https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true" class="uri">https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true</a></p>
+<ul>
+<li><span class="hl-yellow"><strong>Realidades complejas, decisiones complejas</strong></span>. Cuidado con reducir a decisiones binarias realidades complejas. La regla del p-valor es una herramienta más, pero no debe ser la única en la que nos basemos para decidir. <span class="hl-yellow"><strong>Otros aspectos a considerar</strong></span>: calidad de las medidas, diseño del estudio, evidencia externa en la literatura respecto a la causalidad subyacente, validez de las hipótesis planteadas, etc</li>
+</ul>
+</section>
+<section id="paréntesis-p-valor-2" class="slide level2">
+<h2>Paréntesis: p-valor</h2>
+<p><span class="hl-yellow"><strong>¿Qué representa un p-valor?</strong></span></p>
+<p>Hablaremos más adelante de ellos pero este es un <span class="hl-yellow"><strong>pequeño resumen respecto al consenso</strong></span> recogido en 2016 por la ASA (American Statistical Association) en su trabajo <a href="https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true" class="uri">https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true</a></p>
+<ul>
+<li><span class="hl-red"><strong>No hagas cherry picking</strong></span>: muestra de manera transparentes que has probado, que ha salido y que no, y no te quedes solo con lo que sale bien o los p-valores que te convenga (<strong>p-hacking</strong>).</li>
+</ul>
+</section>
+<section id="paréntesis-p-valor-3" class="slide level2">
+<h2>Paréntesis: p-valor</h2>
+<p><span class="hl-yellow"><strong>¿Qué representa un p-valor?</strong></span></p>
+<p>Hablaremos más adelante de ellos pero este es un <span class="hl-yellow"><strong>pequeño resumen respecto al consenso</strong></span> recogido en 2016 por la ASA (American Statistical Association) en su trabajo <a href="https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true" class="uri">https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true</a></p>
+<ul>
+<li><span class="hl-yellow"><strong>Significancia estadística</strong></span> no implica significacia real (científica, humana, económica, etc). Obtener <span class="hl-red"><strong>p-valores muy pequeños no implica un mayor efecto</strong></span> que otros p-valores no tan pequeños (y viceversa). <span class="hl-yellow"><strong>Cualquier efecto, por pequeño que sea, puede derivar en p-valores pequeños si el tamaño uestral o la precisión de las medidas es suficiente alto</strong></span>, y al contrario (efectos evidentes pueden derivar en p-valores altos si <span class="math inline">\(n\)</span> es pequeño)</li>
+</ul>
+</section>
+<section id="paréntesis-p-valor-4" class="slide level2">
+<h2>Paréntesis: p-valor</h2>
+<p><span class="hl-yellow"><strong>¿Qué representa un p-valor?</strong></span></p>
+<p>Hablaremos más adelante de ellos pero este es un <span class="hl-yellow"><strong>pequeño resumen respecto al consenso</strong></span> recogido en 2016 por la ASA (American Statistical Association) en su trabajo <a href="https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true" class="uri">https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true</a></p>
+<ul>
+<li><span class="hl-purple"><strong>Alternativas</strong></span>: intervalos de confianza, de credibilidad, métodos bayesianos, false discovery rates.</li>
+</ul>
+<p>&nbsp;</p>
+<p>📚 Ver más en <a href="https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true" class="uri">https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true</a>, <a href="https://anabelforte.com/2020/11/15/contraste/" class="uri">https://anabelforte.com/2020/11/15/contraste/</a> y <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4877414/" class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4877414/</a></p>
+</section>
+<section id="inferencia-de-los-parámetros-14" class="slide level2">
 <h2>Inferencia de los parámetros</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>ajuste_lineal <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>ajuste_lineal <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1919,16 +2000,16 @@ Multiple R-squared:  0.01792,   Adjusted R-squared:  0.0006956
 F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 </div>
 </div>
-<p>Si te fijas ambos p-valores están por encima de <span class="math inline">\(\alpha = 0.05\)</span> (valor adoptado habitualmente) los que nos dice que <span class="hl-yellow"><strong>no hay evidencias en los datos para afirmar que haya efectos lineales significativos</strong></span></p>
+<p>Si te fijas ambos p-valores están por encima de <span class="math inline">\(\alpha = 0.05\)</span> (umbral adoptado habitualmente) los que nos dice que <span class="hl-yellow"><strong>no hay evidencias de los datos sean compatibles con afirmar que haya efectos lineales significativos</strong></span></p>
 <div class="fragment">
 <p>¿Y si probamos a quitar <span class="math inline">\(\beta_0\)</span> (es decir, la respuesta está centrada)?</p>
 </div>
 </section>
-<section id="inferencia-de-los-parámetros-12" class="slide level2">
+<section id="inferencia-de-los-parámetros-15" class="slide level2">
 <h2>Inferencia de los parámetros</h2>
 <p>Para ello basta añadir un <code>-1</code> antes de las variables predictoras.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">lm</span>(<span class="at">data =</span> datos, <span class="at">formula =</span> mass <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> height) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">lm</span>(<span class="at">data =</span> datos, <span class="at">formula =</span> mass <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> height) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -2070,7 +2151,7 @@ F-statistic: 20.85 on 1 and 58 DF,  p-value: 2.638e-05</code></pre>
 <div class="fragment">
 <p>Para ello antes tendremos que instalar un <span class="hl-yellow"><strong>conjunto de paquetes para desarrolladores</strong></span> llamado <code>{devtools}</code>, que nos permitirá la instalación desde Github</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -2087,7 +2168,7 @@ F-statistic: 20.85 on 1 and 58 DF,  p-value: 2.638e-05</code></pre>
 <div class="fragment">
 <p>En la mayoría de casos bastará con la función <code>install_github()</code> (del paquete que acabamos de instalar), pasándole como argumento la <span class="hl-yellow"><strong>ruta del repositorio</strong></span> (sin “github.com/”).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"jbgb13/peRReo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"jbgb13/peRReo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Ya puedes perrear con ggplot ;)</p>
 </div>
@@ -2173,8 +2254,8 @@ F-statistic: 20.85 on 1 and 58 DF,  p-value: 2.638e-05</code></pre>
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="co"># Carga de datos desde ISCIII</span></span>
-<span id="cb44-2"><a href="#cb44-2"></a>datos_covid <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"https://cnecovid.isciii.es/covid19/resources/casos_hosp_uci_def_sexo_edad_provres.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="co"># Carga de datos desde ISCIII</span></span>
+<span id="cb50-2"><a href="#cb50-2"></a>datos_covid <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"https://cnecovid.isciii.es/covid19/resources/casos_hosp_uci_def_sexo_edad_provres.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="fragment">
@@ -2184,15 +2265,15 @@ F-statistic: 20.85 on 1 and 58 DF,  p-value: 2.638e-05</code></pre>
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="co"># Depuración</span></span>
-<span id="cb45-2"><a href="#cb45-2"></a>datos_madrid <span class="ot">&lt;-</span></span>
-<span id="cb45-3"><a href="#cb45-3"></a>  datos_covid <span class="sc">|&gt;</span></span>
-<span id="cb45-4"><a href="#cb45-4"></a>  <span class="co"># Filtrado por Madrid y fecha</span></span>
-<span id="cb45-5"><a href="#cb45-5"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"M"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb45-6"><a href="#cb45-6"></a>  <span class="co"># Selección de columnas</span></span>
-<span id="cb45-7"><a href="#cb45-7"></a>  <span class="fu">select</span>(provincia_iso<span class="sc">:</span>fecha, num_casos) <span class="sc">|&gt;</span> </span>
-<span id="cb45-8"><a href="#cb45-8"></a>  <span class="co"># Resumen de casos diarios por fecha y sexo</span></span>
-<span id="cb45-9"><a href="#cb45-9"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a><span class="co"># Depuración</span></span>
+<span id="cb51-2"><a href="#cb51-2"></a>datos_madrid <span class="ot">&lt;-</span></span>
+<span id="cb51-3"><a href="#cb51-3"></a>  datos_covid <span class="sc">|&gt;</span></span>
+<span id="cb51-4"><a href="#cb51-4"></a>  <span class="co"># Filtrado por Madrid y fecha</span></span>
+<span id="cb51-5"><a href="#cb51-5"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"M"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb51-6"><a href="#cb51-6"></a>  <span class="co"># Selección de columnas</span></span>
+<span id="cb51-7"><a href="#cb51-7"></a>  <span class="fu">select</span>(provincia_iso<span class="sc">:</span>fecha, num_casos) <span class="sc">|&gt;</span> </span>
+<span id="cb51-8"><a href="#cb51-8"></a>  <span class="co"># Resumen de casos diarios por fecha y sexo</span></span>
+<span id="cb51-9"><a href="#cb51-9"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -2205,8 +2286,8 @@ F-statistic: 20.85 on 1 and 58 DF,  p-value: 2.638e-05</code></pre>
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># Exportamos datos</span></span>
-<span id="cb46-2"><a href="#cb46-2"></a><span class="fu">write_csv</span>(datos_madrid, <span class="at">file =</span> <span class="st">"./exportado/datos_madrid.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="co"># Exportamos datos</span></span>
+<span id="cb52-2"><a href="#cb52-2"></a><span class="fu">write_csv</span>(datos_madrid, <span class="at">file =</span> <span class="st">"./exportado/datos_madrid.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="fragment">
@@ -2218,14 +2299,14 @@ F-statistic: 20.85 on 1 and 58 DF,  p-value: 2.638e-05</code></pre>
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="co"># Gráfica</span></span>
-<span id="cb47-2"><a href="#cb47-2"></a><span class="fu">ggplot</span>(datos_madrid) <span class="sc">+</span></span>
-<span id="cb47-3"><a href="#cb47-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> fecha, <span class="at">y =</span> num_casos, <span class="at">color =</span> sexo),</span>
-<span id="cb47-4"><a href="#cb47-4"></a>            <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">linewidth =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb47-5"><a href="#cb47-5"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#85519D"</span>, <span class="st">"#278862"</span>)) <span class="sc">+</span></span>
-<span id="cb47-6"><a href="#cb47-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>sexo) <span class="sc">+</span></span>
-<span id="cb47-7"><a href="#cb47-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb47-8"><a href="#cb47-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a><span class="co"># Gráfica</span></span>
+<span id="cb53-2"><a href="#cb53-2"></a><span class="fu">ggplot</span>(datos_madrid) <span class="sc">+</span></span>
+<span id="cb53-3"><a href="#cb53-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> fecha, <span class="at">y =</span> num_casos, <span class="at">color =</span> sexo),</span>
+<span id="cb53-4"><a href="#cb53-4"></a>            <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">linewidth =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb53-5"><a href="#cb53-5"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#85519D"</span>, <span class="st">"#278862"</span>)) <span class="sc">+</span></span>
+<span id="cb53-6"><a href="#cb53-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>sexo) <span class="sc">+</span></span>
+<span id="cb53-7"><a href="#cb53-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb53-8"><a href="#cb53-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div><div class="column" style="width:60%;">
@@ -2238,8 +2319,8 @@ F-statistic: 20.85 on 1 and 58 DF,  p-value: 2.638e-05</code></pre>
 <li>Tras ello <span class="hl-yellow"><strong>exportamos la gráfica</strong></span></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"./exportado/ggplot.png"</span>, <span class="at">plot =</span> <span class="fu">last_plot</span>(),</span>
-<span id="cb48-2"><a href="#cb48-2"></a>       <span class="at">bg =</span> <span class="st">"white"</span>, <span class="at">width =</span> <span class="dv">12</span>, <span class="at">height =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"./exportado/ggplot.png"</span>, <span class="at">plot =</span> <span class="fu">last_plot</span>(),</span>
+<span id="cb54-2"><a href="#cb54-2"></a>       <span class="at">bg =</span> <span class="st">"white"</span>, <span class="at">width =</span> <span class="dv">12</span>, <span class="at">height =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -2283,11 +2364,11 @@ F-statistic: 20.85 on 1 and 58 DF,  p-value: 2.638e-05</code></pre>
 <h2>Repo de código</h2>
 <p>Vamos a realizar un <span class="hl-yellow"><strong>cambio en nuestro código</strong></span>: en tu código local (local –&gt; tu ordenador), en lugar de filtrar por Madrid haz el <span class="hl-yellow"><strong>filtro por Barcelona</strong></span>, guarda el código y sube en el repositorio el nuevo archivo (con el mismo nombre, Github hará la sobrescritura)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>datos_bcn <span class="ot">&lt;-</span></span>
-<span id="cb49-2"><a href="#cb49-2"></a>  datos_covid <span class="sc">|&gt;</span></span>
-<span id="cb49-3"><a href="#cb49-3"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"B"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb49-4"><a href="#cb49-4"></a>  <span class="fu">select</span>(fecha, sexo, grupo_edad, num_casos) <span class="sc">|&gt;</span> </span>
-<span id="cb49-5"><a href="#cb49-5"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>datos_bcn <span class="ot">&lt;-</span></span>
+<span id="cb55-2"><a href="#cb55-2"></a>  datos_covid <span class="sc">|&gt;</span></span>
+<span id="cb55-3"><a href="#cb55-3"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"B"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb55-4"><a href="#cb55-4"></a>  <span class="fu">select</span>(fecha, sexo, grupo_edad, num_casos) <span class="sc">|&gt;</span> </span>
+<span id="cb55-5"><a href="#cb55-5"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="consulta-de-commits" class="slide level2">

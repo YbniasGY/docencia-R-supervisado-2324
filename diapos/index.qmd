@@ -1688,8 +1688,71 @@ donde $t_{n-p-1; \alpha/2}$ es el cuantil $1-\alpha/2$ (deja a la izquierda una 
 ---
 
 
-## Paréntesis: intervalos de confianza
-confint(
+## Inferencia de los parámetros
+
+Podemos calcular los intervalos de confianza de los parámetros en `R` con `confint()`
+
+```{r}
+confint(ajuste_lineal, level = 0.99)
+confint(ajuste_lineal, level = 0.95)
+confint(ajuste_lineal, level = 0.9)
+```
+
+---
+
+## Inferencia de los parámetros
+
+[**¿Qué significa realmente un intervalo de confianza?**]{.hl-yellow}
+
+. . .
+
+La **probabilidad de que el parámetro real** caiga dentro [**NO EXISTE**]{.hl-red}: el parámetro es desconocido pero fijo, no aleatorio, así que no sentido calcular su probabilidad.
+
+. . .
+
+Si obtenemos para un parámetro un intervalo $[-1, 1]$ al 95%, no significa que $P(parametro \in [-1, 1]) = 0.95$: significa que [**si tomamos 1000 muestras distintas de la población**]{.hl-yellow} y calculamos para cada una el intervalo de confianza, [**aproximadamente 950 intervalos de confianza contendrán dentro el parámetro real**]{.hl-yellow}
+
+. . .
+
+Un [**intervalo al 95% implica que habrá una frecuencia esperada de 0.95**]{.hl-yellow} de que intervalos que no conocemos (porque se derivan de muestras que no hemos tomado) contengan al parámetro real, pero [**no es la probabilidad de que tu intervalo calculado contenga a dicho parámetro**]{.hl-red}: nos habla la precisión de nuestra metodología de estimación, no del parámetro.
+
+
+---
+
+## Inferencia de los parámetros
+
+[**Deberes**]{.hl-yellow}. Dada una población normal $\mu = 3$ y $\sigma = 1.2$, crea un código que genere 500 muestras distintas (tamaño $n = 100$ cada una), de manera que para cada una apliques un `t.test()` para calcular un IC para $\mu$. Tras ello, gráfica los intervalos como se muestra en la imagen (haz uso de `geom_segment()`)
+
+```{r}
+#| echo: false
+mu <- 3
+sigma <- 1.2
+m <- 500
+conf_int <- tibble("id" = 1:m, "low" = NA, "high" = NA)
+
+for (i in 1:m) {
+  
+  sample <- rnorm(n = 100, mean = mu, sd = sigma)
+  hyp_test <- t.test(x = sample)
+  conf_int[i, 2] <- hyp_test$conf.int[1]
+  conf_int[i, 3] <- hyp_test$conf.int[2]
+}
+conf_int <-
+  conf_int |> 
+  mutate(true_param = mu >= low & mu <= high)
+
+ggplot(conf_int) +
+  geom_segment(aes(y = id, yend = id, x = low, xend = high,
+                   color = true_param, linewidth = true_param)) +
+  geom_vline(xintercept = mu) +
+  scale_linewidth_manual(values = c(1.1, 0.2)) +
+  theme_minimal() +
+  guides(linewidth = "none") +
+  labs(x = "Valores del intervalo",
+       y = "id intervalo",
+       color = "¿Contiene mu real?")
+```
+
 ---
 
 
@@ -1721,11 +1784,70 @@ Este contraste significancia en realidad **contesta a la siguiente pregunta**
 
 &nbsp;
 
-Esa pregunta puede ser respondida desde un punto de vista **frecuentista** haciendo uso de los [**p-valores**]{.hl-yellow}: si $p-value < \alpha$, entonces rechazamos la nula (rechazamos que la variable no tenga efecto lineal significativo, es decir, aceptamos que sí lo tiene); en caso contrario no podemos rechazar (que **no es lo mismo que aceptarla**, solo que no hay evidencias suficientes en los datos para decir que haya un efecto significativo)
+Esa pregunta puede ser respondida desde un punto de vista **frecuentista** haciendo uso de los [**p-valores**]{.hl-yellow}: si $p-value < \alpha$, se suele rechazar la nula (rechazamos que la variable no tenga efecto lineal significativo, es decir, aceptamos que sí lo tiene); en caso contrario no se suele rechazar (que **no es lo mismo que aceptarla**). Pero...
 
 ---
 
 ## Paréntesis: p-valor
+
+[**¿Qué representa un p-valor?**]{.hl-yellow}
+
+. . .
+
+Hablaremos más adelante de ellos pero este es un [**pequeño resumen respecto al consenso**]{.hl-yellow} recogido en 2016 por la ASA (American Statistical Association) en su trabajo <https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true>
+
+. . .
+
+* [**Habla sobre los datos**]{.hl-yellow}. Los p-valores nos pueden servir como indicadores de **cómo de incompatible son los datos respecto a un modelo/hipotesis/explicación asumida**: habla sobre los datos, no sobre la veracidad de la hipotesis nula per se o la probabilidad de que los datos hayan salido tan extremos por azar. 
+
+---
+
+## Paréntesis: p-valor
+
+[**¿Qué representa un p-valor?**]{.hl-yellow}
+
+Hablaremos más adelante de ellos pero este es un [**pequeño resumen respecto al consenso**]{.hl-yellow} recogido en 2016 por la ASA (American Statistical Association) en su trabajo <https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true>
+
+
+
+* [**Realidades complejas, decisiones complejas**]{.hl-yellow}. Cuidado con reducir a decisiones binarias realidades complejas. La regla del p-valor es una herramienta más, pero no debe ser la única en la que nos basemos para decidir. [**Otros aspectos a considerar**]{.hl-yellow}: calidad de las medidas, diseño del estudio, evidencia externa en la literatura respecto a la causalidad subyacente, validez de las hipótesis planteadas, etc
+
+---
+
+## Paréntesis: p-valor
+
+[**¿Qué representa un p-valor?**]{.hl-yellow}
+
+Hablaremos más adelante de ellos pero este es un [**pequeño resumen respecto al consenso**]{.hl-yellow} recogido en 2016 por la ASA (American Statistical Association) en su trabajo <https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true>
+
+
+* [**No hagas cherry picking**]{.hl-red}: muestra de manera transparentes que has probado, que ha salido y que no, y no te quedes solo con lo que sale bien o los p-valores que te convenga (**p-hacking**).
+
+---
+
+## Paréntesis: p-valor
+
+[**¿Qué representa un p-valor?**]{.hl-yellow}
+
+Hablaremos más adelante de ellos pero este es un [**pequeño resumen respecto al consenso**]{.hl-yellow} recogido en 2016 por la ASA (American Statistical Association) en su trabajo <https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true>
+
+
+* [**Significancia estadística**]{.hl-yellow} no implica significacia real (científica, humana, económica, etc). Obtener [**p-valores muy pequeños no implica un mayor efecto**]{.hl-red} que otros p-valores no tan pequeños (y viceversa). [**Cualquier efecto, por pequeño que sea, puede derivar en p-valores pequeños si el tamaño uestral o la precisión de las medidas es suficiente alto**]{.hl-yellow}, y al contrario (efectos evidentes pueden derivar en p-valores altos si $n$ es pequeño)
+
+---
+
+## Paréntesis: p-valor
+
+[**¿Qué representa un p-valor?**]{.hl-yellow}
+
+Hablaremos más adelante de ellos pero este es un [**pequeño resumen respecto al consenso**]{.hl-yellow} recogido en 2016 por la ASA (American Statistical Association) en su trabajo <https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true>
+
+
+* [**Alternativas**]{.hl-purple}: intervalos de confianza, de credibilidad, métodos bayesianos, false discovery rates.
+
+&nbsp;
+
+📚 Ver más en <https://www.tandfonline.com/doi/epdf/10.1080/00031305.2016.1154108?needAccess=true>, <https://anabelforte.com/2020/11/15/contraste/> y <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4877414/>
 
 ---
 
@@ -1737,7 +1859,7 @@ Esa pregunta puede ser respondida desde un punto de vista **frecuentista** hacie
 ajuste_lineal |> summary()
 ```
 
-Si te fijas ambos p-valores están por encima de $\alpha = 0.05$ (valor adoptado habitualmente) los que nos dice que [**no hay evidencias en los datos para afirmar que haya efectos lineales significativos**]{.hl-yellow}
+Si te fijas ambos p-valores están por encima de $\alpha = 0.05$ (umbral adoptado habitualmente) los que nos dice que [**no hay evidencias de los datos sean compatibles con afirmar que haya efectos lineales significativos**]{.hl-yellow}
 
 . . .
 
