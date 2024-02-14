@@ -1877,22 +1877,747 @@ lm(data = datos, formula = mass ~ -1 + height) |> summary()
 
 Fíjate que ahora, amén que [**hay un efecto lineal significativo de la altura**]{.hl-yellow} y de tener $R^2$ mayor, $\beta_1$ tiene una precisión mayor. En este caso [**solo podía quitar uno**]{.hl-yellow} (perderíamos $X$), pero veremos más adelante cómo decidir cuál quitar si tuviésemos varias variables.
 
----
+# Clases 7 y 8: caso práctico  {#clase-7-8}
 
-siguiente clase 13/02: caso práctico
-
-* Análisis exploratorio (numérico y visualización, corrplot)
-
-* Estimación
-
-* Interpretación coeficientes
-
-* Diagnosis (herramientas en R)
-
+[**¿De qué depende el precio del vino?**]{style="color:#444442;"}
 
 ---
 
-siguiente clase 15/02:
+## Caso práctico
+
+Vamos a poner en práctica lo aprendido con el dataset `wine.csv` disponible en el campus.
+
+```{r}
+datos <- read_csv(file = "./datos/wine.csv")
+datos
+```
+
+---
+
+## Caso práctico
+
+
+El conjunto de datos está formado por 27 observaciones (cosechas de vino rojo Burdeos) y 7 variables
+
+* `Year`, `Age`: año de la cosecha y número de años en barrica.
+* `Price`: precio en 1990-1991 de cada cosecha (en **escala log**)
+* `WinterRain`: lluvia (en mm) que cayó ese año en invierno.
+* `AGST`: crecimiento medio de la temperatura (en grados Celsius) durante la temporada.
+* `HarvestRain`: lluvia (en mm) que cayó ese año durante la cosecha.
+* `FrancePop`: población (miles de habitantes) de Francia.
+
+Ver más en detalles en <https://doi.org/10.1080/09332480.1995.10542468>
+
+. . .
+
+[**El objetivo: predecir el precio**]{.hl-yellow}
+
+
+---
+
+## Caso práctico
+
+```{r}
+datos
+```
+
+Para predecir el precio vamos a usar (de momento) una [**regresión lineal univariante**]{.hl-yellow}, donde $Y = precio$ y deberemos elegir la predictora $X$ más apropiada.
+
+---
+
+## Pasos a seguir
+
+1. [**Análisis exploratorio inicial**]{.hl-yellow}:
+  - ¿Las variables son [**numéricas (continuas)**]{.hl-purple}?
+  - ¿Tienen [**problemas de rango**]{.hl-purple} (por ejemplo, pesos negativos)? ¿Tienen datos ausentes?
+  - ¿Cómo se [**distribuyen las variables**]{.hl-purple}? Ideas: resúmen numérico, histogramas/densidades, boxplots, gráficos de violín, etc
+  - ¿Hay [**datos atípicos**]{.hl-purple}?
+
+---
+
+## Pasos a seguir
+
+2. [**Análisis de dependencia**]{.hl-yellow}:
+  - ¿Qué [**predictora está más correlacionada (linealmente) con la variable objetivo**]{.hl-purple} a predecir? ¿Existe otro tipo de dependencia (pendiente implementar en `R`)?
+  - ¿Cómo se [**relacionan las predictoras**]{.hl-purple} entre sí? ¿Están correlacionadas? Ideas: matriz de correlaciones, diagramas de dispersión vs Y, corrplots, etc
+
+. . .
+
+3. [**Formulación**]{.hl-yellow} del modelo
+
+. . .
+
+4. [**Fase de estimación**]{.hl-yellow}:
+  - ¿Cuánto valen los [**parámetros estimados**]{.hl-purple}? ¿Cómo queda el ajuste?
+  - ¿Qué [**interpretación**]{.hl-purple} tienen?
+
+
+---
+
+## Pasos a seguir
+
+5. [**Fase de diagnosis**]{.hl-yellow} (paquetes `{performance}` y `{olsrr}`):
+  - ¿Cumplen los datos las [**hipótesis parámetricas**]{.hl-purple} requeridas para poder hacer inferencia? 
+  - ¿Cómo modificar los datos para que se cumplan?
+  - Análisis de residuales
+  
+. . .
+
+6. [**Fase de inferencia**]{.hl-yellow}:
+  - ¿Qué [**variabilidad**]{.hl-purple} tienen las estimaciones de nuestro parámetros?
+  - ¿Las predictoras/intercepto tienen un [**efecto lineal significativo**]{.hl-purple}?
+  - ¿Debemos [**re-entrenar el modelo**]{.hl-purple} sin alguno de ellos?
+
+---
+
+## Pasos a seguir
+
+7. [**Fase de evaluación**]{.hl-yellow}:
+  - ¿Es significativo el modelo? [**ANOVA: análisis de la varianza**]{.hl-purple}
+  - ¿Qué información de la predictora explica el modelo? [**Parámetros de bondad de ajuste**]{.hl-purple} ($R^2$ por ejemplo)
+
+. . .
+
+8. [**Fase de predicción**]{.hl-yellow}
+
+
+---
+
+## Análisis exploratorio inicial
+
+
+1. [**Análisis exploratorio inicial**]{.hl-yellow}:
+  - ¿Las variables son [**numéricas (continuas)**]{.hl-purple}?
+  - ¿Tienen [**problemas de rango**]{.hl-purple} (por ejemplo, pesos negativos)? ¿Tienen datos ausentes?
+  
+&nbsp;
+
+Para responder a dichas preguntas lo más sencillos es hacer uso de la función `skim()` del paquete `{skimr}`
+
+```{r}
+#| eval: false
+library(skimr)
+datos |> skim()
+```
+
+. . .
+
+En este caso [**no tenemos ausentes ni problemas de codificación**]{.hl-green}
+
+
+---
+
+## Análisis exploratorio inicial
+
+  - ¿Cómo se [**distribuyen las variables**]{.hl-purple}?
+  - ¿Hay [**datos atípicos**]{.hl-purple}?
+
+
+&nbsp;
+
+Para ello podemos [**visualizar la distribución de cada variable**]{.hl-yellow} haciendo uso de densidades, histogramas y/o boxplots (por ejemplo), pero si queremos ahorrar tiempo en visualizar convertimos nuestro dataset en [**tidydata**]{.hl-yellow}
+
+```{r}
+datos_tidy <-
+  datos |> 
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "values")
+datos_tidy
+```
+
+---
+
+## Análisis exploratorio inicial
+
+```{r}
+#| code-fold: true
+ggplot(datos_tidy, aes(x = values)) +
+  geom_density(aes(color = variable, fill = variable),
+               alpha = 0.75) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  facet_wrap(~variable, scales = "free") +
+  theme_minimal()
+```
+
+---
+
+## Análisis exploratorio inicial
+
+```{r}
+#| code-fold: true
+ggplot(datos_tidy, aes(x = values)) +
+  geom_histogram(aes(color = variable, fill = variable),
+               alpha = 0.75, bins = 10) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  facet_wrap(~variable, scales = "free") +
+  theme_minimal()
+```
+
+---
+
+## Análisis exploratorio inicial
+
+```{r}
+#| code-fold: true
+ggplot(datos_tidy, aes(x = values)) +
+  geom_histogram(aes(color = variable, fill = variable),
+               alpha = 0.75, bins = 10) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  facet_wrap(~variable, scales = "free") +
+  theme_minimal()
+```
+
+---
+
+## Análisis exploratorio inicial
+
+```{r}
+#| code-fold: true
+ggplot(datos_tidy, aes(y = values, x = variable)) +
+  geom_boxplot(aes(color = variable, fill = variable),
+               alpha = 0.75) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  facet_wrap(~variable, scales = "free") +
+  theme_minimal()
+```
+
+[**No hay valores atípicos (respecto a los percentiles)**]{.hl-green}
+
+---
+
+## Análisis exploratorio inicial
+
+Podemos incluso gráficar todos los scatter plot sin transformar los datos con `facet_matrix()` del paquete `{ggforce}`
+
+```{r}
+#| code-fold: true
+library(ggforce)
+ggplot(datos) +
+  geom_point(aes(x = .panel_x, y = .panel_y)) +
+  facet_matrix(vars(everything())) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  theme_minimal()
+  
+```
+
+---
+
+## Análisis exploratorio inicial
+
+Podemos también visualizar con un [**scatter plot**]{.hl-yellow} todas las variables y además sus correlaciones, con el paquete `{GGally}` y la función `ggpairs(), sin necesidad de convertir a tidydata.
+
+```{r}
+#| code-fold: true
+library(GGally)
+ggpairs(datos) +
+  theme_minimal()
+```
+   
+---
+
+
+## Análisis de dependencia
+
+2. [**Análisis de dependencia**]{.hl-yellow}:
+  - ¿Qué [**predictora está más correlacionada (linealmente) con la variable objetivo**]{.hl-purple} a predecir? ¿Existe otro tipo de dependencia (pendiente implementar en `R`)?
+  - ¿Cómo se [**relacionan las predictoras**]{.hl-purple} entre sí? ¿Están correlacionadas? Ideas: matriz de correlaciones, diagramas de dispersión vs Y, corrplots, etc
+
+. . .
+
+Este paso será crucial en el [**contexto multivariante**]{.hl-yellow} pero en este caso simplemente vamos a ver como se relacionan linealmente las predictoras entre sí, y cuál de ellas es la **más adecuada para predecir linealmente** `precio`
+
+---
+
+## Análisis de dependencia
+
+El primer paso es la [**matriz de correlaciones**]{.hl-yellow} con la función `cor()` o con la función `correlate()` del paquete `{corrr}` (importa en tibble más visual)
+
+```{r}
+library(corrr)
+datos |> correlate()
+```
+
+. . .
+
+* [**Respecto a Y**]{.hl-yellow}: predictoras con mayor cor lineal son `AGST` (más calor, menos cosechas, sube el precio) y `HarvestRain` (más lluvias, más cosechas, baja el precio, ¡el signo importa!)
+
+* [**Dependencia entre predictoras**]{.hl-yellow}: las variables `Age`, `Year` y `FrancePop` presentan la misma información.
+
+
+---
+
+## Análisis de dependencia
+
+También podemos usar `corrplot()` del paquete `{corrplot}`, al que le pasamos una matriz de correlaciones clásica y nos la [**visualiza**]{.hl-yellow}.
+
+```{r}
+library(corrplot)
+datos |> cor() |> corrplot(method = "ellipse")
+```
+
+Puedes ver distintas opciones de visualización en <https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html>
+
+---
+
+## Análisis de dependencia
+
+Otra opción es [**visualizar con un scatter plots todas las predictoras vs Y**]{.hl-yellow}, pivotando antes nuestro dataset (solo pivotamos las predictoras)
+
+:::: columns
+::: {.column width="65%"}
+
+```{r}
+#| code-fold: true
+datos_tidy <-
+  datos |> pivot_longer(cols = -Price, names_to = "variable",
+                        values_to = "values")
+ggplot(datos_tidy, aes(x = values, y = Price)) + 
+  geom_point(aes(color = variable), alpha = 0.7) +
+  geom_smooth(method = "lm") +
+  ggthemes::scale_color_colorblind() +
+  facet_wrap(~variable, scales = "free_x") +
+  theme_minimal()
+```
+
+:::
+
+::: {.column width="35%"}
+
+No solo comprobamos que las rectas con más pendiente son `AGST` y `HarvestRain`, además los puntos parecen poder ajustarse a una recta sin otro patrón identificable.
+
+:::
+::::
+
+Esto es importante hacerlo ya que debemos [**descartar posibles correlaciones espúreas**]{.hl-red} (ver ejemplo datasaurus)
+
+---
+
+## Formulación del modelo
+
+Una vez que hemos decidido que dos predictoras usaemos, vamos por tanto a plantear [**dos modelos univariantes**]{.hl-yellow}
+
+$$Price = \beta_0 + \beta_1*AGST + \varepsilon$$
+$$Price = \beta_0 + \beta_1*HarvestRain + \varepsilon$$
+
+---
+
+## Fase de estimación
+
+
+4. [**Fase de estimación**]{.hl-yellow}:
+  - ¿Cuánto valen los [**parámetros estimados**]{.hl-purple}? ¿Cómo queda el ajuste?
+  - ¿Qué [**interpretación**]{.hl-purple} tienen?
+
+
+&nbsp;
+
+Para ello ejecutaremos ambos modelos con `lm()`
+
+```{r}
+ajuste_AGST <- lm(data = datos, formula = Price ~ AGST)
+ajuste_harvest <- lm(data = datos, formula = Price ~ HarvestRain)
+```
+
+
+---
+
+## Fase de estimación
+
+[**Ajuste con AGST**]{.hl-yellow}
+
+```{r}
+ajuste_AGST |> summary()
+```
+
+* $\beta_0=$ `r round(ajuste_AGST$coefficients[1], 3)`: predicción del precio cuando $AGST = 0$ es de -3 (recuerda que está en escala logartímica)
+
+* $\beta_1=$ `r round(ajuste_AGST$coefficients[2], 3)`: por cada grado de aumento, el precio sube `r round(ajuste_AGST$coefficients[2], 3)` (escala log).
+
+---
+
+## Fase de estimación
+
+[**Ajuste con AGST**]{.hl-yellow}
+
+```{r}
+#| echo: false
+ajuste_AGST |> summary()
+```
+
+* [**Residuales**]{.hl-yellow}: además de media cero, parecen presentar una distribución simétrica con la mediana en torno al cero. Además se tiene que $\widehat{\sigma}_{\varepsilon}^{2}=\frac{1}{n-2}\sum_{i=1}^{n} \widehat{\varepsilon}_{i}^{2} = 0.4819$ (estimador insesgado de la varianza residual) y $R^2 = 0.4456$ (bondad de ajuste)
+
+
+---
+
+## Fase de estimación
+
+[**Ajuste con harvestRain**]{.hl-yellow}
+
+
+```{r}
+ajuste_harvest |> summary()
+```
+
+* $\beta_0=$ `r round(ajuste_harvest$coefficients[1], 3)`: predicción del precio cuando la lluvia fue nula es de 7.679 (recuerda que está en escala logartímica)
+
+* $\beta_1=$ `r round(ajuste_harvest$coefficients[2], 3)`: por cada litro de lluvia, precio baja `r round(1000*ajuste_AGST$coefficients[2], 3)` (escala log).
+
+---
+
+## Fase de estimación
+
+[**Ajuste con harvestRain**]{.hl-yellow}
+
+```{r}
+#| echo: false
+ajuste_harvest |> summary()
+```
+
+* [**Residuales**]{.hl-yellow}: además de media cero, parecen presentar una distribución simétrica con la mediana en torno al cero. Además se tiene que $\widehat{\sigma}_{\varepsilon}^{2}=\frac{1}{n-2}\sum_{i=1}^{n} \widehat{\varepsilon}_{i}^{2} = 0.5577$ (algo más grande que el otro ajuste) y $R^2 = 0.2572$ (algo más pequeño que el otro ajuste) -> de momento es mejor el primer modelo.
+
+---
+
+## Fase de diagnosis
+
+5. [**Fase de diagnosis**]{.hl-yellow} (paquetes `{performance}` y `{olsrr}`):
+  - ¿Cumplen los datos las [**hipótesis parámetricas**]{.hl-purple} requeridas para poder hacer inferencia? 
+  - ¿Cómo modificar los datos para que se cumplan?
+  - Análisis de residuales
+  
+&nbsp;
+
+Recuerda que [**necesitamos verificar antes las hipótesis**]{.hl-yellow} para poder hacer inferencia con los parámetros, así que vamos a ello con el paquete `{performance}` y el paquete `{olsrr}`
+
+---
+
+## Fase de diagnosis
+
+```{r}
+library(performance)
+check_model(ajuste_AGST)
+```
+
+---
+
+## Diagnosis: linealidad
+
+1. [**Linealidad**]{.hl-green}: el valor esperado de $Y$ es $E \left[Y | \boldsymbol{X} = x \right] = \beta_0 + \beta_1 x$
+
+
+```{r}
+#| code-fold: true
+check_model(ajuste_AGST)
+```
+
+Si te fijas el gráfico que se refiere a ello está [**visualizando residuales vs valores estimados**]{.hl-yellow}: está volviendo a plantear un segundo modelo de regresión donde ahora $\widehat{\varepsilon}_i = \gamma_0 + \gamma_1 \widehat{y}_i$
+
+---
+
+## Diagnosis: linealidad
+
+```{r}
+linealidad <- lm(data = tibble("fitted" = ajuste_AGST$fitted.values,
+                               "residuals" = ajuste_AGST$residuals),
+                 formula = residuals ~ fitted)
+linealidad |> summary()
+```
+
+Si te fijas [**ambos parámetros no son significativamente distintos de 0**]{.hl-green}: no presentan una tendencia (lineal al menos)
+
+---
+
+## Diagnosis: linealidad
+
+Más adelante probaremos alguna otra cosa pero de momento nos basta con eso. También podemos [**visualizar nosotros ese scatter plot residuales vs estimaciones**]{.hl-yellow}
+
+```{r}
+#| code-fold: true
+ggplot(tibble("fitted" = ajuste_AGST$fitted.values,
+              "residuals" = ajuste_AGST$residuals),
+       aes(x = fitted, y = residuals)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm") +
+  theme_minimal()
+```
+
+---
+
+## Diagnosis: homocedasticidad
+
+2. [**Homocedasticidad**]{.hl-green}: necesitamos que la [**varianza del error sea finita y constante**]{.hl-yellow}, tal que $\sigma_{r}^2 = \sigma_{\varepsilon}^2 = {\rm Var} \left[\varepsilon | \boldsymbol{X} = x \right] = cte < \infty$.
+
+```{r}
+check_heteroscedasticity(ajuste_AGST)
+```
+
+. . .
+
+El gráfico titulado `Homogeneity of variance` nos visualiza la raíz cuadrada del valor absoluto de los residuos estandarizados frente a las predicciones (se conoce como [**gráfico de escala-localización**]{.hl-yellow})
+
+---
+
+## Diagnosis: homocedasticidad
+
+Si visualizamos los [**residuales**]{.hl-yellow} deberían estar en torno a 0, dentro de una banda constante (varianza constante)
+
+
+```{r}
+#| code-fold: true
+ggplot(tibble("id" = 1:length(ajuste_AGST$residuals),
+              "residuals" = ajuste_AGST$residuals),
+       aes(x = id, y = residuals)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal()
+```
+
+---
+
+
+## Diagnosis: homocedasticidad
+
+Si visualizamos el gráfico de [**escala-localización**]{.hl-yellow} deberíamos obtener un diagrama de dispersión cuya recta de regresión saliese casi plana en torno al 1.
+
+
+```{r}
+#| code-fold: true
+ggplot(tibble("fitted" = ajuste_AGST$fitted.values,
+              "sqrt_std_residuals" = sqrt(abs((ajuste_AGST$residuals - mean(ajuste_AGST$residuals)) / sd(ajuste_AGST$residuals)))),
+       aes(x = fitted, y = sqrt_std_residuals)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal()
+```
+
+Según el gráfico no deberíamos asumir homocedasticidad. **¿Por qué el contraste no la rechaza?**
+
+---
+
+## Diagnosis: homocedasticidad
+
+
+```{r}
+#| code-fold: true
+ggplot(tibble("fitted" = ajuste_AGST$fitted.values,
+              "sqrt_std_residuals" = sqrt(abs((ajuste_AGST$residuals - mean(ajuste_AGST$residuals)) / sd(ajuste_AGST$residuals)))),
+       aes(x = fitted, y = sqrt_std_residuals)) +
+  geom_point(size = 3, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal()
+```
+
+Con el poco tamaño muestral que tenemos, es complicado tener evidencias que refuten la hipótesis nula (y el gráfico puede estar parcialmente diseñado). Por eso es la [**hipótesis más difícil de cumplir**]{.hl-yellow}. Lo importante es que en [**la recta de regresión al dibujar los residuos no se aprecia una banda cuya anchura se modifique groseramente**]{.hl-green}, más o menos constante
+
+
+---
+
+## Diagnosis: normalidad
+
+3. [**Normalidad**]{.hl-green}: pediremos que $\varepsilon \sim N \left(0, \sigma_{r}^2 \right)$
+
+Con la función `ols_test_normality()` del paquete `{olsrr}` podemos obtener diferentes contrastes de normalidad
+
+```{r}
+library(olsrr)
+ols_test_normality(ajuste_AGST)
+```
+
+Nos centraremos en los contrastes de `Shapiro-Wilk`, `Kolmogorov-Smirnov` y `Anderson-Darling`: [**no se rechaza normalidad**]{.hl-yellow}
+
+---
+
+## Diagnosis: normalidad
+
+Además del contraste podemos visualizar con `stat_qq()` y `stat_qq_line()` el conocido como [**Q-Q plot**]{.hl-yellow}: enfrenta los cuantiles de una muestra con los cuantiles de una normal teórica, teniendo que **obtener los puntos en torno a una recta** (especilamente en el centro).
+
+
+```{r}
+#| code-fold: true
+ggplot(tibble("residuals" = ajuste_AGST$residuals)) +
+  stat_qq(aes(sample = residuals)) +
+  stat_qq_line(aes(sample = residuals))
+```
+
+
+---
+
+## Diagnosis: independencia
+
+4. [**Independencia**]{.hl-green}: los errores $\left\lbrace \varepsilon_i \right\rbrace_{i=1}^{n}$ deben ser independientes entre sí (el error en una observación no depende de otras). En particular, serán **incorrelados**
+
+$${\rm Cor}_{\varepsilon_i \varepsilon_j} = E \left[\varepsilon_i \varepsilon_j \right] - E \left[\varepsilon_i \right] E \left[\varepsilon_j \right] = E \left[\varepsilon_i \varepsilon_j \right] = 0, \quad i \neq j$$
+
+```{r}
+check_autocorrelation(ajuste_AGST)
+```
+
+Por último, `check_autocorrelation()` comprueba como efectivamente los [**residuales/errores son independientes**]{.hl-yellow}, haciendo un test de autocorrelación (nos tiene que salir lo contrario a una serie temporal, que el error i no depende del i-1).
+
+---
+
+## Diagnosis: independencia
+
+Otra forma de verlo es [**visualizando los residuos respecto a su versión con retardo**]{.hl-yellow} (por ejemplo, $\left(\widehat{\varepsilon}_1, \widehat{\varepsilon}_2, \widehat{\varepsilon}_3, \ldots, \widehat{\varepsilon}_{n-1} \right)$ vs $\left(\widehat{\varepsilon}_2, \widehat{\varepsilon}_3, \ldots, \widehat{\varepsilon}_n \right)$ 
+
+```{r}
+#| code-fold: true
+ggplot(tibble("lag1" = ajuste_AGST$residuals[-length(ajuste_AGST$residuals)],
+              "residuals" = ajuste_AGST$residuals[-1]),
+       aes(x = residuals, y = lag1)) +
+  geom_point(size = 3, alpha = 0.7) + 
+  geom_smooth(method = "lm") + 
+  theme_minimal()
+```
+
+---
+
+## Fase de diagnosis
+
+```{r}
+check_model(ajuste_AGST)
+```
+
+En nuestro caso se cumplen todas las hipótesis (algunas más fuertemente que otras).
+
+[**Repite el proceso con el otro modelo**]{.hl-yellow}
+
+---
+
+## Fase de diagnosis
+
+```{r}
+check_predictions(ajuste_AGST)
+```
+
+Nos faltan dos gráficas por comentar:
+
+* `Posterior Predictive Checks`: [**simula distintas variables respuesta**]{.hl-yellow} suponiendo que el modelo fuese cierto (añadiendo ruido aleatorio) y lo compara con la muestra. [**Si lo observado se distancia mucho de las simulaciones**]{.hl-red} es que el modelo planteado no ajusta bien a la muestra.
+
+---
+
+## Fase de diagnosis
+
+```{r}
+check_outliers(ajuste_AGST)
+```
+
+* `Influential Observations`: nos permite identificar [**observaciones influyentes**]{.hl-yellow}, marcando aquellas (con su id de fila) que se salgan fuera de la banda definida por la conocida como **distancia de Cook** denotada como $D_i$ (realiza, para cada observación, la suma de todos los cambios de la regresión cuando la observación $i$ es retirada: si hay muchos cambios al cambiar una observación, es que era muy influyente)
+
+. . .
+
+Diferencia dos tipos: 
+
+* [**outliers**]{.hl-yellow}: valor atípico de la **respuesta** pudiendo perturbar la varianza residual
+* [**high-leverage points**]{.hl-yellow}: valor atípico en alguna de las **predictoras**
+
+---
+
+## Fase de inferencia
+
+6. [**Fase de inferencia**]{.hl-yellow}:
+  - ¿Qué [**variabilidad**]{.hl-purple} tienen las estimaciones de nuestro parámetros?
+  - ¿Las predictoras/intercepto tienen un [**efecto lineal significativo**]{.hl-purple}?
+  - ¿Debemos [**re-entrenar el modelo**]{.hl-purple} sin alguno de ellos?
+
+&nbsp;
+
+Una vez verificadas las hipótesis lo que haremos será [**inferir conclusiones de la población en función de la muestra**]{.hl-yellow}
+
+---
+
+## Fase de inferencia
+
+```{r}
+ajuste_AGST |> summary()
+```
+
+* [**Variabilidad**]{.hl-yellow} de las estimaciones de nuestro parámetros
+
+  - $\widehat{SE} \left( \widehat{\beta}_0 \right)$ igual a 2.344 por lo que (aprox) $\widehat{\beta_0} \sim N(-3.547, 2.344)$
+  - $\widehat{SE} \left( \widehat{\beta}_1 \right)$ igual a 0.143  por lo que (aprox) que $\widehat{\beta_1} \sim N(0.643, 0.143)$
+  
+
+---
+
+## Fase de inferencia
+
+```{r}
+ajuste_AGST |> summary()
+```
+
+* [**Estadístico**]{.hl-yellow} del contraste
+
+  - $\frac{\widehat{\beta}_0 - 0}{\widehat{SE} \left( \widehat{\beta}_0 \right)}$ igual a -1.5 (valor que tendrías que buscar en las tablas a mano)
+  - $\frac{\widehat{\beta}_1 - 0}{\widehat{SE} \left( \widehat{\beta}_1 \right)}$ igual a 4.483 (valor que tendrías que buscar en las tablas a mano)
+  
+  
+  
+---
+
+## Fase de inferencia
+
+```{r}
+ajuste_AGST |> summary()
+```
+
+* [**Efecto (lineal)**]{.hl-yellow}: si nos fijamos en la tabla, el p-valor de $\beta_0$ es 0.146052. Si adoptamos $\alpha = 0.05$ como suele ser habitual, el contraste $H_0:~\beta_0 = 0$ vs $H_1:~\beta_0 \neq 0$ nos dice que [**no podemos rechazar de forma significativa la hipótesis nula**]{.hl-red} (no sucede con $\beta_1$, si sucediese no habría modelo)
+
+---
+
+## Fase de inferencia
+
+```{r}
+ajuste_AGST |> summary()
+```
+
+[**¿Y si quitamos dicho parámetro?**]{.hl-yellow}
+
+. . .
+
+Para quitarlo añadimos un -1 al modelo
+
+```{r}
+ajuste_AGST_sin_beta0 <- lm(data = datos, formula = Price ~ -1 + AGST)
+```
+ 
+---
+
+## Re-aprendiendo
+
+```{r}
+ajuste_AGST_sin_beta0 |> summary()
+```
+
+* La [**bondad de ajuste**]{.hl-yellow} ha pasado de $R^2 = 0.446$ a $R^2 = 0.9953$
+
+* La [**variabilidad de la estimación**]{.hl-yellow} $\widehat{SE} \left( \widehat{\beta}_1 \right)$  ha pasado de 0.143 a 0.005757.
+
+---
+
+## Comparar modelos
+
+Aunque no hemos hablado en profundidad de las **métricas de evaluación** podemos [**comparar los modelos**]{.hl-yellow} con `compare_performance()` del paquete `{performance}`
+
+```{r}
+#| echo: false
+ajuste_harvest_sin_beta0 <- lm(data = datos, formula = Price ~ -1 + HarvestRain)
+```
+```{r}
+compare_performance(ajuste_AGST, ajuste_AGST_sin_beta0,
+                    ajuste_harvest, ajuste_harvest_sin_beta0)
+```
+
+# Clases 9: evaluación y predicción {#clase-9}
+
+[**¿Cómo se puede evaluar un modelo? ¿Qué métricas existen? ¿Cómo predecir?**]{style="color:#444442;"}
+
+---
+
+siguiente clase 20/02:
 
 * otro caso real
 
@@ -1900,28 +2625,26 @@ siguiente clase 15/02:
 
 * intervalos predicción (se)
 
----
-
-siguiente clase 20/02:
-
+* gráfico error vs fitted values
 
 ANOVA
 
-caso con todo
+# Clases 10: caso práctico {#clase-10}
+
+[**...**]{style="color:#444442;"}
+
 
 ---
 
-siguiente clase 22/02:
-
-
-caso con todo a mano y en R
-
+caso práctico con todo
 
 ---
 
 siguiente clase 27/02:
 
+
 entrega
+
 
 ---
 
