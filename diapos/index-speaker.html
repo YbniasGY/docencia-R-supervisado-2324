@@ -2723,7 +2723,7 @@ Anderson-Darling          0.2422         0.7457
 <div class="cell">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">check_autocorrelation</span>(ajuste_AGST)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.698).</code></pre>
+<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.630).</code></pre>
 </div>
 </div>
 <p>Por último, <code>check_autocorrelation()</code> comprueba como efectivamente los <span class="hl-yellow"><strong>residuales/errores son independientes</strong></span>, haciendo un test de autocorrelación (nos tiene que salir lo contrario a una serie temporal, que el error i no depende del i-1).</p>
@@ -3352,9 +3352,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 
 Name          | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 ------------------------------------------------------------------------------------------------------------
-ajuste_lineal |    lm | 3650.1 (0.778) | 3650.2 (0.788) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
-ajuste_6pred  |    lm | 3652.6 (0.222) | 3652.8 (0.212) | 3691.9 (&lt;.001) | 0.816 |     0.815 | 1.491 | 1.496
-ajuste_23pred |    lm | 3668.7 (&lt;.001) | 3670.0 (&lt;.001) | 3791.4 (&lt;.001) | 0.820 |     0.815 | 1.478 | 1.496</code></pre>
+ajuste_lineal |    lm | 3650.1 (0.973) | 3650.2 (0.975) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
+ajuste_6pred  |    lm | 3657.3 (0.027) | 3657.5 (0.025) | 3696.6 (&lt;.001) | 0.816 |     0.814 | 1.494 | 1.500
+ajuste_23pred |    lm | 3672.4 (&lt;.001) | 3673.7 (&lt;.001) | 3795.1 (&lt;.001) | 0.819 |     0.815 | 1.480 | 1.498</code></pre>
 </div>
 </div>
 <p>Con <code>compare_performance()</code> podemos comparar métricas de modelos.</p>
@@ -3399,12 +3399,12 @@ ajuste_23pred |    lm | 3668.7 (&lt;.001) | 3670.0 (&lt;.001) | 3791.4 (&lt;.001
 
 Name     | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 -------------------------------------------------------------------------------------------------------
-ajuste_1 |    lm |   50.1 (&gt;.999) |   50.1 (&gt;.999) |   64.8 (&gt;.999) | 0.997 |     0.997 | 0.247 | 0.248
-ajuste_2 |    lm | 2827.3 (&lt;.001) | 2827.3 (&lt;.001) | 2842.0 (&lt;.001) | 0.956 |     0.956 | 0.992 | 0.993
-ajuste_3 |    lm | 3657.7 (&lt;.001) | 3657.8 (&lt;.001) | 3672.5 (&lt;.001) | 0.905 |     0.905 | 1.502 | 1.504
-ajuste_4 |    lm | 4271.0 (&lt;.001) | 4271.0 (&lt;.001) | 4285.7 (&lt;.001) | 0.834 |     0.833 | 2.041 | 2.043
-ajuste_5 |    lm | 5538.5 (&lt;.001) | 5538.6 (&lt;.001) | 5553.3 (&lt;.001) | 0.573 |     0.573 | 3.847 | 3.851
-ajuste_6 |    lm | 7036.9 (&lt;.001) | 7037.0 (&lt;.001) | 7051.7 (&lt;.001) | 0.228 |     0.228 | 8.138 | 8.146</code></pre>
+ajuste_1 |    lm |   -1.3 (&gt;.999) |   -1.3 (&gt;.999) |   13.4 (&gt;.999) | 0.998 |     0.998 | 0.241 | 0.241
+ajuste_2 |    lm | 2843.1 (&lt;.001) | 2843.1 (&lt;.001) | 2857.8 (&lt;.001) | 0.961 |     0.961 | 1.000 | 1.001
+ajuste_3 |    lm | 3659.5 (&lt;.001) | 3659.5 (&lt;.001) | 3674.2 (&lt;.001) | 0.918 |     0.918 | 1.504 | 1.505
+ajuste_4 |    lm | 4231.7 (&lt;.001) | 4231.7 (&lt;.001) | 4246.4 (&lt;.001) | 0.870 |     0.870 | 2.002 | 2.004
+ajuste_5 |    lm | 5586.0 (&lt;.001) | 5586.1 (&lt;.001) | 5600.8 (&lt;.001) | 0.624 |     0.623 | 3.940 | 3.944
+ajuste_6 |    lm | 7017.9 (&lt;.001) | 7017.9 (&lt;.001) | 7032.6 (&lt;.001) | 0.267 |     0.267 | 8.061 | 8.069</code></pre>
 </div>
 </div>
 </section>
@@ -3465,18 +3465,18 @@ lm(formula = y ~ x, data = datos)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--2.24296 -0.45519  0.03292  0.48913  1.64761 
+-1.51476 -0.36926  0.05178  0.44028  2.19146 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.94952    0.10745   8.837 5.35e-16 ***
-x           -1.89776    0.08943 -21.221  &lt; 2e-16 ***
+(Intercept)  1.02755    0.09976   10.30   &lt;2e-16 ***
+x           -2.00868    0.08302  -24.19   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.6788 on 198 degrees of freedom
-Multiple R-squared:  0.6946,    Adjusted R-squared:  0.6931 
-F-statistic: 450.3 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.6302 on 198 degrees of freedom
+Multiple R-squared:  0.7472,    Adjusted R-squared:  0.746 
+F-statistic: 585.3 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -3504,18 +3504,18 @@ lm(formula = y ~ x, data = datos)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--2.85030 -0.27702  0.02903  0.24577  2.18323 
+-1.55854 -0.33364  0.03403  0.25806  1.84039 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.93472    0.08849   10.56   &lt;2e-16 ***
-x           -1.90353    0.07635  -24.93   &lt;2e-16 ***
+(Intercept)  0.89645    0.08154   10.99   &lt;2e-16 ***
+x           -1.85153    0.07035  -26.32   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.6234 on 198 degrees of freedom
-Multiple R-squared:  0.7584,    Adjusted R-squared:  0.7572 
-F-statistic: 621.6 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.5744 on 198 degrees of freedom
+Multiple R-squared:  0.7777,    Adjusted R-squared:  0.7766 
+F-statistic: 692.7 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
@@ -3564,551 +3564,32 @@ F-statistic: 621.6 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section></section>
 <section>
 <section id="clase-10" class="title-slide slide level1 center">
-<h1>Clase 10: predicción y resumen</h1>
-<p><span style="color:#444442;"><strong>Fase de predicción. Resumen</strong></span></p>
-</section>
-<section id="resumen" class="slide level2">
-<h2>Resumen</h2>
-<p>Un breve resumen de lo aprendido sobre reg. lineal univariante</p>
-<ul>
-<li><span class="hl-yellow"><strong>Modelo supervisado de predicción</strong></span>: hay una variable objetivo <span class="math inline">\(Y\)</span> continua (numérica) cuyo valor real conocemos</li>
-</ul>
-<div class="fragment">
-<ul>
-<li><span class="hl-yellow"><strong>La visualización importa</strong></span>: no fies tu análisis solo a los parámetros matemáticos, la visualización ayuda a entender los datos.</li>
-</ul>
-</div>
-<div class="fragment">
-<ul>
-<li><span class="hl-yellow"><strong>Relación entre variables</strong></span>: buscamos predictoras muy correladas (linealmente) con <span class="math inline">\(Y\)</span> y lo más incorreladas/independientes entre ellas.</li>
-</ul>
-</div>
-<div class="fragment">
-<ul>
-<li><span class="hl-yellow"><strong>Modelo</strong></span>: el modelo parámetrico se resume en <span class="math inline">\(Y = \beta_0 + \beta_1 X + \varepsilon\)</span>, donde <span class="math inline">\(\varepsilon\)</span> es una variable aleatoria (ruido).</li>
-</ul>
-</div>
-<div class="fragment">
-<ul>
-<li><span class="hl-yellow"><strong>Estimación</strong></span>: la estimación viene modelizada bajo la hipótesis de linealidad</li>
-</ul>
-<p><span class="math display">\[E[Y|X=x] = \beta_0 + \beta_1 x\]</span></p>
-</div>
-</section></section>
-<section id="clase-11" class="title-slide slide level1 center">
-<h1>Clase 11: entrega I</h1>
-<p><span style="color:#444442;"><strong>Entrega I</strong></span></p>
-</section>
-
-<section>
-<section id="clase-12" class="title-slide slide level1 center">
-<h1>Clase 12: incumpliendo hipótesis</h1>
-<p><span style="color:#444442;"><strong>¿Cómo simular datos que incumplan las hipótesis?</strong></span></p>
-</section>
-<section id="incumpliendo-hipótesis" class="slide level2">
-<h2>Incumpliendo hipótesis</h2>
-<p>Los contenidos vistos en esta clase se subirán resumidos en formato notebook.</p>
-</section></section>
-<section>
-<section id="clase-13" class="title-slide slide level1 center">
-<h1>Clase 13: reg. multivariante</h1>
-<p><span style="color:#444442;"><strong>Introducción a la regresión multivariante. Formulación del modelo y estimación</strong></span></p>
-</section>
-<section id="formulación-multivariante" class="slide level2">
-<h2>Formulación multivariante</h2>
-<p>De aquí en adelante llamaremos <span class="hl-yellow"><strong>modelo multivariante</strong></span> a todo modelo en el que <span class="math inline">\(p &gt; 1\)</span> (es decir, tenemos más de una variable predictora).</p>
-<p><span class="math display">\[Y = f\left(X_1, \ldots, X_p \right) + \varepsilon, \quad E \left[Y | \boldsymbol{X} = x \right] =f\left(X_1, \ldots, X_p \right)\]</span> tal que <span class="math inline">\(E \left[ \varepsilon | \left( X_1 = x_1, \ldots, X_p = x_p \right) \right] = 0\)</span>.</p>
-<div class="fragment">
-<p>En el caso del <span class="hl-yellow"><strong>modelo lineal multivariante</strong></span> se traducirá por tanto en</p>
-<p><span class="math display">\[E \left[Y | \boldsymbol{X} = x \right]  = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p, \quad \widehat{Y} = \widehat{\beta_0} + \displaystyle \sum_{j=1}^{p} \widehat{\beta_j} X_j \]</span></p>
-<p>El objetivo seguirá siendo obtener la estimación de los <span class="math inline">\(\widehat{\beta}\)</span> tal que <span class="hl-yellow"><strong>minimicemos el error</strong></span></p>
-</div>
-</section>
-<section id="formulación-matricial" class="slide level2">
-<h2>Formulación matricial</h2>
-<p>Su formulación muestral la podemos expresar mediante la <span class="hl-yellow"><strong>matriz de diseño</strong></span></p>
-<p><span class="math display">\[\mathbf{X} =\begin{pmatrix} 1 &amp; X_{11} &amp; \ldots &amp; X_{1p} \\ 1 &amp; X_{21} &amp; \ldots &amp; X_{2p} \\
-\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
-1 &amp; X_{n1} &amp; \ldots &amp; X_{np}
-\end{pmatrix}_{n\times(p+1)}\]</span></p>
-<p>tal que <span class="math inline">\(Y_i = \beta_0 + \sum_{j=1}^{p} \beta_j X_j + \varepsilon_i\)</span>, para todo elemento de la muestra <span class="math inline">\(i=1,\ldots, n\)</span></p>
-<p><span class="math display">\[ \mathbf{Y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon} = \begin{pmatrix} 1 &amp; X_{11} &amp; \ldots &amp; X_{1p} \\ 1 &amp; X_{21} &amp; \ldots &amp; X_{2p} \\
-\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
-1 &amp; X_{n1} &amp; \ldots &amp; X_{np}
-\end{pmatrix}_{n\times(p+1)}\begin{pmatrix} \beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{pmatrix}_{(p+1)\times1} + \begin{pmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_n \end{pmatrix}_{n\times1}\]</span></p>
-</section>
-<section id="formulación-matricial-1" class="slide level2">
-<h2>Formulación matricial</h2>
-<p>La estimación será por tanto</p>
-<p><span class="math display">\[\widehat{\mathbf{Y}} = \begin{pmatrix} \widehat{Y}_1 \\ \widehat{Y}_2 \\ \vdots \\ \widehat{Y}_n \end{pmatrix}_{n\times1} = \mathbf{X} \widehat{\boldsymbol{\beta}} = \begin{pmatrix} 1 &amp; X_{11} &amp; \ldots &amp; X_{1p} \\ 1 &amp; X_{21} &amp; \ldots &amp; X_{2p} \\
-\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
-1 &amp; X_{n1} &amp; \ldots &amp; X_{np}
-\end{pmatrix}_{n\times(p+1)}\begin{pmatrix} \widehat{\beta}_1 \\ \widehat{\beta}_2 \\ \vdots \\ \widehat{\beta}_p \end{pmatrix}_{(p+1)\times1}\]</span></p>
-</section>
-<section id="varianza-residual-1" class="slide level2">
-<h2>Varianza residual</h2>
-<p>Como sucedía antes, el objetivo será minimizar la <span class="hl-yellow"><strong>varianza residual o error cuadrático medio</strong></span> (varianza del error), o lo que hemos llamado <span class="math inline">\(SSR\)</span></p>
-<p><span class="math display">\[SSR \left(\boldsymbol{\beta} \right) =  \displaystyle \sum_{i=1}^{n} \widehat{\varepsilon}_{i}^{2} = \displaystyle \sum_{i=1}^{n} \left(Y_i - \beta_0 - \beta_1 X_{i1} - \ldots - \beta_p X_{ip} \right)^2 \]</span> ¿Cómo quedaría <strong>matricialmente</strong>?</p>
-<div class="fragment">
-<p><span class="math display">\[SSR \left(\boldsymbol{\beta} \right) =  \displaystyle \sum_{i=1}^{n} \widehat{\varepsilon}_{i}^{2} = \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)^{T}\left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right) = \varepsilon^{T} \varepsilon\]</span></p>
-<p>Así, aplicando el <span class="hl-yellow"><strong>método de los mínimos cuadrados</strong></span>, los <span class="hl-yellow"><strong>parámetros óptimos</strong></span> serán aquellos <span class="math inline">\(\widehat{\boldsymbol{\beta}} = \left(\widehat{\beta}_0, \widehat{\beta}_1, \ldots, \widehat{\beta}_p\right)\)</span> que minimicen dicha suma</p>
-<p><span class="math display">\[\widehat{\boldsymbol{\beta}} = \left(\widehat{\beta}_0, \widehat{\beta}_1, \ldots, \widehat{\beta}_p \right) = \arg \min_{\boldsymbol{\beta} \in \mathbb{R}^{p+1}} \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)^{T}\left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)\]</span></p>
-<p>Y repetimos la idea: <span class="hl-yellow"><strong>calcularemos la derivada respecto a <span class="math inline">\(\widehat{\boldsymbol{\beta}}\)</span> e igualamos a cero</strong></span></p>
-</div>
-</section>
-<section id="método-mínimos-cuadrados-4" class="slide level2">
-<h2>Método mínimos cuadrados</h2>
-<p><span class="math display">\[\widehat{\boldsymbol{\beta}} = \left(\widehat{\beta}_0, \widehat{\beta}_1, \ldots, \widehat{\beta}_p \right) = \arg \min_{\boldsymbol{\beta} \in \mathbb{R}^{p+1}} \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)^{T}\left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)\]</span></p>
-<p>Derivando matricialmente tenemos (recuerda: <span class="math inline">\(\left(A B \right)^{T} = B^{T} A^{T}\)</span>)</p>
-<p><span class="math display">\[\begin{eqnarray}\frac{\partial SSR \left( \boldsymbol{\beta} \right)}{\partial \boldsymbol{\beta}} &amp;=&amp; \frac{\partial \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)^{T}\left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)}{\partial \boldsymbol{\beta}} \nonumber \\  &amp;=&amp; \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)^{T} \frac{\partial \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)}{\partial \boldsymbol{\beta}} + \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right) \frac{\partial \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)^{T}}{\partial \boldsymbol{\beta}} \nonumber \\  &amp;=&amp; -\left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)^{T} \mathbf{X} - \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right) \mathbf{X}^{T} \nonumber \\  &amp;=&amp; -\mathbf{X}^{T}\left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)  - \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right) \mathbf{X}^{T} \nonumber \\ &amp;=&amp; -2\mathbf{X}^{T} \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right) = 0 \end{eqnarray}\]</span></p>
-</section>
-<section id="método-mínimos-cuadrados-5" class="slide level2">
-<h2>Método mínimos cuadrados</h2>
-<p><span class="math display">\[\begin{eqnarray}\frac{\partial SSR \left( \boldsymbol{\beta} \right)}{\partial \boldsymbol{\beta}} &amp;=&amp;  -2\mathbf{X}^{T} \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right) = 0 \end{eqnarray}\]</span></p>
-<p>Si descartamos el <span class="math inline">\(-2\)</span> como constante, tenemos que</p>
-<p><span class="math display">\[\mathbf{X}^{T} \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right) = 0 \longrightarrow \mathbf{X}^{T}  \mathbf{Y} = \mathbf{X}^{T} \mathbf{X} \boldsymbol{\beta}\]</span></p>
-<p>Si ahora despejamos <span class="math inline">\(\beta\)</span> multiplicando en ambos lados por <span class="math inline">\(\left(\mathbf{X}^{T}\mathbf{X} \right)^{-1}\)</span> tenemos finalmente</p>
-<p><span class="math display">\[\widehat{\boldsymbol{\beta}}=\left(\mathbf{X}^{T}\mathbf{X} \right)^{-1}\mathbf{X}^{T}\mathbf{Y}\]</span></p>
-</section>
-<section id="estimación" class="slide level2">
-<h2>Estimación</h2>
-<p>Fíjate que cuando <span class="math inline">\(p = 1\)</span> tenemos que</p>
-<p><span class="math display">\[\widehat{\mathbf{Y}} = \begin{pmatrix} \widehat{Y}_1 \\ \vdots \\ \widehat{Y}_n \end{pmatrix}_{n\times1} = \mathbf{X} \widehat{\boldsymbol{\beta}} = \begin{pmatrix} 1 &amp; X_{11} \\\vdots &amp; \vdots \\ 1 &amp; X_{n1} \end{pmatrix}_{n \times 2}\begin{pmatrix} \widehat{\beta}_0 \\ \widehat{\beta}_1 \end{pmatrix}_{2\times1}\]</span></p>
-<p>y que por tanto <span class="math inline">\(\widehat{\boldsymbol{\beta}}= \left(\begin{pmatrix} 1 &amp; \ldots &amp; 1 \\ X_{11} &amp; \ldots &amp; X_{n1} \end{pmatrix} \begin{pmatrix} 1 &amp; X_{11} \\ 1 &amp; X_{21} \\ \vdots &amp; \vdots \\ 1 &amp; X_{n1} \end{pmatrix} \right)^{-1}\mathbf{X}^{T}\mathbf{Y}\)</span></p>
-<p><span class="hl-red"><strong>Deberes</strong></span>: sería interesante que para el examen supieses demostrar que cuando <span class="math inline">\(p=1\)</span> esa expresión acaba en</p>
-<p><span class="math display">\[\widehat{\beta}_1  = \frac{s_{xy}}{s_{x}^{2}}, \quad \widehat{\beta}_0 = \overline{y} - \hat{\beta}_1 \overline{x}\]</span></p>
-</section>
-<section id="estimación-1" class="slide level2">
-<h2>Estimación</h2>
-<p><span class="math display">\[\widehat{\boldsymbol{\beta}}=\left(\mathbf{X}^{T}\mathbf{X} \right)^{-1}\mathbf{X}^{T}\mathbf{Y}\]</span></p>
-<ul>
-<li>La <span class="hl-yellow"><strong>estimación</strong></span> será por tanto</li>
-</ul>
-<p><span class="math display">\[\widehat{\mathbf{Y}} = \mathbf{X}\hat{\boldsymbol{\beta}}=\mathbf{X}\left(\mathbf{X}^{T}\mathbf{X} \right)^{-1}\mathbf{X}^{T}\mathbf{Y} = \mathbf{H}\mathbf{Y}\]</span></p>
-<ul>
-<li>La matriz <span class="math inline">\(\mathbf{H} = \mathbf{X}\left(\mathbf{X}^{T}\mathbf{X} \right)^{-1}\mathbf{X}^{T}\)</span> se conoce como <span class="hl-yellow"><strong>hat matrix o matriz de proyección</strong></span> (ya que hace que las estimaciones <span class="math inline">\(\hat{y}\)</span> sean en realidad los valores <span class="math inline">\(y\)</span> proyectados verticalmente sobre el plano de regresión ajustado).</li>
-</ul>
-</section>
-<section id="interpretación" class="slide level2">
-<h2>Interpretación</h2>
-<p>Al igual que pasaba antes será importante <span class="hl-yellow"><strong>distinguir lo población de lo muestral</strong></span></p>
-<ul>
-<li><p>Los parámetros <span class="math inline">\(\left( \beta_0, \beta_1, \ldots, \beta_p \right)\)</span> son desconocidos, los <span class="hl-yellow"><strong>parámetros poblacionales</strong></span></p></li>
-<li><p>Los parámetros <span class="math inline">\(\left( \widehat{\beta}_0, \widehat{\beta}_1 , \ldots, \widehat{\beta}_p\right)\)</span> son estimados a partir de los datos, son <span class="hl-yellow"><strong>variables aleatorias</strong></span> ya que han sido calculados en función de una muestra aleatoria.</p></li>
-</ul>
-<p>&nbsp;</p>
-<p><span class="hl-yellow"><strong>¿Cómo se interpretan ahora los parámetros?</strong></span></p>
-</section>
-<section id="interpretación-1" class="slide level2">
-<h2>Interpretación</h2>
-<p><span class="math display">\[\widehat{\mathbf{Y}} = \mathbf{X}\widehat{\boldsymbol{\beta}}= \widehat{\beta}_0 + \sum_{j=1}^{p} \widehat{\beta}_j X_j\]</span></p>
-<ul>
-<li><span class="hl-yellow"><strong>Ordenada en el origen</strong></span>: también llamado <strong>intercepto</strong>, y denotado como <span class="math inline">\(\beta_0\)</span> su valor real, es el valor de <span class="math inline">\(Y\)</span> cuando <span class="math inline">\(X_1 = \ldots = X_p = 0\)</span>. Es decir, <span class="math inline">\(\widehat{\beta}_0\)</span> se puede interpretar como la estimación <span class="math inline">\(\widehat{Y}\)</span> cuando <span class="hl-purple"><strong>TODAS las predictoras son nulas</strong></span></li>
-</ul>
-<div class="fragment">
-<ul>
-<li><span class="hl-yellow"><strong>Pendientes</strong></span>: denotadas como <span class="math inline">\(\beta_j\)</span>, para <span class="math inline">\(j=1,\ldots, p\)</span>, su valor real, cuantifica el incremento de <span class="math inline">\(Y\)</span> cuando solo <span class="math inline">\(X_j\)</span> aumenta una unidad. Es decir, <span class="math inline">\(\widehat{\beta}_j\)</span> se puede interpretar como la variación de la estimación <span class="math inline">\(\widehat{Y}\)</span> cuando <span class="hl-purple"><strong><span class="math inline">\(X_j\)</span> tiene un incremento unitario y el RESTO DE PREDICTORAS permanecen fijas</strong></span>.</li>
-</ul>
-</div>
-</section>
-<section id="diagnosis-3" class="slide level2">
-<h2>Diagnosis</h2>
-<p>En el caso multivariante las <span class="hl-yellow"><strong>4 hipótesis</strong></span> se convierten en</p>
-<ol type="1">
-<li><span class="hl-green"><strong>Linealidad</strong></span>: el valor esperado de <span class="math inline">\(Y\)</span> es</li>
-</ol>
-<p><span class="math display">\[E \left[Y | \left( \boldsymbol{X}_1 = x_1, \ldots, \boldsymbol{X}_p = x_p \right) \right] = \beta_0 + \beta_1 x_1 + \ldots + \beta_p x_p\]</span></p>
-<ol start="2" type="1">
-<li><p><span class="hl-green"><strong>Homocedasticidad</strong></span>: necesitamos que la <span class="hl-yellow"><strong>varianza del error sea finita y constante</strong></span> <span class="math inline">\(\sigma_{r}^2 = \sigma_{\varepsilon}^2 = {\rm Var} \left[\varepsilon | \left( \boldsymbol{X}_1 = x_1, \ldots, \boldsymbol{X}_p = x_p \right) \right] = cte &lt; \infty\)</span></p></li>
-<li><p><span class="hl-green"><strong>Normalidad</strong></span>: pediremos que <span class="math inline">\(\varepsilon \sim N \left(0, \sigma_{r}^2 \right)\)</span></p></li>
-<li><p><span class="hl-green"><strong>Independencia</strong></span>: los errores <span class="math inline">\(\left\lbrace \varepsilon_i \right\rbrace_{i=1}^{n}\)</span> deben ser en independientes, y en particular <strong>incorrelados</strong> <span class="math inline">\({\rm Cor}_{\varepsilon_i \varepsilon_j} = E \left[\varepsilon_i \varepsilon_j \right] = 0, \quad i \neq j\)</span></p></li>
-</ol>
-<p><span class="math display">\[Y | \left( \boldsymbol{X}_1 = x_1, \ldots, \boldsymbol{X}_p = x_p \right) \sim N \left(\beta_0 + \beta_1x_1 + \ldots + \beta_p x_p, \sigma_{\varepsilon}^2 \right)\]</span></p>
-</section>
-<section id="inferencia" class="slide level2">
-<h2>Inferencia</h2>
-<p>Ahora las hipótesis nos permiten decir que los <span class="hl-yellow"><strong>parámetros estimados siguen una distribución normal multivariante</strong></span> de <span class="hl-purple"><strong>media el vector de parámetros</strong></span> a estimar y de <span class="hl-purple"><strong>matriz de covarianzas la varianza residual por <span class="math inline">\(\left(\mathbf{X}^{T}\mathbf{X} \right)^{-1}\)</span></strong></span></p>
-<p><span class="math display">\[\widehat{\boldsymbol{\beta}} \sim N_{p+1}\left(\boldsymbol{\beta}, \sigma_{\varepsilon}^2 \left( \mathbf{X}^{T}\mathbf{X} \right)^{-1}\right)\]</span></p>
-<div class="fragment">
-<p>Esa normal multivariante, componente a componente, deriva en</p>
-<p><span class="math display">\[\widehat{\beta}_j\sim N \left(\beta_j, SE \left(\widehat{\beta}_j\right)^2 \right), \quad \frac{\widehat{\beta}_j - \beta_j}{SE \left(\widehat{\beta}_j\right)} \sim N \left(0, 1 \right), \quad \frac{\widehat{\beta}_j - \beta_j}{\widehat{SE} \left(\widehat{\beta}_j\right)} \sim t_{n-p-1}\]</span></p>
-<p>donde <span class="math inline">\(SE \left(\widehat{\beta}_j\right)^2 = \sigma_{\varepsilon}^2 v_j\)</span> y <span class="math inline">\(\widehat{SE} \left(\widehat{\beta}_j\right)^2 = \widehat{\sigma}_{\varepsilon}^2 v_j\)</span>, con <span class="math inline">\(v_j\)</span> el elemento <span class="math inline">\(j\)</span>-ésimo de la diagonal de <span class="math inline">\(\left( \mathbf{X}^{T}\mathbf{X} \right)^{-1}\)</span> (matriz que representa la <strong>variabilidad de predictores</strong>)</p>
-</div>
-</section>
-<section id="caso-práctico-wine.csv" class="slide level2">
-<h2>Caso práctico: wine.csv</h2>
-<p>Vamos a volver a usar nuestros datos <code>wine.csv</code></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"./datos/wine.csv"</span>)</span>
-<span id="cb131-2"><a href="#cb131-2"></a>datos</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 27 × 7
-    Year Price WinterRain  AGST HarvestRain   Age FrancePop
-   &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
- 1  1952  7.50        600  17.1         160    31    43184.
- 2  1953  8.04        690  16.7          80    30    43495.
- 3  1955  7.69        502  17.2         130    28    44218.
- 4  1957  6.98        420  16.1         110    26    45152.
- 5  1958  6.78        582  16.4         187    25    45654.
- 6  1959  8.08        485  17.5         187    24    46129.
- 7  1960  6.52        763  16.4         290    23    46584.
- 8  1961  8.49        830  17.3          38    22    47128.
- 9  1962  7.39        697  16.3          52    21    48089.
-10  1963  6.71        608  15.7         155    20    48799.
-# ℹ 17 more rows</code></pre>
-</div>
-</div>
-<p>Pero esta vez no vamos a seleccionar ninguna variable previamente. Para <span class="hl-yellow"><strong>ajustar un modelo multivariante</strong></span> basta con añadir variables <code>+</code></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1"></a>ajuste_uni <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> datos, <span class="at">formula =</span> Price <span class="sc">~</span> AGST)</span>
-<span id="cb133-2"><a href="#cb133-2"></a>ajuste_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> datos, <span class="at">formula =</span> Price <span class="sc">~</span> AGST <span class="sc">+</span> HarvestRain)</span>
-<span id="cb133-3"><a href="#cb133-3"></a>ajuste_full <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> datos, <span class="at">formula =</span> Price <span class="sc">~</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="caso-práctico-wine.csv-1" class="slide level2">
-<h2>Caso práctico: wine.csv</h2>
-<p>Fíjate que ahora la tabla <code>coefficients</code> tiene una <span class="hl-yellow"><strong>línea por covariable</strong></span> (más <span class="math inline">\(\beta_0\)</span>) y además en este caso dice <code>(1 not defined because of singularities)</code>: la <span class="hl-red"><strong>matriz de covarianzas no es invertible</strong></span> ya que el <span class="hl-red"><strong>determinante es 0</strong></span> (en este caso <code>Year</code> es “igual” que <code>Age</code>)</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1"></a>ajuste_full <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = Price ~ ., data = datos)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--0.46541 -0.24133  0.00413  0.18974  0.52495 
-
-Coefficients: (1 not defined because of singularities)
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  2.496e+01  1.081e+02   0.231  0.81956    
-Year        -1.377e-02  5.821e-02  -0.237  0.81531    
-WinterRain   1.153e-03  4.991e-04   2.311  0.03109 *  
-AGST         6.144e-01  9.799e-02   6.270 3.22e-06 ***
-HarvestRain -3.837e-03  8.366e-04  -4.587  0.00016 ***
-Age                 NA         NA      NA       NA    
-FrancePop   -2.213e-05  1.268e-04  -0.175  0.86313    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.293 on 21 degrees of freedom
-Multiple R-squared:  0.8278,    Adjusted R-squared:  0.7868 
-F-statistic: 20.19 on 5 and 21 DF,  p-value: 2.232e-07</code></pre>
-</div>
-</div>
-</section>
-<section id="caso-práctico-wine.csv-2" class="slide level2">
-<h2>Caso práctico: wine.csv</h2>
-<p>Una vez eliminada, en la última línea <code>F-statistic: ... p-value: 2.232e-07</code>: se está <span class="hl-green"><strong>rechazando la hipótesis nula</strong></span> del contraste de significación global (existe <span class="hl-green"><strong>alguna predictora cuyo efecto lineal es significativo</strong></span>). Recuerda que la nula es <span class="math inline">\(H_0:~\beta_1 = \ldots = \beta_5 = 0\)</span></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb136"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1"></a>ajuste_full <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> datos <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Age), <span class="at">formula =</span> Price <span class="sc">~</span> .)</span>
-<span id="cb136-2"><a href="#cb136-2"></a>ajuste_full <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = Price ~ ., data = select(datos, -Age))
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--0.46541 -0.24133  0.00413  0.18974  0.52495 
-
-Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  2.496e+01  1.081e+02   0.231  0.81956    
-Year        -1.377e-02  5.821e-02  -0.237  0.81531    
-WinterRain   1.153e-03  4.991e-04   2.311  0.03109 *  
-AGST         6.144e-01  9.799e-02   6.270 3.22e-06 ***
-HarvestRain -3.837e-03  8.366e-04  -4.587  0.00016 ***
-FrancePop   -2.213e-05  1.268e-04  -0.175  0.86313    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.293 on 21 degrees of freedom
-Multiple R-squared:  0.8278,    Adjusted R-squared:  0.7868 
-F-statistic: 20.19 on 5 and 21 DF,  p-value: 2.232e-07</code></pre>
-</div>
-</div>
-</section>
-<section id="caso-práctico-wine.csv-3" class="slide level2">
-<h2>Caso práctico: wine.csv</h2>
-<p>Si nos fijamos en la tabla de coeficientes el <span class="hl-yellow"><strong>modelo ajustado</strong></span> es</p>
-<p><span class="math display">\[\begin{eqnarray}\widehat{Precio} &amp;=&amp; 2.496 - 0.0137 * Year + 0.0012 * WinterRain + 0.614 * AGST \nonumber \\ &amp;-&amp; 0.0038 * HarvestRain - 0.00002 * FrancePop \nonumber \end{eqnarray}\]</span></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb138"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a>ajuste_full <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = Price ~ ., data = select(datos, -Age))
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--0.46541 -0.24133  0.00413  0.18974  0.52495 
-
-Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  2.496e+01  1.081e+02   0.231  0.81956    
-Year        -1.377e-02  5.821e-02  -0.237  0.81531    
-WinterRain   1.153e-03  4.991e-04   2.311  0.03109 *  
-AGST         6.144e-01  9.799e-02   6.270 3.22e-06 ***
-HarvestRain -3.837e-03  8.366e-04  -4.587  0.00016 ***
-FrancePop   -2.213e-05  1.268e-04  -0.175  0.86313    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.293 on 21 degrees of freedom
-Multiple R-squared:  0.8278,    Adjusted R-squared:  0.7868 
-F-statistic: 20.19 on 5 and 21 DF,  p-value: 2.232e-07</code></pre>
-</div>
-</div>
-</section>
-<section id="caso-práctico-wine.csv-4" class="slide level2">
-<h2>Caso práctico: wine.csv</h2>
-<p><span class="math display">\[\begin{eqnarray}\widehat{Precio} &amp;=&amp; 2.496 - 0.0137 * Year + 0.0012 * WinterRain + 0.614 * AGST \nonumber \\ &amp;-&amp; 0.0038 * HarvestRain - 0.00002 * FrancePop \nonumber \end{eqnarray}\]</span></p>
-<p>La <span class="hl_yellow"><strong>interpretación</strong></span> es</p>
-<ul>
-<li><p>La estimación del modelo cuando todas las covariables son 0 (sin población, sin lluvia ni temperatura, año 0) es de 2.496 (escala log)</p></li>
-<li><p>Por ejemplo, si el resto de variables permaneciesen fijas, por cada litro de lluvia que caiga de más durante la cosecha (agosto-septiembre), el modelo estima que el precio baja 3.8 (escala log)</p></li>
-</ul>
-</section>
-<section id="caso-práctico-wine.csv-5" class="slide level2">
-<h2>Caso práctico: wine.csv</h2>
-<p>Si nos fijamos en la tabla de coeficientes tenemos <strong>2 predictoras cuyo efecto lineal no se acepta que sea significativo</strong>: <code>Year</code>, <code>FrancePop</code> (además de <span class="math inline">\(\beta_0\)</span>) ya que el contraste de significación <span class="math inline">\(H_0:~\beta_j = 0\)</span> vs <span class="math inline">\(H_1:~\beta_j \neq 0\)</span> nos devuelve un <span class="math inline">\(p-valor &gt; \alpha\)</span></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb140"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1"></a>ajuste_full <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = Price ~ ., data = select(datos, -Age))
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--0.46541 -0.24133  0.00413  0.18974  0.52495 
-
-Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  2.496e+01  1.081e+02   0.231  0.81956    
-Year        -1.377e-02  5.821e-02  -0.237  0.81531    
-WinterRain   1.153e-03  4.991e-04   2.311  0.03109 *  
-AGST         6.144e-01  9.799e-02   6.270 3.22e-06 ***
-HarvestRain -3.837e-03  8.366e-04  -4.587  0.00016 ***
-FrancePop   -2.213e-05  1.268e-04  -0.175  0.86313    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.293 on 21 degrees of freedom
-Multiple R-squared:  0.8278,    Adjusted R-squared:  0.7868 
-F-statistic: 20.19 on 5 and 21 DF,  p-value: 2.232e-07</code></pre>
-</div>
-</div>
-</section>
-<section id="caso-práctico-wine.csv-6" class="slide level2">
-<h2>Caso práctico: wine.csv</h2>
-<p>La pregunta que intentaremos resolver en futuras clases es:</p>
-<p><span class="hl-yellow"><strong>¿Cómo decidir que predictoras seleccionamos?</strong></span> El problema si quitamos todas las no significativas de manera simultánea es que no sabemos qué <strong>efectos puede haber entre las propias predictoras</strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1"></a>ajuste_full <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = Price ~ ., data = select(datos, -Age))
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--0.46541 -0.24133  0.00413  0.18974  0.52495 
-
-Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  2.496e+01  1.081e+02   0.231  0.81956    
-Year        -1.377e-02  5.821e-02  -0.237  0.81531    
-WinterRain   1.153e-03  4.991e-04   2.311  0.03109 *  
-AGST         6.144e-01  9.799e-02   6.270 3.22e-06 ***
-HarvestRain -3.837e-03  8.366e-04  -4.587  0.00016 ***
-FrancePop   -2.213e-05  1.268e-04  -0.175  0.86313    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.293 on 21 degrees of freedom
-Multiple R-squared:  0.8278,    Adjusted R-squared:  0.7868 
-F-statistic: 20.19 on 5 and 21 DF,  p-value: 2.232e-07</code></pre>
-</div>
-</div>
-</section>
-<section id="caso-práctico-wine.csv-7" class="slide level2">
-<h2>Caso práctico: wine.csv</h2>
-<p>Fíjate que ahora en la <span class="hl-yellow"><strong>fase de diagnosis</strong></span> tenemos una <strong>sexta gráfica a chequear</strong>: una gráfica que nos calcula la conocida como <code>VIF</code> (Variance Inflaction), que nos <span class="hl-yellow"><strong>cuantifica la colinealidad (efectos lineales) entre las predictoras</strong></span></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1"></a><span class="fu">check_model</span>(ajuste_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-90-1.png" width="960" class="r-stretch"></section>
-<section id="anova-5" class="slide level2">
-<h2>ANOVA</h2>
-<p>Ahora <code>anova()</code> en realidad nos hace una <span class="hl-yellow"><strong>ANOVA secuencial</strong></span> (variable a variable)</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb145"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1"></a>ajuste_full <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Response: Price
-            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
-Year         1 2.2195  2.2195 25.8480 4.916e-05 ***
-WinterRain   1 0.2635  0.2635  3.0693 0.0943762 .  
-AGST         1 4.3055  4.3055 50.1419 5.495e-07 ***
-HarvestRain  1 1.8760  1.8760 21.8485 0.0001298 ***
-FrancePop    1 0.0026  0.0026  0.0305 0.8631279    
-Residuals   21 1.8032  0.0859                      
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-</div>
-</section>
-<section id="anova-6" class="slide level2">
-<h2>ANOVA</h2>
-<p>Ahora <code>anova()</code> en realidad nos hace una <span class="hl-yellow"><strong>ANOVA secuencial</strong></span> (variable a variable)</p>
-<table>
-<colgroup>
-<col style="width: 22%">
-<col style="width: 14%">
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 16%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: center;"></th>
-<th style="text-align: center;">Df (grados)</th>
-<th style="text-align: center;">Sum Sq</th>
-<th style="text-align: center;">Mean Sq</th>
-<th style="text-align: center;">F value</th>
-<th style="text-align: center;">Pr(&gt;F)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\(x_1\)</span></td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;"><span class="math inline">\(SSR_1\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\frac{SSR_1}{1}\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(F-value = \frac{\frac{SSR_1}{1}}{\frac{SSE}{n-p-1}}\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(p_1\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">…</td>
-<td style="text-align: center;">…</td>
-<td style="text-align: center;">…</td>
-<td style="text-align: center;">…</td>
-<td style="text-align: center;"><span class="math inline">\(F-value = \frac{\frac{SSR}{p}}{\frac{SSE}{n-p-1}}\)</span></td>
-<td style="text-align: center;">p-valor F test</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><span class="math inline">\(x_p\)</span></td>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;"><span class="math inline">\(SSR_p\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(\frac{SSR_p}{1}\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(F-value = \frac{\frac{SSR_p}{1}}{\frac{SSE}{n-p-1}}\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(p_p\)</span></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">Residuals</td>
-<td style="text-align: center;">n - p - 1</td>
-<td style="text-align: center;">SSE</td>
-<td style="text-align: center;"><span class="math inline">\(\widehat{\sigma}_{\varepsilon}^{2} = \frac{SSE}{n-p-1}\)</span></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="anova-7" class="slide level2">
-<h2>ANOVA</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb147"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1"></a>ajuste_full <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Response: Price
-            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
-Year         1 2.2195  2.2195 25.8480 4.916e-05 ***
-WinterRain   1 0.2635  0.2635  3.0693 0.0943762 .  
-AGST         1 4.3055  4.3055 50.1419 5.495e-07 ***
-HarvestRain  1 1.8760  1.8760 21.8485 0.0001298 ***
-FrancePop    1 0.0026  0.0026  0.0305 0.8631279    
-Residuals   21 1.8032  0.0859                      
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
-</div>
-</div>
-<p>Ahora <span class="math inline">\(SSR_j\)</span>, con <span class="math inline">\(j=1,\ldots,p\)</span>, representa la <strong>suma de residuos al cuadrado</strong> <span class="math inline">\(SSR\)</span> cuando incluimos la predictora j-ésima <span class="math inline">\(X_j\)</span>, frente a cuando no lo hacemos, tal que</p>
-<p><span class="math display">\[SSR_j = SSR \left(X_1, \ldots, X_j \right) - SSR \left(X_1, \ldots, X_{j-1} \right)\]</span></p>
-<p>Así los p-valores <span class="math inline">\(p_j\)</span> son individuales (los mismos que los de la tabla de coeficientes).</p>
-</section></section>
-<section>
-<section id="clase-14" class="title-slide slide level1 center">
-<h1>Clase 14: selección de modelos</h1>
-<p><span style="color:#444442;"><strong>Selección secuencial de modelos</strong></span></p>
-</section>
-<section id="bondad-de-ajuste-3" class="slide level2">
-<h2>Bondad de ajuste</h2>
-</section>
-<section id="intervalos-predicción" class="slide level2">
-<h2>Intervalos predicción</h2>
-</section>
-<section id="multicolinealidad" class="slide level2">
-<h2>Multicolinealidad</h2>
-</section>
-<section id="caso-práctico-3" class="slide level2">
-<h2>Caso práctico</h2>
-</section>
-<section id="selección-de-modelos" class="slide level2">
-<h2>Selección de modelos</h2>
-</section>
-<section id="bic-y-aic" class="slide level2">
-<h2>BIC y AIC</h2>
-</section>
-<section id="consistencia" class="slide level2">
-<h2>Consistencia</h2>
-</section></section>
-<section>
-<section id="clase-15" class="title-slide slide level1 center">
-<h1>Clase 15: caso práctico</h1>
-<p><span style="color:#444442;"><strong>Caso práctico con datos de viviendas de Boston</strong></span></p>
-</section>
-<section id="section" class="slide level2">
-<h2>…</h2>
-</section></section>
-<section>
-<section id="clase-16" class="title-slide slide level1 center">
-<h1>Clase 16: variables cualitativas</h1>
-<p><span style="color:#444442;"><strong>¿Cómo introducir predictoras cualitativas?</strong></span></p>
-</section>
-<section id="section-1" class="slide level2">
-<h2>…</h2>
-</section></section>
-<section>
-<section id="clase-17" class="title-slide slide level1 center">
-<h1>Clase 17: depuración</h1>
+<h1>Clases 10: caso práctico</h1>
 <p><span style="color:#444442;"><strong>…</strong></span></p>
 </section>
-<section id="interacciones" class="slide level2">
-<h2>Interacciones</h2>
+<section class="slide level2">
+
+<p>incumplir hipotesis</p>
+<ol start="8" type="1">
+<li><span class="hl-yellow"><strong>Fase de predicción</strong></span></li>
+</ol>
+<ul>
+<li>intervalos predicción (se)</li>
+</ul>
+<p>caso práctico con todo</p>
 </section>
-<section id="ausentes" class="slide level2">
-<h2>Ausentes</h2>
+<section class="slide level2">
+
+<p>siguiente clase 27/02:</p>
+<p>entrega</p>
 </section>
-<section id="outliers" class="slide level2">
-<h2>Outliers</h2>
+<section class="slide level2">
+
+<p>siguiente clase 29/02:</p>
+<p>Regresión lineal multivariante</p>
 </section>
-<section id="section-2" class="slide level2">
-<h2>…</h2>
-</section></section>
-<section>
-<section id="clase-18" class="title-slide slide level1 center">
-<h1>Clase 18: …</h1>
-<p><span style="color:#444442;"><strong>…</strong></span></p>
-</section>
-<section id="section-3" class="slide level2">
-<h2>…</h2>
+<section class="slide level2">
+
 </section></section>
 <section>
 <section id="el-mundo-github" class="title-slide slide level1 center">
@@ -4186,7 +3667,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="fragment">
 <p>Para ello antes tendremos que instalar un <span class="hl-yellow"><strong>conjunto de paquetes para desarrolladores</strong></span> llamado <code>{devtools}</code>, que nos permitirá la instalación desde Github</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -4203,7 +3684,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="fragment">
 <p>En la mayoría de casos bastará con la función <code>install_github()</code> (del paquete que acabamos de instalar), pasándole como argumento la <span class="hl-yellow"><strong>ruta del repositorio</strong></span> (sin “github.com/”).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb150"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"jbgb13/peRReo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"jbgb13/peRReo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Ya puedes perrear con ggplot ;)</p>
 </div>
@@ -4289,8 +3770,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1"></a><span class="co"># Carga de datos desde ISCIII</span></span>
-<span id="cb151-2"><a href="#cb151-2"></a>datos_covid <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"https://cnecovid.isciii.es/covid19/resources/casos_hosp_uci_def_sexo_edad_provres.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1"></a><span class="co"># Carga de datos desde ISCIII</span></span>
+<span id="cb133-2"><a href="#cb133-2"></a>datos_covid <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"https://cnecovid.isciii.es/covid19/resources/casos_hosp_uci_def_sexo_edad_provres.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="fragment">
@@ -4300,15 +3781,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1"></a><span class="co"># Depuración</span></span>
-<span id="cb152-2"><a href="#cb152-2"></a>datos_madrid <span class="ot">&lt;-</span></span>
-<span id="cb152-3"><a href="#cb152-3"></a>  datos_covid <span class="sc">|&gt;</span></span>
-<span id="cb152-4"><a href="#cb152-4"></a>  <span class="co"># Filtrado por Madrid y fecha</span></span>
-<span id="cb152-5"><a href="#cb152-5"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"M"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb152-6"><a href="#cb152-6"></a>  <span class="co"># Selección de columnas</span></span>
-<span id="cb152-7"><a href="#cb152-7"></a>  <span class="fu">select</span>(provincia_iso<span class="sc">:</span>fecha, num_casos) <span class="sc">|&gt;</span> </span>
-<span id="cb152-8"><a href="#cb152-8"></a>  <span class="co"># Resumen de casos diarios por fecha y sexo</span></span>
-<span id="cb152-9"><a href="#cb152-9"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1"></a><span class="co"># Depuración</span></span>
+<span id="cb134-2"><a href="#cb134-2"></a>datos_madrid <span class="ot">&lt;-</span></span>
+<span id="cb134-3"><a href="#cb134-3"></a>  datos_covid <span class="sc">|&gt;</span></span>
+<span id="cb134-4"><a href="#cb134-4"></a>  <span class="co"># Filtrado por Madrid y fecha</span></span>
+<span id="cb134-5"><a href="#cb134-5"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"M"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb134-6"><a href="#cb134-6"></a>  <span class="co"># Selección de columnas</span></span>
+<span id="cb134-7"><a href="#cb134-7"></a>  <span class="fu">select</span>(provincia_iso<span class="sc">:</span>fecha, num_casos) <span class="sc">|&gt;</span> </span>
+<span id="cb134-8"><a href="#cb134-8"></a>  <span class="co"># Resumen de casos diarios por fecha y sexo</span></span>
+<span id="cb134-9"><a href="#cb134-9"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -4321,8 +3802,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb153"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1"></a><span class="co"># Exportamos datos</span></span>
-<span id="cb153-2"><a href="#cb153-2"></a><span class="fu">write_csv</span>(datos_madrid, <span class="at">file =</span> <span class="st">"./exportado/datos_madrid.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1"></a><span class="co"># Exportamos datos</span></span>
+<span id="cb135-2"><a href="#cb135-2"></a><span class="fu">write_csv</span>(datos_madrid, <span class="at">file =</span> <span class="st">"./exportado/datos_madrid.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="fragment">
@@ -4334,14 +3815,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1"></a><span class="co"># Gráfica</span></span>
-<span id="cb154-2"><a href="#cb154-2"></a><span class="fu">ggplot</span>(datos_madrid) <span class="sc">+</span></span>
-<span id="cb154-3"><a href="#cb154-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> fecha, <span class="at">y =</span> num_casos, <span class="at">color =</span> sexo),</span>
-<span id="cb154-4"><a href="#cb154-4"></a>            <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">linewidth =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb154-5"><a href="#cb154-5"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#85519D"</span>, <span class="st">"#278862"</span>)) <span class="sc">+</span></span>
-<span id="cb154-6"><a href="#cb154-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>sexo) <span class="sc">+</span></span>
-<span id="cb154-7"><a href="#cb154-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb154-8"><a href="#cb154-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb136"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1"></a><span class="co"># Gráfica</span></span>
+<span id="cb136-2"><a href="#cb136-2"></a><span class="fu">ggplot</span>(datos_madrid) <span class="sc">+</span></span>
+<span id="cb136-3"><a href="#cb136-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> fecha, <span class="at">y =</span> num_casos, <span class="at">color =</span> sexo),</span>
+<span id="cb136-4"><a href="#cb136-4"></a>            <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">linewidth =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb136-5"><a href="#cb136-5"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#85519D"</span>, <span class="st">"#278862"</span>)) <span class="sc">+</span></span>
+<span id="cb136-6"><a href="#cb136-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>sexo) <span class="sc">+</span></span>
+<span id="cb136-7"><a href="#cb136-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb136-8"><a href="#cb136-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div><div class="column" style="width:60%;">
@@ -4354,8 +3835,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <li>Tras ello <span class="hl-yellow"><strong>exportamos la gráfica</strong></span></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"./exportado/ggplot.png"</span>, <span class="at">plot =</span> <span class="fu">last_plot</span>(),</span>
-<span id="cb155-2"><a href="#cb155-2"></a>       <span class="at">bg =</span> <span class="st">"white"</span>, <span class="at">width =</span> <span class="dv">12</span>, <span class="at">height =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"./exportado/ggplot.png"</span>, <span class="at">plot =</span> <span class="fu">last_plot</span>(),</span>
+<span id="cb137-2"><a href="#cb137-2"></a>       <span class="at">bg =</span> <span class="st">"white"</span>, <span class="at">width =</span> <span class="dv">12</span>, <span class="at">height =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -4399,11 +3880,11 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <h2>Repo de código</h2>
 <p>Vamos a realizar un <span class="hl-yellow"><strong>cambio en nuestro código</strong></span>: en tu código local (local –&gt; tu ordenador), en lugar de filtrar por Madrid haz el <span class="hl-yellow"><strong>filtro por Barcelona</strong></span>, guarda el código y sube en el repositorio el nuevo archivo (con el mismo nombre, Github hará la sobrescritura)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb156" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a>datos_bcn <span class="ot">&lt;-</span></span>
-<span id="cb156-2"><a href="#cb156-2"></a>  datos_covid <span class="sc">|&gt;</span></span>
-<span id="cb156-3"><a href="#cb156-3"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"B"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb156-4"><a href="#cb156-4"></a>  <span class="fu">select</span>(fecha, sexo, grupo_edad, num_casos) <span class="sc">|&gt;</span> </span>
-<span id="cb156-5"><a href="#cb156-5"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb138" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a>datos_bcn <span class="ot">&lt;-</span></span>
+<span id="cb138-2"><a href="#cb138-2"></a>  datos_covid <span class="sc">|&gt;</span></span>
+<span id="cb138-3"><a href="#cb138-3"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"B"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb138-4"><a href="#cb138-4"></a>  <span class="fu">select</span>(fecha, sexo, grupo_edad, num_casos) <span class="sc">|&gt;</span> </span>
+<span id="cb138-5"><a href="#cb138-5"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="consulta-de-commits" class="slide level2">
@@ -4650,7 +4131,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <li><span class="hl-yellow"><strong>Añadir comentarios</strong></span> al que ha solicitado el <code>merge</code> por si queremos solicitar algún cambio <span class="hl-yellow"><strong>antes de ser aprobado</strong></span></li>
 </ul>
 </section>
-<section id="section-4" class="slide level2">
+<section id="section" class="slide level2">
 <h2><img data-src="img/menu-pr-2.png"></h2>
 </section>
 <section id="pull-request-4" class="slide level2">
