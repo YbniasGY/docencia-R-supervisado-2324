@@ -2723,7 +2723,7 @@ Anderson-Darling          0.2422         0.7457
 <div class="cell">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">check_autocorrelation</span>(ajuste_AGST)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.630).</code></pre>
+<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.668).</code></pre>
 </div>
 </div>
 <p>Por último, <code>check_autocorrelation()</code> comprueba como efectivamente los <span class="hl-yellow"><strong>residuales/errores son independientes</strong></span>, haciendo un test de autocorrelación (nos tiene que salir lo contrario a una serie temporal, que el error i no depende del i-1).</p>
@@ -3352,9 +3352,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 
 Name          | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 ------------------------------------------------------------------------------------------------------------
-ajuste_lineal |    lm | 3650.1 (0.973) | 3650.2 (0.975) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
-ajuste_6pred  |    lm | 3657.3 (0.027) | 3657.5 (0.025) | 3696.6 (&lt;.001) | 0.816 |     0.814 | 1.494 | 1.500
-ajuste_23pred |    lm | 3672.4 (&lt;.001) | 3673.7 (&lt;.001) | 3795.1 (&lt;.001) | 0.819 |     0.815 | 1.480 | 1.498</code></pre>
+ajuste_lineal |    lm | 3650.1 (0.561) | 3650.2 (0.576) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
+ajuste_6pred  |    lm | 3650.6 (0.439) | 3650.8 (0.424) | 3689.9 (&lt;.001) | 0.817 |     0.816 | 1.489 | 1.495
+ajuste_23pred |    lm | 3674.1 (&lt;.001) | 3675.4 (&lt;.001) | 3796.8 (&lt;.001) | 0.819 |     0.814 | 1.482 | 1.500</code></pre>
 </div>
 </div>
 <p>Con <code>compare_performance()</code> podemos comparar métricas de modelos.</p>
@@ -3399,12 +3399,12 @@ ajuste_23pred |    lm | 3672.4 (&lt;.001) | 3673.7 (&lt;.001) | 3795.1 (&lt;.001
 
 Name     | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 -------------------------------------------------------------------------------------------------------
-ajuste_1 |    lm |   -1.3 (&gt;.999) |   -1.3 (&gt;.999) |   13.4 (&gt;.999) | 0.998 |     0.998 | 0.241 | 0.241
-ajuste_2 |    lm | 2843.1 (&lt;.001) | 2843.1 (&lt;.001) | 2857.8 (&lt;.001) | 0.961 |     0.961 | 1.000 | 1.001
-ajuste_3 |    lm | 3659.5 (&lt;.001) | 3659.5 (&lt;.001) | 3674.2 (&lt;.001) | 0.918 |     0.918 | 1.504 | 1.505
-ajuste_4 |    lm | 4231.7 (&lt;.001) | 4231.7 (&lt;.001) | 4246.4 (&lt;.001) | 0.870 |     0.870 | 2.002 | 2.004
-ajuste_5 |    lm | 5586.0 (&lt;.001) | 5586.1 (&lt;.001) | 5600.8 (&lt;.001) | 0.624 |     0.623 | 3.940 | 3.944
-ajuste_6 |    lm | 7017.9 (&lt;.001) | 7017.9 (&lt;.001) | 7032.6 (&lt;.001) | 0.267 |     0.267 | 8.061 | 8.069</code></pre>
+ajuste_1 |    lm |   64.2 (&gt;.999) |   64.2 (&gt;.999) |   78.9 (&gt;.999) | 0.997 |     0.997 | 0.249 | 0.249
+ajuste_2 |    lm | 2851.5 (&lt;.001) | 2851.6 (&lt;.001) | 2866.3 (&lt;.001) | 0.957 |     0.957 | 1.004 | 1.005
+ajuste_3 |    lm | 3652.5 (&lt;.001) | 3652.5 (&lt;.001) | 3667.2 (&lt;.001) | 0.911 |     0.910 | 1.498 | 1.500
+ajuste_4 |    lm | 4260.2 (&lt;.001) | 4260.2 (&lt;.001) | 4274.9 (&lt;.001) | 0.855 |     0.854 | 2.030 | 2.032
+ajuste_5 |    lm | 5622.8 (&lt;.001) | 5622.8 (&lt;.001) | 5637.5 (&lt;.001) | 0.596 |     0.595 | 4.013 | 4.017
+ajuste_6 |    lm | 7064.3 (&lt;.001) | 7064.3 (&lt;.001) | 7079.0 (&lt;.001) | 0.235 |     0.234 | 8.250 | 8.258</code></pre>
 </div>
 </div>
 </section>
@@ -3465,18 +3465,18 @@ lm(formula = y ~ x, data = datos)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--1.51476 -0.36926  0.05178  0.44028  2.19146 
+-1.88002 -0.47177 -0.03357  0.42272  1.82038 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  1.02755    0.09976   10.30   &lt;2e-16 ***
-x           -2.00868    0.08302  -24.19   &lt;2e-16 ***
+(Intercept)  0.97164    0.10191   9.534   &lt;2e-16 ***
+x           -1.87040    0.08482 -22.051   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.6302 on 198 degrees of freedom
-Multiple R-squared:  0.7472,    Adjusted R-squared:  0.746 
-F-statistic: 585.3 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.6438 on 198 degrees of freedom
+Multiple R-squared:  0.7106,    Adjusted R-squared:  0.7092 
+F-statistic: 486.3 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -3503,19 +3503,19 @@ Call:
 lm(formula = y ~ x, data = datos)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--1.55854 -0.33364  0.03403  0.25806  1.84039 
+    Min      1Q  Median      3Q     Max 
+-3.0492 -0.2760  0.0012  0.2026  2.6749 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.89645    0.08154   10.99   &lt;2e-16 ***
-x           -1.85153    0.07035  -26.32   &lt;2e-16 ***
+(Intercept)  0.95303    0.09390   10.15   &lt;2e-16 ***
+x           -1.90804    0.08101  -23.55   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.5744 on 198 degrees of freedom
-Multiple R-squared:  0.7777,    Adjusted R-squared:  0.7766 
-F-statistic: 692.7 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.6615 on 198 degrees of freedom
+Multiple R-squared:  0.7369,    Adjusted R-squared:  0.7356 
+F-statistic: 554.7 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
