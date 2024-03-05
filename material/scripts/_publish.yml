@@ -1,0 +1,4 @@
+- source: correlacion.qmd
+  quarto-pub:
+    - id: 428bd638-9f5e-43f4-9a4b-09166bdc2881
+      url: 'https://quartopub.com/sites/javieralvarezliebana/correlaciones'

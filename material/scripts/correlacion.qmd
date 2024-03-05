@@ -1,0 +1,876 @@
+---
+title: "Correlaciones"
+subtitle: "Cuadernos prácticos de Aprendizaje Supervisado I del Grado en Ciencia de Datos Aplicada (curso 2023-2024)"
+author: "Javier Álvarez Liébana"
+format:
+  html:
+    theme: [default, style.scss]
+    toc: true
+    toc-title: Índice
+    toc-depth: 4
+    toc-location: left
+    number-sections: true
+embed-resources: true
+execute: 
+  echo: true
+---
+
+## Intro a la modelización lineal
+
+El objetivo de la asignatura es ser capaces de construir [**modelos predictivos**]{.hl-yellow} para predecir una variable $Y$ numérica y continua (conocida como **variable objetivo** o **variable dependiente**), haciendo uso de un conjunto de predictoras $X_1,\ldots,X_p$ (conocidas como **covariables** o **variables independientes**) tal que
+
+$$Y = f\left( X_1,\ldots,X_p \right) + \varepsilon$$
+
+Concretamente, dado que la asignatura gira en torno a [**modelos lineales**]{.hl-yellow}, esa función $f()$ que relacione las predictoras con la variable objetivo tendrá que ser una función lineal. En matemáticas decimos que una función $f(x)$ es **lineal** cuando se cumple:
+
+* [**Propiedad aditiva**]{.hl-yellow}: $f(x + y) = f(x) + f(y)$
+
+* [**Propiedad homogénea**]{.hl-yellow}: $f(k*x) = k*f(x)$ (donde $k$ es una constante en $\mathbb{R}$).
+
+Ambas se pueden resumir en $f(a*x + b*y) = a*f(x) + b*f(y)$
+
+&nbsp;
+
+- [**Ejemplos lineales**]{.hl-green}: $y = 2*x_1 - 3$ o  $y = 4 - \frac{x_1}{2} + 3*x_2$
+
+- [**Ejemplos no lineales**]{.hl-red}: $y = 2*\frac{1}{x_1}$ o  $y = 4 - x_{1}^{2} - x_2$ o $y = ln(x_1) + cos(x_2)$
+
+&nbsp;
+
+Así, nuestra [**regresión lineal**]{.hl-yellow} será:
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_p X_p + \varepsilon, \quad E[\varepsilon] = 0$$
+lo que traduce en
+
+$$E[Y|X = x] = \beta_0 + \beta_1 x_1 + \beta_p x_p$$
+
+
+&nbsp;
+
+La idea es encontrar el **«mejor» modelo posible** atendiendo a diferentes aspectos
+
+* ¿Cuánto se **equivoca**? (conocemos el error ya que es **aprendizaje supervisado**: de mi conjunto con el que entreno el modelo, conozco los valores reales de $Y$. 📚 Ver «The elements of Statistical Learning» Hastie et al., 2008)
+
+* ¿Cómo de **complicado** es el modelo? ¿Existe alguno más sencillo (equivocándose similar)?
+
+* Amén de lo que se equivoca, ¿cómo **varían dichas equivocaciones**? ¿Qué varianza tienen mis estimaciones?
+
+* ¿Qué % de información estoy capturando?
+
+&nbsp;
+
+Ese modelo lo podemos reducir a encontrar los «mejores» estimadores $\left( \hat{\beta}_0, \ldots, \hat{\beta}_p \right)$ 
+
+$$\widehat{E[Y|X = x]} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \ldots + \hat{\beta}_p x_p$$
+
+Así, nuestro [**error estimado**]{.hl-yellow} se podrá calcular como
+
+$$\hat{\varepsilon}= Y - \hat{Y}, \quad E[\hat{\varepsilon}] = 0$$
+
+### Caso particular: regresión univariante
+
+
+El [**caso univariante**]{.hl-yellow} es el más sencillo y es aquel en el que solo tenemos una variable predictora $X_1 :=  X$, tal que
+
+$$Y = \beta_0 + \beta_1 X_1 + \varepsilon := \beta_0 + \beta_1 X + \varepsilon$$
+
+&nbsp;
+
+El objetivo en este primera aproximación es, dado un dataset con una variable objetivo y múltiples predictoras, ser capaces de decidir la [**predictora cuyo efecto lineal en $Y$ sea más relevante**]{.hl-yellow}. Y para ello debemos saber un concepto fundamental estadística: la [**covarianza**]{.hl-yellow} y la [**correlación**]{.hl-yellow}.
+
+
+## Covarianza
+
+### Repaso teórico
+
+
+Es habitual en estadística hablar de **medidas de centralización** (media, moda, mediana) y de **medidas de dispersión**, que cuantifican cómo varían los datos y en torno a qué valor lo hacen.
+
+&nbsp;
+
+La medida de dispersión más famosa es la quizás la varianza. [**¿Qué es en realidad la varianza?**]{.hl-yellow}
+
+
+$$s_{x}^{2} = \frac{1}{n} \sum_{i=1}^{n} \left(x_i - \overline{x} \right)^2 = \overline{x^2} - \overline{x}^2 \geq 0$$
+
+&nbsp;
+
+Si atendemos simplemente a la fórmula y su definición, la [**varianza es el promedio de las desviaciones al cuadrado**]{.hl-yellow} (respecto a la media), lo que nos permite cuantificar de alguna manera la [**relación de una variable CONSIGO MISMA**]{.hl-yellow}. Si te fijas en la fórmula, podríamos separar los cuadrados de la siguiente manera:
+
+$$s_{x}^{2} = \frac{1}{n} \sum_{i=1}^{n} \left(x_i - \overline{x} \right)\left(x_i - \overline{x} \right) = \overline{x*x} - \overline{x}*\overline{x} \geq 0$$
+
+&nbsp;
+
+¿Y si quiésemos medir la  [**relación de una variable X respecto a otra variable (en lugar de consigo misma)**]{.hl-yellow}?
+
+
+&nbsp;
+
+Esta es la base del concepto de la [**covarianza**]{.hl-yellow}: sustituir en la fórmula anterior una de las desviaciones de x por las desviaciones respecto a OTRA variable
+
+
+$$s_{xy} = \frac{1}{n} \sum_{i=1}^{n} \sum_{j=1}^{n} \left(x_i - \overline{x} \right)\left(y_j - \overline{y} \right) = \overline{x*y} - \overline{x}*\overline{y}$$
+
+#### Propiedades de la covarianza
+
+Es importante entender algunas [**propiedades de la covarianza**]{.hl-yellow}
+
+&nbsp;
+
+* [**Signo**]{.hl-yellow}: la [**covarianza puede ser tanto positiva como negativa como 0**]{.hl-green}: al eliminar el cuadrado de la varianza, ya no es necesario que sea positiva
+
+* [**¿Qué cuantifica?**]{.hl-yellow} La covarianza [**SOLO mide la relación LINEAL**]{.hl-green} (en torno a una recta) entre dos variables, pero [**no captura relaciones no lineales**]{.hl-red}
+
+&nbsp;
+
+* [**¿Qué dice su signo?**]{.hl-yellow} El signo de la covarianza nos indicará la [**dirección de la dependencia lineal**]{.hl-yellow}: si es positiva, la relación será creciente (cuando X crece, Y crece); si es negativa, la relación será decreciente (cuando X crece, Y decrece)
+
+
+* [**¿Qué dice su magnitud?**]{.hl-yellow}  Al igual que pasa con la varianza, la **covarianza depende de las unidades y magnitudes** de los datos, así que no podemos comparar covarianzas de variables y datasets distintos: si me dicen que la covarianza es de, por ejemplo, 5.5, no sabemos si es mucho o poco.
+
+
+### Herramientas en R
+
+Para calcular la covarianza entre dos variables en `R` la forma más sencilla es usar la función `cov()`.
+
+::: callout-important
+## Importante
+
+Recuerda que los softwares estadísticos nos devuelven siempre la [**cuasi covarianza**]{.hl-yellow}, dividido entre $n-1$ y no entre $n$. La cuasivarianza y la cuasicovarianza son los [**mejores estimadores muestrales (insesgados)**]{.hl-yellow} de los respectivos parámetros poblaciones
+
+:::
+
+#### Simulación: variables sin relación
+
+Por ejemplo, vamos a simular dos variables $X \sim N(0, 0.5)$ e $Y \sim N(0, 0.5)$ que no tienen ningún tipo de relación (ni lineal ni no lineal entre ellas)
+
+```{r}
+set.seed(12345)
+x <- rnorm(n = 1e6, mean = 0, sd = 0.5)
+y <- rnorm(n = 1e6, mean = 0, sd = 0.5)
+cov(x, y)
+```
+
+Vemos como efectivamente la **covarianza es prácticamente cero**, ¿pero cómo cercano a 0 sería?
+
+#### Simulación: variables sin relación lineal
+
+¿Y si simulamos una variable $X$ de manera aleatoria y otra variable $Y$ tal que $Y = X^2$?
+
+```{r}
+set.seed(12345)
+x <- rnorm(n = 1e6, mean = 0, sd = 0.5)
+y <- x^2
+cov(x, y)
+```
+
+Aunque haya una **relación de dependencia perfecta** entre X e Y (una función que las relaciona), [**¡la covarianza puede que sea incluso más pequeña que antes (en valor absoluto)!**]{.hl-yellow}.
+
+Esto se debe a que la [**covarianza/correlación no captura relaciones no lineales**]{.hl-red}, así que para saber si son independientes realmente deberíamos de pasar un **contraste de independencia**. Para ello podemos hacer uso de `chisq.test()` (contraste no parámetrico).
+
+&nbsp;
+
+Esto lo podemos ilustrar con ejemplo más sencillo:
+
+* $X = -1, 0, 1$ cuya media es $\overline{x} = 0$
+* $Y = X^2 = 1, 0, 1$ cuya media es $\overline{y} = \frac{2}{3}$
+* $XY = X*X^2 = X^3 = -1, 0, 1$ cuya media es $\overline{xy} = 0$
+
+Si hacemos la covarianza
+
+$$s_{xy} = \overline{xy} - \overline{x}{y} = 0 - 0 \frac{2}{3} = 0$$
+
+[**Moraleja**]{.hl-yellow}: covarianza nula [**NO IMPLICA**]{.hl-red} independencia (independencia si implica, en particular, ausencia de relación lineal)
+
+![](img/escenarios-covarianza.png) 
+
+#### Simulación: variables con relación lineal
+
+¿Y si simulamos dos variables con relación lineal?
+
+
+```{r}
+set.seed(12345)
+x <- rnorm(n = 1e6, mean = 0, sd = 0.5)
+y <- 2*x
+cov(x, y)
+```
+
+La covarianza en este caos es `r round(cov(x, y), 5)` y la pregunta es...¿es mucho o poco? Eso no podemos resolverlo hasta hablar de **correlación**: de momento solo podemos decir que, en caso de existir, la relación lineal será **positiva**. Esto cambiaría si la hubiéramos definido $Y$ de otra manera, por ejemplo `y <- -2*x`
+
+```{r}
+y <- -2*x
+cov(x, y)
+```
+
+### Matriz de covarianzas
+
+Antes de hablar de correlación, vamos a introducir una **generalización** de una simple covarianza, y es la conocida como [**matriz de covarianzas**]{.hl-yellow}, y que jugará un papel fundamental en estadística ya que resume un conjunto de datos multivariantes.
+
+&nbsp;
+
+La idea de dicha matriz que llamaremos $\Sigma$ es, que si en lugar de tener una sola predictora tenemos $\left(X_1, \ldots, X_p \right)$ covariables, cada elemento $\Sigma_{i,j}$ se defina como 
+
+$$\Sigma = \left(\Sigma_{i,j} \right)_{i=1,\ldots,p}^{j=1,\ldots,p} = \begin{pmatrix} s_{x_1 x_1} = s_{x_1}^2 & s_{x_1 x_2} & \ldots & s_{x_1 x_p} \\ s_{x_2 x_1} & s_{x_2 x_2} = s_{x_2}^2 & \ldots & s_{x_2 x_p} \\ \vdots & \vdots & \ddots & \vdots \\ s_{x_p x_1} & s_{x_p x_2} & \ldots & s_{x_p x_p} = s_{x_p}^2 \end{pmatrix}$$
+
+En el futuro veremos como los **autovalores y autovectores de esta matriz** serán fundamentales. Para calcularla en `R` basta con pasarle `cov()` a un dataset (¡importante, solo numéricas!)
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+starwars |>
+  select(where(is.numeric)) |> # importante: solo numéricas
+  drop_na() |> # importante: covarianza de ausentes --> ausente
+  cov()
+```
+
+### Datos agrupados
+
+Un pequeño matiz en caso de que tuviésemos que hacer el [**cálculo a mano**]{.hl-yellow}: si tenemos una base de datos agrupados (no tenemos el dato en bruto sino los pares de datos únicos $(x_i, y_j)$ y su frecuencia $n_{ij}$), la matriz anterior se calcula como
+
+$$\Sigma = \left(\Sigma_{i,j} \right)_{i=1,\ldots,p}^{j=1,\ldots,p}, \quad \Sigma_{i,j} = s_{x_i x_j} = \frac{1}{n} \sum_{i=1}^{k_i} \sum_{j=1}^{k_j} n_{ij} \left(x_i - \overline{x} \right)\left(y_j - \overline{y} \right)$$
+
+
+## Correlación
+
+### Repaso teórico
+
+Como decíamos, al igual que pasaba con la varianza, la [**covarianza depende de las unidades y magnitudes**]{.hl-yellow} de los datos, así que lo que haremos será [**estandarizar la covarianza**]{.hl-yellow}.
+
+Definiremos el [**coeficiente correlación lineal (de Pearson)**]{.hl-yellow} como la covarianza dividida entre el producto de las desviaciones típicas (algo adimensional)
+
+
+$$r_{xy} = \rho_{xy} = \frac{s_{xy}}{s_x s_y} = \frac{\overline{x*y} - \overline{x} * \overline{y}}{\sqrt{\overline{x^2} - \overline{x}^2}\sqrt{\overline{y^2} - \overline{y}^2}}$$
+
+#### Propiedades de la correlación
+
+Es importante entender algunas [**propiedades de la correlación**]{.hl-yellow}
+
+
+
+* [**Signo**]{.hl-yellow}: mismo signo que la covarianza ya que el denominador es siempre positivo.
+
+* [**¿Qué cuantifica?**]{.hl-yellow}: sus [**valores siempre están entre -1 y 1**]{.hl-yellow} por lo que nos sirve como una **escala de la fortaleza de una relación lineal**. Al igual qe con la covarianza [**no captura relaciones no lineales**]{.hl-red}
+
+&nbsp;
+
+* [**¿Qué dice su signo?**]{.hl-yellow} El signo de la correlación nos indicará la [**dirección de la dependencia lineal**]{.hl-yellow}: si es positiva, la relación será creciente (cuando X crece, Y crece); si es negativa, la relación será decreciente (cuando X crece, Y decrece)
+
+
+* [**¿Qué dice su magnitud?**]{.hl-yellow}  Más cerca de -1 o 1 implica (a priori...) una relación más fuerte, más cerca de 0 ausencia (a priori...) de relación lineal
+
+
+![](img/correlaciones.jpg)
+
+
+### Herramientas en R
+
+Para calcular la correlación entre dos variables en `R` la forma más sencilla es usar la función `cor()`.
+
+::: callout-important
+## Importante
+
+Aunque los softwares estadísticos nos devuelven siempre la [**cuasi covarianza**]{.hl-yellow}, dividido entre $n-1$ y no entre $n$, esto no afecta la correlación (ya que los denominadores se cancelan)
+
+:::
+
+&nbsp;
+
+Como hemos hecho antes con la covarianza, podemos tener una **generalización** de una simple correlación, y es la conocida como [**matriz de correlaciones**]{.hl-yellow}, y que jugará también un papel fundamental en estadística ya que resume un conjunto de datos multivariantes (estandrizados).
+
+&nbsp;
+
+La idea de dicha matriz que llamaremos $R$ es, que si en lugar de tener una sola predictora tenemos $\left(X_1, \ldots, X_p \right)$ covariables, cada elemento $r_{i,j}$ se defina como 
+
+$$R = \left(r_{i,j} \right)_{i=1,\ldots,p}^{j=1,\ldots,p} = \begin{pmatrix} 1 & r_{x_1 x_2} & \ldots & r_{x_1 x_p} \\ r_{x_2 x_1} & 1 & \ldots & r_{x_2 x_p} \\ \vdots & \vdots & \ddots & \vdots \\ r_{x_p x_1} & r_{x_p x_2} & \ldots & 1 \end{pmatrix}$$
+
+Fíjate que ahora, además de ser simétrica como la matriz de covarianzas, la diagonal es siempre 1 (la correlación entre una variable consigo misma es la máxima posible). Para calcularla en `R` basta con pasarle `cor()` a un dataset (¡importante, solo numéricas!)
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+starwars |>
+  select(where(is.numeric)) |> # importante: solo numéricas
+  drop_na() |> # importante: correlación de ausentes --> ausente
+  cor()
+```
+
+&nbsp;
+
+Una propiedad importante que relaciona ambas matrices. Si tenemos los [**datos estandarizados por media y varianza**]{.hl-yellow}, la [**matriz de covarianzas coincide con la de correlaciones**]{.hl-yellow}
+
+$$R\left(X_1, \ldots, X_p \right) = \Sigma \left(\frac{X_1 - \overline{X_1}}{s_{X_1}}, \ldots, \frac{X_p - \overline{X_p}}{s_{X_p}} \right)$$
+
+La [**matriz de correlaciones no es más que la matriz de covarianzas cuando los datos están estandarizados**]{.hl-yellow}
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+
+# Correlación
+starwars |>
+  select(where(is.numeric)) |>
+  drop_na() |>
+  cor()
+
+# Covarianza con datos estandarizados
+starwars |>
+  select(where(is.numeric)) |>
+  drop_na() |>
+  # Estandarizamos
+  mutate(across(everything(), function(x) { (x - mean(x))/sd(x) })) |> 
+  cov()
+```
+
+Efectivamente es la misma matriz.
+
+#### Herramientas extras: paquete corrr y paquete corrplot
+
+Para poder hacer un mejor uso de las correlaciones contamos con el paquete `{corrr}` que nos proporciona la matriz de correlaciones en un tibble propio, 
+pudiendo realizar una **profundo análisis exploratorio** de la misma. La función más importante es `correlate()` (el equivalente a `cor()`), que vamos a aplicar al conjunto `mtcars` del paquete `{datasets}`
+
+```{r}
+library(corrr)
+mtcars |> 
+  correlate()
+```
+
+[**¿Qué diferencias hay?**]{.hl-yellow}
+
+1. La salida es a su vez un tibble por lo que podemos [**filtrar de manera muy sencilla**]{.hl-yellow} quedándonos solo con la información que nos interesa
+
+```{r}
+# Filtramos solo las correlaciones respecto a 3 variables
+mtcars |> 
+  correlate() |> 
+  filter(term %in% c("mpg", "disp", "gear"))
+
+# Si queremos predecir mpg, filtramos aquellas variables que tienen una correlación (en valor absoluto) superior a 0.7
+mtcars |> 
+  correlate() |> 
+  filter(abs(mpg) > 0.7)
+```
+
+2. Los [**valores negativos vienen marcados en rojo**]{.hl-yellow}
+
+3. Podemos especificar que valor queremos en la **diagonal**
+
+```{r}
+mtcars |> 
+  correlate(diag = 1)
+```
+
+Además contamos con algunas funciones que nos pueden ayudar:
+
+* `focus()`: realiza un **filtro específico de las variables de interés** (cuidado: hay otra función con el mismo nombre del paquete `{skimr}`)
+
+```{r}
+mtcars |> 
+  correlate() |> 
+  corrr::focus(mpg, cyl)
+```
+
+Podemos indicar que **variables queremos quitar** con un signo negativo sobre ellas y `mirror = TRUE`
+
+```{r}
+mtcars |> 
+  correlate() |> 
+  corrr::focus(-(mpg:drat), mirror = TRUE)
+```
+
+* `rearrange()`: nos permite [**ordenar por correlación**]{.hl-yellow}, de manera que nos agrupa las variables más altamente correladas juntas
+
+
+```{r}
+mtcars |> 
+  correlate() |>
+  rearrange(absolute = TRUE)
+```
+
+* `shave()`: nos muestra solo la **diagonal inferior**
+
+```{r}
+mtcars |> 
+  correlate() |>
+  rearrange(absolute = TRUE) |> 
+  shave()
+```
+
+* `fashion()`: nos ofrece un **resumen más limpio y resumido**
+
+```{r}
+mtcars |> 
+  correlate() |>
+  shave() |> 
+  fashion()
+```
+
+* `network_plot()`: nos permite [**visualizar las relaciones lineales**]{.hl-yellow} mediante un grafo (podemos decidir el umbral de correlación con `min_cor = ...`)
+
+```{r}
+mtcars |> 
+  correlate() |>
+  network_plot(min_cor = 0.7)
+```
+
+&nbsp;
+
+Además del paquete `{corrr}` podemos hacer uso de `{corrrplot}` para una mejor [**visualización**]{.hl-yellow} (importante: necesita la matriz de correlaciones sin formato)
+
+```{r}
+library(corrplot)
+mtcars |> 
+  cor() |> 
+  corrplot()
+```
+Dando valores distintos al argumento `method = ...` podemos obtener visualizaciones diferentes.
+
+
+```{r}
+mtcars |> 
+  cor() |> 
+  corrplot(method = "color")
+```
+
+```{r}
+mtcars |> 
+  cor() |> 
+  corrplot(method = "number")
+```
+
+```{r}
+mtcars |> 
+  cor() |> 
+  corrplot(method = "ellipse")
+```
+
+Podemos hacer uso también del argumento `type = ...` para visualizar solo una mitad de la matriz (simétrica)
+
+```{r}
+mtcars |> 
+  cor() |> 
+  corrplot(method = "ellipse")
+```
+
+
+Incluso podemos elegir la paleta de colores con `col = ...` y las opciones del paquete `{RColorBrewer}` para construir paletas
+
+
+
+```{r}
+library(RColorBrewer)
+mtcars |> 
+  cor() |> 
+  corrplot(type="upper", col = brewer.pal(n = 8, name = "PuOr"))
+```
+
+Podemos incluso realizar un [**contraste de hipótesis**]{.hl-yellow} cuya **hipótesis nula es que la correlación es nula**
+
+```{r}
+cor_test <-
+  mtcars |> 
+  cor.mtest()
+cor_test$p # matriz de p-valores
+```
+
+Esa **matriz de p-valores** podemos incluirla en `corrplot()` para que directamente nos [**marque las variables cuya hipótesis nula de incorrelación no puede rechazarse**]{.hl-yellow}
+
+```{r}
+mtcars |>
+  cor() |> 
+  corrplot(method = "color", p.mat = cor_test$p, sig.level = 0.05) 
+```
+
+
+         
+#### Simulación: variables sin relación
+
+Vamos a volver a simular las dos variables $X \sim N(0, 0.5)$ e $Y \sim N(0, 0.5)$ que no tienen ningún tipo de relación (ni lineal ni no lineal entre ellas)
+
+```{r}
+set.seed(12345)
+x <- rnorm(n = 1e6, mean = 0, sd = 0.5)
+y <- rnorm(n = 1e6, mean = 0, sd = 0.5)
+cor(x, y)
+```
+
+Ahora sí que pdoemos decir que, efectivamente, la **relación lineal es inexistente** ya que la **correlación es prácticamente nula**
+
+
+
+#### Simulación: variables sin relación lineal
+
+Simulamos de nuevo una variable $X$ de manera aleatoria y otra variable $Y$ tal que $Y = X^2$
+
+```{r}
+set.seed(12345)
+x <- rnorm(n = 1e6, mean = 0, sd = 0.5)
+y <- x^2
+cor(x, y)
+```
+
+Aunque haya una **relación de dependencia perfecta** entre X e Y (una función que las relaciona), [**la correlación vuelve a ser prácticamente nula**]{.hl-yellow}.
+
+
+#### Simulación: variables con relación lineal
+
+Y vamos a volver a simular dos variables con relación lineal
+
+
+```{r}
+set.seed(12345)
+x <- rnorm(n = 1e6, mean = 0, sd = 0.5)
+y <- 2*x
+cor(x, y)
+```
+
+La covarianza en este caso es `1`, ya que tenemos una **relación lineal perfecta** dado que ambas variables vienen relacionadas por una fórmula
+
+#### Simulación con ruido
+
+¿Y si a la anterior relación lineal le incorporamos **ruido**, con una varianza cada vez más grande?
+
+```{r}
+set.seed(12345)
+x <- rnorm(n = 1e5, mean = 0, sd = 0.5)
+sigmas <- seq(0.0001, 10, l = 100)
+correlations <- tibble("sigmas" = sigmas, "cor" = NA)
+
+for (i in 1:length(sigmas)) {
+  
+  # vamos añadiendo ruido y calculamos la correlación
+  y <- 2*x + rnorm(n = 1e5, mean = 0, sd = sigmas[i])
+  correlations$cor[i] <- cor(x, y)
+  
+}
+
+ggplot(correlations, aes(x = sigmas, y = cor)) +
+  geom_point(aes(color = sigmas), size = 3, alpha = 0.7) +
+  labs(title = "Correlación vs ruido",
+       x = "sigma", y = "correlación",
+       color = "sd ruido") +
+  theme_minimal()
+```
+
+La **correlación captura la relación lineal** pero si entre ambas variables hay demás algo aleatorio que no podemos capturar, según [**aumente la varianza del ruido, la correlación será más débil**]{.hl-yellow} ya que perturbará la dependencia entre ellas.
+
+## Correlación vs causalidad
+
+
+Por último, vamos a mencionar un matiz importante: la idea de [**causalidad**]{.hl-yellow}
+
+
+![](img/helados-moreno.jpg)
+
+Imagina que $X$ e $Y$ fuesen variables dependientes (lineales o no) como en la imagen...[**¿implicaría que el ascenso/descenso de una PROVOCA el ascenso/descenso de la otra?**]{.hl-yellow}
+
+En el caso de la imagen el nivel de bronceado (X) y el consumo de helados (Y). parece que son dependientes? Pero...¿una causa la otra?
+
+&nbsp;
+
+Diremos que dos variables tienen una [**relación causal o de causalidad**]{.hl-yellow} cuando una variable es la CAUSA del comportamiento de la otra, algo que no sabremos solo con estadística (sino con conocimiento experto, en este caso de nutricionistas y médicos). Y es que, mal que nos pese a veces a los matemáticos/estadísticos/científicos de datos, [**correlación NO IMPLICA causalidad**]{.hl-red} (al menos no tiene por qué) 
+
+&nbsp;
+
+**Otro ejemplo** podemos verlo en la siguiente gráfica que, aparentemente, nos dice que comer chocolate nos hará ganar el Nobel. Ojalá :P
+
+![](img/chocolate-correlacion.jpg)
+
+
+Este fenómeno es conocido como [**correlaciones espúreas**]{.hl-yellow}, y aparece cuando dos variables presentan una [**relación matemática**]{.hl-green} pero sin [**ningún tipo de relación causal o lógica**]{.hl-red}. Puedes ver más en <https://www.tylervigen.com/spurious-correlations>
+
+&nbsp;
+
+Dicho patrón matemático puede deberse al mero azar o la existencia de lo que se conoce como [**variables de confusión**]{.hl-yellow} (en el caso del helado, el verano es el que causa ambas).
+
+![](img/confounder.jpg)
+
+La rama que se dedica al [**estudio de la causalidad**]{.hl-yellow}, combinando las ramas de la **estadística, filosofía, sociología y psicología** se le conoce como [**inferencia causal**]{.hl-yellow} y es fundamental en un análisis más profundo de las relaciones entre las variables (sobre todo en campos como la economía, la psicología o la sociología).
+
+::: callout-warning
+## Recuerda
+
+Así que recuerda: un buen estadístico/a o científico/a de datos debe ser **humilde** en sus atribuciones. Nuestro trabajo llega hasta encontrar patrones. **Deja a otros expertos** que sean los que, con su conocimiento de la matería, atribuyan causas y consecuencias.
+
+:::
+## Caso práctico I: anscombe
+
+
+En el paquete `{datasets}` se encuentra el dataset conocido como [**cuarteto de Anscombe**]{.hl-yellow}, un dataset que cuenta en realidad con 4 conjuntos de datos.
+
+```{r}
+library(tidyverse)
+anscombe_tb <- as_tibble(datasets::anscombe)
+anscombe_tb
+```
+
+Para su correcto manejo vamos a **convertirlo a tidydata**
+
+```{r}
+anscombe_x <- 
+  anscombe_tb |>
+  pivot_longer(cols = x1:x4, names_to = "dataset", values_to = "x") |> 
+  select(-contains("y")) |> 
+  mutate(dataset = str_remove_all(dataset, "x"))
+
+anscombe_y <- 
+  anscombe_tb |>
+  pivot_longer(cols = y1:y4, names_to = "dataset", values_to = "y") |> 
+  select(-contains("x"), -dataset)
+
+anscombe_tidy <-
+  anscombe_x |> mutate("y" = anscombe_y$y)
+anscombe_tidy
+```
+
+[**¿Qué características muestrales tienen?**]{.hl-yellow} Para conocerlos un poco mejor vamos a **calcular** la media, varianza, desv. típica, covarianza y correlación en cada dataset
+
+```{r}
+anscombe_tidy |> 
+  summarise(mean_x = mean(x), mean_y = mean(y),
+            var_x = var(x), var_y = var(y),
+            sd_x = sd(x), sd_y = sd(y),
+            cov = cov(x, y), cor = cor(x, y), .by = dataset)
+```
+
+Si te fijas todos los datasets tienen los [**mismos momentos**]{.hl-yellow} muestrales, y en concreto **tienen la misma correlación** y **misma covarianza**.
+
+[**¿Serán el mismo dataset desordenado?**]{.hl-yellow}
+
+
+```{r}
+ggplot(anscombe_tidy) +
+  geom_point(aes(x = x, y = y, color = dataset), size = 3, alpha = 0.7) +
+  ggthemes::scale_color_colorblind() +
+  facet_wrap(~dataset) +
+  theme_minimal()
+```
+
+
+Por suerte o por desgracia [**no todo son matemáticas**]{.hl-red}: antes de pensar que modelo es mejor para nuestros datos, es importantísimo realizar un [**análisis exploratorio**]{.hl-yellow} de los datos (incluyendo, por supuesto, una correcta visualización).
+
+## Caso práctico II: datasauRus
+
+Podemos visualizarlo de manera aún más extrema con el dataset `datasaurus_dozen` del paquete `{datasauRus}` (ver más en <https://www.research.autodesk.com/publications/same-stats-different-graphs/>)
+
+```{r}
+library(datasauRus)
+datasaurus_dozen |>
+  summarise(mean_x = mean(x), mean_y = mean(y),
+            var_x = var(x), var_y = var(y),
+            sd_x = sd(x), sd_y = sd(y),
+            cov = cov(x, y), cor = cor(x, y), .by = dataset)
+```
+
+De nuevo tenemos la **misma correlación** pero...¿tendrán la misma relación lineal de verdad?
+
+```{r}
+ggplot(datasaurus_dozen |>
+         filter(dataset != "wide_lines"),
+       aes(x = x, y = y, color = dataset)) +
+  geom_point(size = 2.5, alpha = 0.75) +
+  geom_smooth(method = "lm", se = FALSE)  +
+  facet_wrap(~dataset, ncol = 3) +
+  theme_minimal()
+```
+
+::: callout-tip
+## Moraleja
+
+Los resúmenes numéricos son eso, resúmenes, y como veremos más adelante, pueden existir distintos factores que enmascaran la verdadera relación de las variables. Por eso saber visualizar de una manera correcta es vital.
+:::
+
+## Caso práctico III: wine.csv
+
+
+Vamos a poner en práctica lo aprendido con el dataset `wine.csv` disponible en el campus.
+
+```{r}
+datos <- read_csv(file = "./datos/wine.csv")
+datos
+```
+
+El conjunto de datos está formado por 27 observaciones (cosechas de vino rojo Burdeos) y **7 variables**
+
+* `Year`, `Age`: año de la cosecha y número de años en barrica.
+* `Price`: precio en 1990-1991 de cada cosecha (en **escala log**)
+* `WinterRain`: lluvia (en mm) que cayó ese año en invierno.
+* `AGST`: crecimiento medio de la temperatura (en grados Celsius) durante la temporada.
+* `HarvestRain`: lluvia (en mm) que cayó ese año durante la cosecha.
+* `FrancePop`: población (miles de habitantes) de Francia.
+
+Puedes ver más en detalles en <https://doi.org/10.1080/09332480.1995.10542468>
+
+&nbsp;
+
+
+Si el objetivo fuese [**predecir el precio**]{.hl-yellow}, $Y = precio$, con una sola predictora $X$, ¿cuál tendríamos que elegir? Si el modelo lineal, parece ya claro que deberemos elegir a priori aquella con [**mayor correlación lineal (en valor absoluto)**]{.hl-yellow}. Pero como hemos visto con los ejemplos, a veces los resúmenes numéricos pueden engañarnos así que lo primero que haremos será realizar un **análisis exploratorio**.
+
+### Análisis exploratorio
+
+Algunas de las primeras preguntas que podemos hacernos son:
+
+- ¿Las variables son [**numéricas (continuas)**]{.hl-yellow}?
+- ¿Tienen [**problemas de rango**]{.hl-yellow} (por ejemplo, pesos negativos)? ¿Tienen datos ausentes?
+  
+&nbsp;
+
+Para responder a dichas preguntas lo más sencillos es hacer uso de la función `skim()` del paquete `{skimr}`
+
+```{r}
+library(skimr)
+datos |> skim()
+```
+
+En este caso [**no tenemos ausentes ni problemas de codificación**]{.hl-green}
+
+
+&nbsp;
+
+Profundizando un poco podemos preguntarnos...
+
+- ¿Cómo se [**distribuyen las variables**]{.hl-yellow}?
+- ¿Hay [**datos atípicos**]{.hl-yellow}?
+
+
+&nbsp;
+
+Para ello podemos empezar [**visualizando la distribución de cada variable**]{.hl-yellow} haciendo uso de densidades, histogramas y/o boxplots (por ejemplo), pero si queremos ahorrar tiempo en visualizar convertimos nuestro dataset en [**tidydata**]{.hl-yellow}
+
+```{r}
+datos_tidy <-
+  datos |> 
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "values")
+
+ggplot(datos_tidy, aes(x = values)) +
+  geom_density(aes(color = variable, fill = variable),
+               alpha = 0.75) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  facet_wrap(~variable, scales = "free") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(datos_tidy, aes(x = values)) +
+  geom_histogram(aes(color = variable, fill = variable),
+               alpha = 0.75, bins = 10) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  facet_wrap(~variable, scales = "free") +
+  theme_minimal()
+```
+
+
+```{r}
+ggplot(datos_tidy, aes(y = values, x = variable)) +
+  geom_boxplot(aes(color = variable, fill = variable),
+               alpha = 0.75) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  facet_wrap(~variable, scales = "free") +
+  theme_minimal()
+```
+
+[**No se aprecian valores atípicos**]{.hl-green} (al menos respecto a los percentiles)
+
+&nbsp;
+
+Podemos incluso gráficar todos los scatter plot sin transformar los datos con `facet_matrix()` del paquete `{ggforce}`
+
+```{r}
+#| code-fold: true
+library(ggforce)
+ggplot(datos) +
+  geom_point(aes(x = .panel_x, y = .panel_y)) +
+  facet_matrix(vars(everything())) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  theme_minimal()
+```
+
+Podemos también visualizar con un [**scatter plot**]{.hl-yellow} todas las variables y además sus correlaciones, con el paquete `{GGally}` y la función `ggpairs(), sin necesidad de convertir a tidydata.
+
+```{r}
+#| code-fold: true
+library(GGally)
+ggpairs(datos) +
+  theme_minimal()
+```
+   
+
+### Análisis de dependencia
+
+
+Tras una primera visualización de los datos, de cada variable por separado, nuestro objetivo real sería responder a
+
+- ¿Qué [**predictora está más correlacionada (linealmente) con la variable objetivo**]{.hl-yellow} a predecir? ¿Existe otro tipo de dependencia ?
+- ¿Cómo se [**relacionan las predictoras**]{.hl-purple} entre sí? ¿Están correlacionadas? Este último paso será crucial en el [**contexto multivariante**]{.hl-yellow} pero en este caso simplemente vamos a ver como se relacionan linealmente las predictoras entre sí (por saber como se haría), y cuál de ellas es la **más adecuada para predecir linealmente** `precio`
+
+&nbsp;
+
+El primer paso es la [**matriz de correlaciones**]{.hl-yellow} con la función `correlate()` del paquete `{corrr}`
+
+```{r}
+datos |>
+  correlate() |>
+  fashion()
+```
+
+Podemos **visualizar dichas correlaciones con un grafo** con `network_plot()`
+
+```{r}
+#| eval: false
+datos |>
+  correlate() |>
+  network_plot(min_cor = 0.5)
+```
+
+
+En cuando a la [**dependencia entre predictoras**]{.hl-yellow}, las variables `Age`, `Year` y `FrancePop` presentan la misma información. Si queremos centrarnos solo en las variables vs la predictora, podemos hacer `focus()` en ella
+
+```{r}
+datos |>
+  correlate() |>
+  corrr::focus(Price)
+```
+
+[**Respecto a Y**]{.hl-yellow}, las predictoras con mayor correlación lineal son `AGST` (más calor, menos cosechas, sube el precio) y `HarvestRain` (más lluvias, más cosechas, baja el precio, ¡el signo importa!)
+
+&nbsp;
+
+También podemos usar `corrplot()` del paquete `{corrplot}`, al que le pasamos una matriz de correlaciones clásica y nos la [**visualiza**]{.hl-yellow}.
+
+```{r}
+library(corrplot)
+datos |>
+  cor() |>
+  corrplot(method = "ellipse")
+```
+
+&nbsp;
+
+Otra opción es [**visualizar con un scatter plots todas las predictoras vs Y**]{.hl-yellow}, pivotando antes nuestro dataset (solo pivotamos las predictoras)
+
+```{r}
+datos_tidy <-
+  datos |> pivot_longer(cols = -Price, names_to = "variable",
+                        values_to = "values")
+ggplot(datos_tidy, aes(x = values, y = Price)) + 
+  geom_point(aes(color = variable), alpha = 0.7) +
+  geom_smooth(method = "lm") +
+  ggthemes::scale_color_colorblind() +
+  facet_wrap(~variable, scales = "free_x") +
+  theme_minimal()
+```
+
+
+No solo comprobamos que las rectas con más pendiente son `AGST` y `HarvestRain`, además los puntos [**parecen poder ajustarse a una recta sin otro patrón identificable**]{.hl-green}. Esto es importante hacerlo ya que debemos [**descartar posibles correlaciones espúreas**]{.hl-red} (ver ejemplo datasaurus)
+
+&nbsp;
+
+Por lo tanto parece claro: la mejor covariable para predecir linealmente el precio sería `AGST` (en sentido positivo) y `HarvestRain` (en sentido negativo)
+
