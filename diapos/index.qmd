@@ -3515,39 +3515,828 @@ Así los p-valores $p_j$ son individuales (los mismos que los de la tabla de coe
 
 ## Bondad de ajuste
 
+Como ya hemos hablado, el conocido como $R^2$ o [**bondad de ajuste**]{.hl-yellow} o el [**coeficiente de determinación**]{.hl-yellow} es una forma sencilla, y relacionada con el ANOVA, para cuantificar la [**cantidad de información explicada por el modelo**]{.hl-yellow} definida como
+
+$$R^2 = \text{Ratio info explicada} = \frac{SSR}{SST} =_{lineal} 1 - \frac{SSE}{SST} = 1 - \frac{s_{r}^{2}}{s_{y}^{2}} =  1 - \frac{\frac{n-p-1}{n}\widehat{\sigma}_{\varepsilon}^{2}}{s_{y}^{2}}$$
+
+
+Por definición, la [**bondad de ajuste está entre 0 y 1**]{.hl-yellow} pero además [**presenta un problema en el caso multivariante**]{.hl_red}
+
+
+* [**Más predictoras**]{.hl-yellow} implica que [**$R^2$ crece**]{.hl-yellow} (al aumentar $p$), ¡incluso aunque dichas [**predictoras no sean significativas**]{.hl-red}!
+
+---
+  
+## R2 ajustado
+
+Para evitar dicho problema vamos a definir la conocida como [**bondad de ajuste ajustada**]{.hl-yellow} 
+
+$$R_{adj}^2 = 1 - \frac{\frac{SSE}{n-p-1}}{\frac{SST}{n-1}} = 1 - \frac{SSE}{SST}\frac{n-1}{n-p-1}  = 1 - \frac{\widehat{\sigma}_{\varepsilon}^{2}}{SST}(n-1)$$
+
+
+. . .
+
+Así el $R_{adj}^2$ [**no depende del número de predictoras de manera directa**]{.hl-green} (si sigue dependiendo del ruido, de manera que descenderá solo cuando incrementar $p$ implica reducir el error, es decir, variables con un efecto significativo). Se cumple además que que si $p=1$
+
+$$\lim_{n\to \infty} R_{adj}^2 = \lim_{n\to \infty} \left(1 - \frac{\widehat{\sigma}_{\varepsilon}^{2}}{SST}(n-1) \right) = \lim_{n\to \infty} \left(1 - \frac{\widehat{\sigma}_{\varepsilon}^{2}}{SST}(n-p-1) \right) = R^2$$
+
 
 ---
 
-## Intervalos predicción
+## R2 ajustado
+
+Para ver mejor su diferencia debes realizar el siguiente [**estudio de simulación**]{.hl-yellow} (si quieres fija semilla `set.seed(12345)`):
+
+. . .
+
+1. Considera dos predictoras $X_1 \sim N(0, 1)$ y $X_2 \sim N(0, 1)$ de tamaño muestral $n = 200$.  Considera el ruido como $\varepsilon \sim N(0, \sigma = 12)$
+
+. . .
+
+2. Simula el modelo $Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \varepsilon_i$ con $\beta_0 = 0.01$, $\beta_1 = 1.5$ y $\beta_2 = -1.5$
+
+. . .
+
+3. Realiza el ajuste con todas las predictoras y calcula el $R^2$ y el $R_{adj}^2$ (lo necesitamos guardar, así usa la fórmula no la salida del `lm()`)
+
+. . .
+
+4. Repite este proceso $M = 300$ veces (vuelve a simular las variables, vuelve a construir el modelo, y obtén de nuevo las bondades de ajuste, de manera que tengamos $300$ de cada uno)
+
+---
+
+## R2 ajustado
+
+
+Lo que debería salirte si fijas `set.seed(12345)`
+
+```{r}
+#| echo: false
+M <- 300
+n <- 200
+R2 <- R2_adj <- rep(NA, M)
+p <- 2
+
+for (i in 1:M) {
+  
+  x_1 <- rnorm(n)
+  x_2 <- rnorm(n)
+  eps <- rnorm(n, mean = 0, sd = 12)
+  
+  y <- 0.01 + 1.5*x_1 - 1.5*x_2 + eps
+  datos <- tibble("y" = y, "x_1" = x_1, "x_2" = x_2)
+  ajuste <- lm(data = datos, y ~ .)
+  
+  R2[i] <- 1 - var(ajuste$residuals) / var(datos$y)
+  R2_adj[i] <-
+    1 - (var(ajuste$residuals) / var(datos$y)) * ((n - 1) / (n - p - 1))
+}
+
+library(ggridges)
+ggplot(tibble("id" = 1:M, "R2" = R2, "R2_adj" = R2_adj) |> 
+         pivot_longer(cols = -id, names_to = "R2_type",
+                      values_to = "values")) +
+  geom_density_ridges(aes(x = values, y = R2_type,
+                          color = R2_type, fill = R2_type),
+                      alpha = 0.5) +
+  ggthemes::scale_color_colorblind() +
+  ggthemes::scale_fill_colorblind() +
+  coord_flip() +
+  theme_minimal()
+```
+
+
+---
+
+## R2 ajustado
+
+Repite el estudio de simulación  añadiendo 
+
+1. Una nueva predictora "basura" $X_3 \sim N(0, 2)$ tal que $Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + 10^{-10} X_{i3} + \varepsilon_i$.
+
+2. Dos nuevas predictora "basura" $X_3 \sim N(0, 2)$ y $X_4 \sim N(0, 2)$ tal que $Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + 10^{-10} X_{i3} + 10^{-10} X_{i4} + \varepsilon_i$.
+
+...
+
+3. 195 nuevas predictora "basura" $X_j \sim N(0, 2)$  tal que $Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \displaystyle \sum_{j=3}^{195} 10^{-10} X_{ij} + \varepsilon_i$.
+
+
+Ahora debes obtener $300*195$ valores de $R^2$ y $R_{adj}^2$ (300 simulaciones por cada nueva predictora que añadimos)
+
+---
+
+## R2 ajustado
+
+![](img/predictoras-R2.png)
+
+
+```{r}
+#| echo: false
+#| eval: false
+M <- 300
+n <- 200
+p <- 195
+R2 <- R2_adj <- matrix(NA, M, p)
+
+set.seed(12345)
+for (i in 1:M) {
+  
+  x_1 <- rnorm(n)
+  x_2 <- rnorm(n)
+  eps <- rnorm(n, mean = 0, sd = 12)
+  y <- 0.01 + 1.5*x_1 - 1.5*x_2 + eps
+  
+  X <- matrix(NA, n, p)
+  for (j in 1:p) {
+    
+    X[, j] <- rnorm(n, mean = 0, sd = 2)
+    y <- y + 1e-10 * X[, j]
+    datos <- tibble("y" = y, "x_1" = x_1, "x_2" = x_2, X[, 1:j])
+    ajuste <- lm(data = datos, y ~ .)
+    
+    R2[i, j] <- 1 - var(ajuste$residuals) / var(datos$y)
+    R2_adj[i, j] <-
+      1 - (var(ajuste$residuals) / var(datos$y)) *
+      ((n - 1) / (n - (j + 2) - 1))
+  }
+}
+
+mean_R2 <- R2 |> colMeans()
+mean_R2_adj <- R2_adj |> colMeans()
+
+gg <- ggplot()
+for (i in 1:M) {
+  gg <-
+    gg +
+    geom_line(data =
+                 tibble("p" = 1:p, "R2" = R2[i, ],
+                        "R2_adj" = R2_adj[i, ]) |>
+                 pivot_longer(cols = -p, names_to = "R2_type",
+                              values_to = "values"),
+               aes(x = p, y = values, color = R2_type),
+              linewidth = 0.01, alpha = 0.1) +
+    geom_line(data = tibble("p" = 1:p, "R2" = mean_R2, "R2_adj" = mean_R2_adj) |>
+                 pivot_longer(cols = -p, names_to = "R2_type",
+                              values_to = "values"),
+              aes(x = p, y = values, color = R2_type), linewidth = 1.5)
+}
+gg1 <- 
+  gg +
+  theme_minimal() +
+  scale_y_continuous(limits = c(-0.5, 1.1)) +
+  labs(x = "Número de predictoras basura")
+```
 
 ---
 
 ## Multicolinealidad
 
+Uno de los mayores problemas de los [**modelos lineales multivariantes**]{.hl-yellow} es el conocido como [**problema de colinealidad**]{.hl-red}
+
+. . .
+
+Imagina un modelo $Y = \beta_0 + \beta_1 X_1 + \beta_2X_2 + \beta_3 X_3$, donde $X_3$ es definida como (literal) la suma de $X_1$ y $X_2$.
+
+```{r}
+n <- 200
+x_1 <- rnorm(n, sd = 2)
+x_2 <- rnorm(n, sd = 2)
+x_3 <- x_1 + x_2
+eps <- rnorm(n)
+
+y <- 0.5 - 2*x_1 + 3*x_2 -2.5*x_3
+datos <- tibble(y, x_1, x_2, x_3)
+ajuste <- lm(data = datos, formula = y ~ .)
+```
+
 ---
 
-## Caso práctico
+## Multicolinealidad
+
+Como ya vimos en el ejemplo de `wine.csv`, cuando tenemos [**dos o más predictoras que dependen linealmente entre sí**]{.hl-yellow} la matriz $\left(X^{T} X \right)^{-1}$ no se puede invertir ya que es singular (determinante igual a 0), así que debe eliminar una de las ecuaciones para que el problema sea de rango completo
+
+Esto se conoce como [**colinealidad exacta**]{.hl-yellow}
+
+```{r}
+ajuste |> summary()
+```
+
+---
+
+## Multicolinealidad
+
+La colinealidad exacta es solo el ejemplo más extremo de lo que se conoce como [**problema de colinealidad**]{.hl-red}: un problema que aparece cuando varias predictoras están **altamente correladas**. 
+Un [**problema de colinealidad**]{.hl-yellow} tiene principalmente dos consecuencias:
+
+. . .
+
+* [**Reduce la precisión de los estimadores**]{.hl-red} ya que la matriz $X^{T} X$, según aumenta la dependencia, tiene un determinante cada vez más cercano a 0, por lo que $\left(\mathbf{X}^{T}\mathbf{X} \right)^{-1}$, que siempre depende de $1/det\left( \mathbf{X}^{T}\mathbf{X} \right)$, tendrá valores cada vez más grandes. Dado que $\widehat{\beta}_j\sim N \left(\beta_j, SE \left(\widehat{\beta}_j\right)^2 \right)$, con $SE \left(\widehat{\beta}_j\right)^2 = \sigma_{\varepsilon}^2 v_j$ siendo $v_j$ el elemento $j$-ésimo de la diagonal de $\left( \mathbf{X}^{T}\mathbf{X} \right)^{-1}$, implica que [**a mayor colinealidad, mayor varianza de las estimaciones**]{.hl_yellow}
+
+. . .
+
+
+* [**Distorsiona los efectos**]{.hl-red} de los predictores sobre la respuesta
+
+---
+
+## Multicolinealidad
+
+¿Pero qué sucede cuando esa [**colinealidad no es tan obvia**]{.hl-yellow}? Veamos un ejemplo sencillo: simula el siguiente modelo (para $n = 100$)
+
+$$Y = 1 + 0.5 X_1 + 2 X_2 - 3 X_3 - X_4 + \varepsilon, \quad \varepsilon \sim N(0, 1)$$
+
+
+* $X_1 \sim N(0, 1)$, $X_2 = 0.5*X_1 + N(0, 1)$ y $X_3 = 0.5*X_2 + N(0, 1)$
+
+* $X_4 = -X_1 + X_2 + N(0, 0.5)$
+
+```{r}
+#| code-fold: true
+set.seed(12345)
+n <- 100
+
+x1 <- rnorm(n)
+x2 <- 0.5 * x1 + rnorm(n)
+x3 <- 0.5 * x2 + rnorm(n)
+x4 <- -x1 + x2 + rnorm(n, sd = 0.5)
+eps <- rnorm(100)
+
+y <- 1 + 0.5 * x1 + 2 * x2 - 3 * x3 - x4 + eps
+datos <- tibble(y, x1, x2, x3, x4)
+```
+
+¿Cómo serán sus **correlaciones (lineales)**?
+
+---
+
+## Multicolinealidad
+
+A priori [**no se observa un problema obvio de colinealidad**]{.hl-yellow} ya que no hay dos predictoras altamente correladas.
+
+```{r}
+datos |> 
+  correlate()
+```
+
+---
+
+## Multicolinealidad
+
+Por la definición realizada es obvio que hay una [**dependencia lineal entre todas las predictoras**]{.hl-yellow}, pero al ser una relación lineal más compleja (con ruido de por medio y distintas predictoras interactuando a la vez), una simple [**revisión de las correlaciones es necesaria pero no suficiente**]{.hl-yellow} ya que puede ocultar problemas de colinealidad que sí existen.
+
+```{r}
+datos |> 
+  cor() |> 
+  corrplot(method = "color", addCoef.col = "#121212")
+```
+
+
+---
+
+## Multicolinealidad
+
+Necesitamos por tanto una forma de cuantificar dicha multicolinealidad, y para ello usaremos el conocido como [**factor de inflación de la varianza (VIF)**]{.hl-yellow}
+
+. . .
+
+Para cada coeficiente $\beta_j$, y su estimador $\widehat{\beta}_j$, se define el VIF como
+
+$$VIF\left(\widehat {\beta_j} \right) = \frac{1}{1 - R^2_{X_j | X_{-j}}}, \quad R_{j}^2:= R^2_{X_j | X_{-j}}$$
+
+donde $R_{j}^2$ representa la [**bondad de ajuste $R^2$ cuando predecimos con una regresión lineal multivariante la predictora $X_j$**]{.hl-yellow} en función del resto de predictoras (sin la variable objetivo)
+
+$$X_j = \gamma_0 + \gamma_1 X_1 + \ldots + \gamma_{j-1} X_{j-1} + \gamma_{j+1} X_{j+1} + \ldots + \gamma_j X_j$$
+
+---
+
+## Multicolinealidad
+
+
+$$VIF\left(\widehat {\beta_j} \right) = \frac{1}{1 - R^2_{X_j | X_{-j}}}, \quad R_{j}^2:= R^2_{X_j | X_{-j}}$$
+
+La idea es [**cuantificar como de relacionado está cada predictor**]{.hl-yellow} respecto al resto (de manera conjunta, no dos a dos). Nota: **siempre es mayor que 1**
+
+. . .
+
+
+* Si $VIF\left(\widehat {\beta_j} \right)$ [**cercano a 1**]{.hl-yellow}, entonces $R_{j}^{2}$ cercano a 0 --> variabilidad del predictor $X_j$ no se puede explicar con la combinación lineal de otras
+
+. . .
+
+
+* Si $VIF\left(\widehat {\beta_j} \right)$ [**mayor que 5**]{.hl-yellow}, entonces $1 - R_{j}^{2} < 0.2$, ergo $R_{j}^{2} > 0.8$ --> problema moderado de colinealidad
+
+. . .
+
+
+* Si además $VIF\left(\widehat {\beta_j} \right)$ [**mayor que 10**]{.hl-yellow}, entonces $R_{j}^{2} > 0.9$ --> problema grave de colinealidad 
+
+---
+
+## Multicolinealidad
+
+Para calcular el $VIF$ podemos o bien hacer regresión con cada parámetro, de manera manual, o bien hacer uso de `check_collinearity()` del paquete `{performance}`
+
+```{r}
+ajuste <- lm(data = datos, y ~ .)
+performance::check_collinearity(ajuste)
+```
+
+---
+
+## Multicolinealidad
+
+Si te fijas $VIF \left(\widehat{\beta}_2 \right) = 10.41$, que es justamente el $1/(1-R^2)$ si hacemos la regresión $X_2$ vs el resto de predictoras
+
+```{r}
+check_collinearity(ajuste)$VIF
+ajuste_X2 <- lm(data = datos |> select(-y), x2 ~ .)
+ajuste_X2 |> summary()
+```
+
+---
+
+## Multicolinealidad
+
+El VIF podemos además [**visualizarlo en una sexta gráfica**]{.hl-model} cuando hacemos `check_model()`
+
+```{r}
+check_model(ajuste)
+```
+
+---
+
+## Multicolinealidad
+
+El VIF podemos además [**visualizarlo de manera manual**]{.hl-model}
+
+```{r}
+#| code-fold: true
+VIF <- tibble("variable" = c("x1", "x2", "x3", "x4"),
+              "VIF"= check_collinearity(ajuste)$VIF)
+ggplot(VIF) +
+  geom_col(aes(x = variable, y = VIF, fill = VIF),
+           alpha = 0.75) +
+  scale_fill_gradient2(low = "#1B8A54", mid = "#F7E865",
+                       high = "#CE2424", midpoint = 5) +
+  theme_minimal()
+```
+
 
 ---
 
 ## Selección de modelos
 
+Por lo tanto parece que obvio que en un **modelo de regresión multivariante** vamos a tener que que [**seleccionar distintas variables**]{.hl-yellow} para solventar esos problemas de colinealidad
+
+. . .
+
+Llamaremos [**modelo saturado**]{.hl-yellow} al modelo con todas las $p$ predictoras, sin seleccionar.
+
+. . .
+
+Y como hemos visto, [**no podremos simplemente comparar 2 a 2 correlaciones o p-valores**]{.hl-red} ya que el efecto de una variable nos puede afectar en otras. ¿Qué hacer?
+
+
+---
+
+## Selección de modelos
+
+Un protocolo de actuación habitual podría ser el siguiente:
+
+1. Hacemos el [**ajuste del modelo saturado**]{.hl-yellow}
+
+2. Calculamos el [**VIF de cada estimador**]{.hl-yellow}
+
+3. Adoptamos un umbral (por ejemplo, $VIF > 10$), de manera que [**toda predictora que lo supere se elimina ya de antemano**]{.hl-yellow}
+
+4. Volvemos a chequear el VIF. Si hay que eliminar, volver al paso 3.
+
+5. Del resto de predictoras se hace una [**selección más fina**]{.hl-yellow}. Algunas opciones: BIC/AIC, regresión penalizada (LASSO, ridge, elastic net), PCA.
+
+---
+
+## Selección de modelos
+
+Lo que nos dice el VIF y lo visto hasta ahora es que, incluso aunque tengan efecto, [**añadir predictoras complejizando el modelo no es gratis**]{.hl-yellow}, ya que lo hacemos a costa de [**sobreajustar el modelo**]{.hl-yellow} (la varianza de los estimadores se incrementa considerablemente)
+
+¿Cuál es el [**número mínimo/máximo de predictoras**]{.hl-yellow} que podremos incluir?
+
+. . .
+
+* El número mínimo de predictoras será $p = 1$
+* El número máximo será $p = n-2$, o dicho de otra forma, necesito al menos $n \geq p+2$ observaciones. Piensa en $p=1$: si quiero una recta, necesito al menos 2 puntos para que la recta existe y al menos 3 para poder calcular la varianza residual estimada (acuérdate que se divide entre $n-p-1$)
+
+. . .
+
+De manera resumida: dado un modelo con $p$ predictores, necesitaremos estimar [**$p+2$ incógnitas**]{.hl-yellow} ($p+1$ coeficientes y la varianza residual).
 
 ---
 
 ## BIC y AIC
 
+[**¿Cómo seleccionar los predictores más adecuados para el CONJUNTO del ajuste?**]{.hl-yellow}
+
+. . .
+
+Los métodos más conocidos son los conocidos como [**selección de modelos stepwise (paso-a-paso)**]{.hl-yellow}, que de manera **iterativa**, va incluyendo y descartando distintos predictores, y comparando su calidad, para decidir que **combinación de parámetros** es la más óptima.
+
+. . .
+
+La idea es [**seleccionar el modelo más óptimo**]{.hl-yellow} en función de un [**criterio de información**]{.hl-yellow} que combina la calidad del modelo con el número de predictoras empleadas: vamos a [**penalizar el uso de variables que no mejore suficiente el modelo**]{.hl-yellow}
+
+---
+
+
+## BIC y AIC
+
+Los dos criterios de información más famosos son el [**Bayesian Information Criterion (BIC)**]{.hl-yellow} y el [**Akaike Information Criterion (AIC)**]{.hl-yellow} definidos ambos como
+
+$$AIC/BIC_{modelo} = -Calidad + \underbrace{\text{npar(modelo)} * \text{penalización}}_{\text{Complejidad}}$$
+
+* $\text{npar(modelo)}$ es el [**número de parámetros a estimar del modelo**]{.hl-yellow}, que en el caso que nos ocupa es $\text{npar(modelo)} = p+2$ (coeficientes + var residual)
+
+* $\text{Calidad}$ una medida que nos diga como de bueno es nuestro ajuste: al tener signo negativo, buscamos el [**menor valor de AIC/BIC**]{.hl-yellow}
+
+* $\text{penalización}$: cuando sube $p$, entonces suba el $AIC/BIC$
+
+El objetivo será probar [**distintos modelos y quedarnos con el que tenga AIC/BIC más pequeño**]{.hl-yellow}
+
+---
+
+## BIC y AIC
+
+Es habitual que la [**calidad del modelo**]{.hl-yellow} venga cuantificada por $2\ell(\text{modelo})$, donde $\ell(\text{modelo})$ es lo que se conoce como [**log-verosimilitud del modelo**]{.hl-yellow} 
+
+$$\ell(\text{modelo}) = \log \left(P \left(\text{datos} |  \left(\text{parámetros}, \text{modelo} \right) \right) \right)$$
+
+es decir, suponiendo que el **modelo fuese correcto** y los **parámetros valiesen la estimación obtenida**, ¿cómo de [**probable es que mis datos hayan sido los que han sido**]{.hl-yellow}?
+
+. . .
+
+Así nuestros criterios quedan como
+
+$$AIC/BIC_{modelo} = -2\ell(\text{modelo}) + \underbrace{(p+2) * \text{penalización}}_{\text{Complejidad}}$$
+
+---
+
+## BIC y AIC
+
+La diferencia entre ambos está en la **penalización usada**
+
+
+$$BIC(modelo_p) = -2\ell(\text{modelo}) + \underbrace{(p+2) * \log(n)}_{\text{Complejidad}}$$
+
+$$AIC (modelo_p) = -2\ell(\text{modelo}) + \underbrace{(p+2) * 2}_{\text{Complejidad}}$$
+
+El [**criterio BIC es más agresivo**]{.hl-yellow} seleccionando variables ya que, si $n$ crece, $\log(n) >> 2$ (penaliza más el sobreajuste) y, además, [**depende del tamaño muestral**]{.hl-yellow}
+
+---
+
+## BIC y AIC
+
+Vamos a ver un **pequeño ejemplo en R** con `wine.csv`, aplicando un modelo saturado (habiendo hecho un filtro inicial por VIF), un modelo solo con `AGST`,  otro con `AGST + HarvestRain` y otro con `AGST + HarvestRain + Year`, y calcular su BIC/AIC con las funciones `BIC()` y `AIC()`
+
+```{r}
+datos <- read_csv(file = "./datos/wine.csv")
+ajuste_saturado <- lm(data = datos, formula = Price ~ .)
+ajuste_1 <- lm(data = datos, formula = Price ~ AGST)
+ajuste_2 <- lm(data = datos, formula = Price ~ AGST + HarvestRain)
+ajuste_3 <- lm(data = datos, formula = Price ~ AGST + HarvestRain + Age)
+```
+
+:::: columns
+::: {.column width="50%"}
+```{r}
+BIC(ajuste_saturado)
+BIC(ajuste_1)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+BIC(ajuste_2)
+BIC(ajuste_3)
+```
+:::
+::::
+
+---
+
+## BIC y AIC
+
+Vamos a ver un **pequeño ejemplo en R** con `wine.csv`, aplicando un modelo saturado (habiendo hecho un filtro inicial por VIF), un modelo solo con `AGST`,  otro con `AGST + HarvestRain` y otro con `AGST + HarvestRain + Year`, y calcular su BIC/AIC con las funciones `BIC()` y `AIC()`
+
+:::: columns
+::: {.column width="50%"}
+```{r}
+AIC(ajuste_saturado)
+AIC(ajuste_1)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+AIC(ajuste_2)
+AIC(ajuste_3)
+```
+:::
+::::
+
+---
+
+## BIC y AIC
+
+Podemos usar `compare_performance()`  ($AICc = AIC +\frac{2(p+2)^{2} + 2(p+2)}{n-(p+2)-1}$ es una versión corregida para tamaños muestrales pequeños)
+
+```{r}
+performance::compare_performance(ajuste_saturado, ajuste_1, ajuste_2, ajuste_3)
+```
+
+. . .
+
+En ambos criterios la conclusión es que de los 4 modelos, el [**"mejor" es el 3º ya que AIC/BIC más bajos**]{.hl-yellow} aunque tenga un $R_{adj}^2$ menor: la mejora que produce meter todas las variables no es suficiente para lo que se complica el modelo.
+
+---
+
+## BIC y AIC
+
+En realidad lo correcto sería antes chequear si [**podemos eliminar alguna variable**]{.hl-yellow} ya de manera preliminar usando el VIF
+
+```{r}
+check_collinearity(ajuste_saturado)
+```
+
+---
+
+## BIC y AIC
+
+Según el VIF debemos ya eliminar de antemano `Year` y `FrancePop` así que lo hacemos y volvemos calcularlo para las restantes
+
+```{r}
+datos_VIF <- datos |> select(-Year, -FrancePop)
+ajuste_saturado <- lm(data = datos_VIF, formula = Price ~ .)
+check_collinearity(ajuste_saturado)
+```
+
+---
+
+## BIC y AIC
+
+Tras este primer **filtro grosero** volvemos a implementar los 3 modelos
+
+```{r}
+ajuste_saturado <- lm(data = datos_VIF, formula = Price ~ .)
+ajuste_1 <- lm(data = datos_VIF, formula = Price ~ AGST)
+ajuste_2 <- lm(data = datos_VIF, formula = Price ~ AGST + HarvestRain)
+ajuste_3 <- lm(data = datos_VIF, formula = Price ~ AGST + HarvestRain + Age)
+compare_performance(ajuste_saturado, ajuste_1, ajuste_2, ajuste_3)
+```
+
+Ahora **nos indica que el mejor modelo es el saturado** (pero que ya no tiene 6 variables sino 4): la mejora de bondad de ajuste compensa por incrementar una sola variable (entre ajuste3 y saturado)
+
+---
+
+## BIC y AIC
+
+Fíjate que además al haber quitado dos variables con alta dependenica lineal del resto las [**hipótesis se cumplen**]{.hl-yellow} (antes no)
+
+```{r}
+check_model(ajuste_saturado)
+```
+
+---
+
+## BIC y AIC
+
+Vamos a repetirlo con un ejemplo simulado $Y = 0.01 + 1.5*X_1 -1.5X_2 + \varepsilon$, donde $X_1,X_2 \sim N(0,1)$ y $\varepsilon \sim N(0, 2)$, y al que vamos añadiendo predictoras basura $X_{2+j} \sim N(0, 2)$ con $\beta_{2+j} = 10^{-8}$, probando cuando $j=1$, $j = 5$, $j = 10$, $j=25$, $j=50$ y $j = 100$. El mejor modelo es el que solo tiene las **dos predictoras con un efecto real** sobre y.
+
+```{r}
+#| code-fold: true
+n <- 200
+p <- c(1, 5, 10, 25, 50, 100)
+
+set.seed(12345)
+x_1 <- rnorm(n)
+x_2 <- rnorm(n)
+eps <- rnorm(n, mean = 0, sd = 2)
+y <- 0.01 + 1.5*x_1 - 1.5*x_2 + eps
+ajuste_0 <- lm(data = tibble("y" = y, "x_1" = x_1, "x_2" = x_2), y ~ .)
+
+X <- matrix(rnorm(n * max(p), mean = 0, sd = 2), nrow = n)
+ajuste <- list()
+for (j in 1:length(p)) {
+  
+  ynew <- y + 1e-8 * sum(X[, 1:p[j]])
+  datos <- tibble("y" = ynew, "x_1" = x_1, "x_2" = x_2, X[, 1:p[j]])
+  ajuste[[j]] <- lm(data = datos, y ~ .)
+}
+compare_performance(ajuste_0, ajuste[[1]], ajuste[[2]],
+                    ajuste[[3]], ajuste[[4]], ajuste[[5]])
+```
+
+
+
+---
+
+
+## Sobreajuste
+
+Algo importante a tener en cuenta es que, aunque ambos criterios nos ayudan a seleccionar modelos, ambos [**funcionan de manera aceptable bajo la hipótesis**]{.hl-yellow} de que $n >> p +2$: en caso contrario, si $n$ se acerca a $p +2$, el sobreajuste seguirá produciéndose
+
+. . .
+
+Dado que la penalización es más grande en el BIC, el [**criterio BIC nos garantiza una más temprana detección del sobreajuste**]{.hl-yellow}
+
+---
+
+## Sobreajuste
+
+Lo anterior se puede ilustrar calculando BIC e AIC del anterior estudio de simulación de $R^2$ vs $R_{adj}^2$: fíjate como el [**BIC tarda más en bajar**]{.hl-yellow}, tal que $BIC(p = 195) > BIC(p=2)$ (nos haría quedarnos con el modelo sin sobreajustar) mientras que $AIC(p = 156) < AIC(p=2)$ (y para todos los que van detrás), por lo que acabaríamos eligiendo el modelo más sobreajustado.
+
+![](img/BIC-AIC.png)
+
+```{r}
+#| echo: false
+#| eval: false
+M <- 300
+n <- 200
+p <- 195
+BIC_values <- AIC_values <- matrix(NA, M, p)
+
+set.seed(12345)
+for (i in 1:M) {
+  
+  x_1 <- rnorm(n)
+  x_2 <- rnorm(n)
+  eps <- rnorm(n, mean = 0, sd = 12)
+  y <- 0.01 + 1.5*x_1 - 1.5*x_2 + eps
+  
+  X <- matrix(NA, n, p)
+  for (j in 1:p) {
+    
+    X[, j] <- rnorm(n, mean = 0, sd = 2)
+    y <- y + 1e-10 * X[, j]
+    datos <- tibble("y" = y, "x_1" = x_1, "x_2" = x_2, X[, 1:j])
+    ajuste <- lm(data = datos, y ~ .)
+    
+    BIC_values[i, j] <- BIC(ajuste)
+    AIC_values[i, j] <- AIC(ajuste)
+  }
+}
+
+mean_BIC <- BIC_values |> colMeans()
+mean_AIC <- AIC_values |> colMeans()
+
+gg <- ggplot()
+for (i in 1:M) {
+  gg <-
+    gg +
+    geom_line(data =
+                 tibble("p" = 1:p, "BIC" = BIC_values[i, ],
+                        "AIC" = AIC_values[i, ]) |>
+                 pivot_longer(cols = -p, names_to = "criterio",
+                              values_to = "values"),
+               aes(x = p, y = values, color = criterio),
+              linewidth = 0.01, alpha = 0.1) +
+    geom_line(data = tibble("p" = 1:p, "BIC" = mean_BIC,
+                            "AIC" = mean_AIC) |>
+                 pivot_longer(cols = -p, names_to = "criterio",
+                              values_to = "values"),
+              aes(x = p, y = values, color = criterio), linewidth = 1.5)
+}
+gg1 <- 
+  gg +
+  theme_minimal() +
+  labs(x = "Número de predictoras basura")
+```
+
 ---
 
 ## Consistencia
 
-# Clase 15: caso práctico {#clase-15}
+Otra [**enorme ventaja del BIC**]{.hl-yellow} es que se ha demostrado matemáticamente que es [**consistente**]{.hl-yellow}: si el tamaño muestral fuese lo suficientemente grande, el [**BIC garantiza elegir el modelo correcto que genera los datos**]{.hl-green}. Matemáticamente se cumple que, si tenemos una serie de modelos $M_1, \ldots, M_m$, y el modelo real que genera los datos $M_0$ (que pretendemos estimar), entonces
 
-[**Caso práctico con datos de viviendas de Boston**]{style="color:#444442;"}
+$$P\left[\arg\min_{k=0,\ldots,m}\text{BIC}(\widehat{M}_k)=0\right]\to 1, \quad  n \to \infty$$
+
+Esto solo suponiendo que el modelo subyacente sea lineal claro... Esto [**no sucede con el AIC**]{.hl-red} (para vuestro yo del futuro: en <https://doi.org/10.2307/2290328.> se prueba que el AIC es equivalente a usar validación cruzada leave-one-out, el cual es inconsistente)
 
 ---
 
-## ...
+## stepAIC
+
+Y aquí nos puede nacer una duda: si tengo muchos predictores, [**¿tengo que calcular el BIC/AIC de todas las combinaciones posibles?**]{.hl-yellow}
+
+. . .
+
+Sí, pero lo hará por nosotros `MASS::stepAIC()`, donde en el parámetro `k = ...` le indicamos la penalización (si `k = 2` es AIC y si `k = log(n)` es el BIC)
+
+```{r}
+#| eval: false
+datos <- read_csv(file = "./datos/wine.csv")
+ajuste_saturado <- lm(data = datos, Price ~ .)
+MASS::stepAIC(ajuste_saturado, k = log(nrow(datos)))
+```
+
+---
+
+## stepAIC
+
+```{r}
+datos <- read_csv(file = "./datos/wine.csv")
+ajuste_saturado <- lm(data = datos, Price ~ .)
+MASS::stepAIC(ajuste_saturado, k = log(nrow(datos)))
+```
+
+
+---
+
+## stepAIC
+
+Lo que obtendremos será una [**selección secuencial de modelos**]{.hl-yellow}, de manera que el irá probando las combinaciones, nos **muestra el ajuste y el valor del BIC/AIC** y se parará cuando el AIC/BIC no mejore.
+
+```{r}
+#| eval: false
+datos <- read_csv(file = "./datos/wine.csv")
+ajuste_saturado <- lm(data = datos, Price ~ .)
+MASS::stepAIC(ajuste_saturado, k = log(nrow(datos)))
+```
+
+
+---
+
+## stepAIC
+
+```{r}
+MASS::stepAIC(ajuste_saturado, k = log(nrow(datos)), direction = "forward")
+```
+
+El argumento `direction = ...` puede tomar los valores `"both"` (por defecto), `"forward"` y `"backward"` que nos determina la [**dirección de búsqueda**]{.hl-yellow}:
+
+
+* `direction = "forward"`: empieza con el modelo proporcionado y va [**añadiendo**]{.hl-yellow} predictoras haciendo modelos cada vez más complejos.
+
+---
+
+## stepAIC
+
+```{r}
+MASS::stepAIC(ajuste_saturado, k = log(nrow(datos)), direction = "forward")
+```
+
+
+Fíjate que ahora  como le hemos dado el modelo saturado y `direction = "forward"`, entonces no hace nada. Para controlar esto podemos incluir la variable `scope = list(lower = mod_easy, upper = mod_complex)`, donde **podemos pasarle dos modelos**p: los modelos más complejos y más sencillo **pentre los que queremos que se mueva en la búsqueda**.
+
+---
+
+## stepAIC
+
+```{r}
+#| eval: false
+MASS::stepAIC(ajuste_saturado, k = log(nrow(datos)), direction = "backward")
+```
+
+* `direction = "backward"`: empieza con el modelo proporcionado y va [**eliminando**]{.hl-yellow} predictoras haciendo modelos cada vez más sencillos.
+
+
+```{r}
+#| eval: false
+MASS::stepAIC(ajuste_saturado, k = log(nrow(datos)))
+```
+
+* `direction = "both"`: empieza con el modelo proporcionado y va [**añadiendo y eliminando**]{.hl-yellow} predictoras según sea más conveniente (pudiendo añadir/eliminar una variable que previamente e había eliminado/añadido)
+
+
+
+
+---
+
+## stepAIC
+
+```{r}
+MASS::stepAIC(ajuste_saturado, k = log(nrow(datos)), direction = "forward")
+```
+
+[**Aviso**]{.hl-red}: en realidad `MASS::stepAIC()` no calcula exactamente el mismo BIC/AIC que las funciones `BIC()` e `AIC()`, sino que les suma una constante $n(\log(2\pi) + 1) + \log(n)$ para BIC y $n(\log(2\pi) + 1) + 2$ para AIC
+
+Dado que es una constante nos da igual para comparar modelos, pero hace que [**NO podamos comparar salidas**]{.hl-red} de `BIC()` y `AIC()` con salidas de `MASS::stepAIC()`.
+
+
+
+# Clase 15: casos prácticos {#clase-15}
+
+[**Casos prácticos: datos de viviendas de Boston y seatpos dataset**]{style="color:#444442;"}
+
+---
+
+## Casos prácticos
+
+Realiza todo el ajuste completo multivariante con los datasets:
+
+* `seatpos` del paquete `{faraway}`: datos de 38 conductores donde el objetivo es predecir `hipcenter`, la posición del asiento del conductor, en función de distintas variables (ver `? faraway::seatpos`)
+
+* `Boston` del paquete `{MASS}`:  datos de 560 suburbios de Boston, en el que se han medido 14 variables en cada uno, con el objetivo de predecir `medv` el precio mediano de inmuebles (en millones de dolares), en función de variables estructurales (`rm` y `age`), variables de vecindario (`crim`, `zn`, `indus`, `chas`, `tax`, `ptratio`, `black` y `lstat`), variables de accesibilidad (`dis` y `rad`) y variables de calidad del aire (`nox`)
+
 
 # Clase 16: variables cualitativas {#clase-16}
 
