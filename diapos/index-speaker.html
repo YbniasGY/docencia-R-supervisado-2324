@@ -8,7 +8,7 @@
 <link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="index_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.294">
+  <meta name="generator" content="quarto-1.3.450">
 
   <meta name="author" content="Grado en Ciencia de Datos Aplicada • curso 2023-2024">
   <title>Aprendizaje Supervisado I</title>
@@ -95,7 +95,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto.css">
   <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -414,7 +414,7 @@ Grado en Ciencia de Datos Aplicada • curso 2023-2024
 <p><span class="hl-green"><strong>Correo</strong></span>: <strong><a href="mailto:javalv09@ucm.es" class="email">javalv09@ucm.es</a></strong>. <span class="hl-green"><strong>Despacho</strong></span>: 722 (3ª planta). <span class="hl-green"><strong>Tutorías</strong></span>: lunes (14:30-16:00), martes (13:00-15:00) y viernes (13:00-14:00).</p>
 <div class="columns">
 <div class="column" style="width:30%;">
-<p><img data-src="img/me.jpeg" class="quarto-discovered-preview-image"></p>
+<p><img data-src="img/me.jpeg"></p>
 </div><div class="column" style="width:70%;">
 <div>
 <ul>
@@ -1058,7 +1058,7 @@ Grado en Ciencia de Datos Aplicada • curso 2023-2024
 <pre><code># A tibble: 1 × 1
   `cov(mass, height)`
                 &lt;dbl&gt;
-1                806.</code></pre>
+1                788.</code></pre>
 </div>
 </div>
 </div>
@@ -1107,9 +1107,9 @@ Grado en Ciencia de Datos Aplicada • curso 2023-2024
 <span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">cov</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               height       mass birth_year
-height       955.5071   715.3057  -2138.334
-mass         715.3057 46313.2034  17402.547
-birth_year -2138.3336 17402.5466  28603.045</code></pre>
+height       957.3802   676.8867   -2164.10
+mass         676.8867 46313.2034   17402.55
+birth_year -2164.1002 17402.5466   28603.04</code></pre>
 </div>
 </div>
 </div>
@@ -1126,9 +1126,9 @@ birth_year -2138.3336 17402.5466  28603.045</code></pre>
 <span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">cov</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               height       mass birth_year
-height       955.5071   715.3057  -2138.334
-mass         715.3057 46313.2034  17402.547
-birth_year -2138.3336 17402.5466  28603.045</code></pre>
+height       957.3802   676.8867   -2164.10
+mass         676.8867 46313.2034   17402.55
+birth_year -2164.1002 17402.5466   28603.04</code></pre>
 </div>
 </div>
 <p>Además de ser <span class="hl-yellow"><strong>simétrica</strong></span>…¿qué tenemos en la <span class="hl-yellow"><strong>diagonal</strong></span>?</p>
@@ -1162,9 +1162,9 @@ birth_year -2138.3336 17402.5466  28603.045</code></pre>
 <span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">cor</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               height      mass birth_year
-height      1.0000000 0.1075282 -0.4090274
-mass        0.1075282 1.0000000  0.4781391
-birth_year -0.4090274 0.4781391  1.0000000</code></pre>
+height      1.0000000 0.1016533 -0.4135510
+mass        0.1016533 1.0000000  0.4781391
+birth_year -0.4135510 0.4781391  1.0000000</code></pre>
 </div>
 </div>
 </div>
@@ -1480,16 +1480,16 @@ lm(formula = mass ~ height, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
- -61.43  -30.03  -21.13  -17.73 1260.06 
+ -60.95  -29.51  -20.83  -17.65 1260.29 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept) -13.8103   111.1545  -0.124    0.902
-height        0.6386     0.6261   1.020    0.312
+(Intercept) -11.4868   111.3842  -0.103    0.918
+height        0.6240     0.6262   0.997    0.323
 
-Residual standard error: 169.4 on 57 degrees of freedom
-Multiple R-squared:  0.01792,   Adjusted R-squared:  0.0006956 
-F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
+Residual standard error: 169.5 on 57 degrees of freedom
+Multiple R-squared:  0.01712,   Adjusted R-squared:  -0.0001194 
+F-statistic: 0.9931 on 1 and 57 DF,  p-value: 0.3232</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -1507,16 +1507,16 @@ lm(formula = mass ~ height, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
- -61.43  -30.03  -21.13  -17.73 1260.06 
+ -60.95  -29.51  -20.83  -17.65 1260.29 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept) -13.8103   111.1545  -0.124    0.902
-height        0.6386     0.6261   1.020    0.312
+(Intercept) -11.4868   111.3842  -0.103    0.918
+height        0.6240     0.6262   0.997    0.323
 
-Residual standard error: 169.4 on 57 degrees of freedom
-Multiple R-squared:  0.01792,   Adjusted R-squared:  0.0006956 
-F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
+Residual standard error: 169.5 on 57 degrees of freedom
+Multiple R-squared:  0.01712,   Adjusted R-squared:  -0.0001194 
+F-statistic: 0.9931 on 1 and 57 DF,  p-value: 0.3232</code></pre>
 </div>
 </div>
 <ul>
@@ -1535,16 +1535,16 @@ lm(formula = mass ~ height, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
- -61.43  -30.03  -21.13  -17.73 1260.06 
+ -60.95  -29.51  -20.83  -17.65 1260.29 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept) -13.8103   111.1545  -0.124    0.902
-height        0.6386     0.6261   1.020    0.312
+(Intercept) -11.4868   111.3842  -0.103    0.918
+height        0.6240     0.6262   0.997    0.323
 
-Residual standard error: 169.4 on 57 degrees of freedom
-Multiple R-squared:  0.01792,   Adjusted R-squared:  0.0006956 
-F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
+Residual standard error: 169.5 on 57 degrees of freedom
+Multiple R-squared:  0.01712,   Adjusted R-squared:  -0.0001194 
+F-statistic: 0.9931 on 1 and 57 DF,  p-value: 0.3232</code></pre>
 </div>
 </div>
 <ul>
@@ -1562,16 +1562,16 @@ lm(formula = mass ~ height, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
- -61.43  -30.03  -21.13  -17.73 1260.06 
+ -60.95  -29.51  -20.83  -17.65 1260.29 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept) -13.8103   111.1545  -0.124    0.902
-height        0.6386     0.6261   1.020    0.312
+(Intercept) -11.4868   111.3842  -0.103    0.918
+height        0.6240     0.6262   0.997    0.323
 
-Residual standard error: 169.4 on 57 degrees of freedom
-Multiple R-squared:  0.01792,   Adjusted R-squared:  0.0006956 
-F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
+Residual standard error: 169.5 on 57 degrees of freedom
+Multiple R-squared:  0.01712,   Adjusted R-squared:  -0.0001194 
+F-statistic: 0.9931 on 1 and 57 DF,  p-value: 0.3232</code></pre>
 </div>
 </div>
 <p>En nuestro caso particular, el <span class="hl-yellow"><strong>ajuste de regresión</strong></span> viene dado por <span class="math inline">\(\widehat{Y} = \widehat{\beta}_0 + \widehat{\beta}_1 X = -11.4868 + 0.6240*X\)</span>, donde <span class="math inline">\(X\)</span> es la estatura: por cada cm extra que mida un personaje, el modelo estima que el peso aumenta 0.6240 kg, y la estimación de peso para un persona que mida 0 cm es de -11.4868 kg (obviamente esta estimación mucho sentido no tiene)</p>
@@ -1587,16 +1587,16 @@ lm(formula = mass ~ height, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
- -61.43  -30.03  -21.13  -17.73 1260.06 
+ -60.95  -29.51  -20.83  -17.65 1260.29 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept) -13.8103   111.1545  -0.124    0.902
-height        0.6386     0.6261   1.020    0.312
+(Intercept) -11.4868   111.3842  -0.103    0.918
+height        0.6240     0.6262   0.997    0.323
 
-Residual standard error: 169.4 on 57 degrees of freedom
-Multiple R-squared:  0.01792,   Adjusted R-squared:  0.0006956 
-F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
+Residual standard error: 169.5 on 57 degrees of freedom
+Multiple R-squared:  0.01712,   Adjusted R-squared:  -0.0001194 
+F-statistic: 0.9931 on 1 and 57 DF,  p-value: 0.3232</code></pre>
 </div>
 </div>
 <ul>
@@ -1617,8 +1617,8 @@ F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 <pre><code># A tibble: 5 × 2
   height mass_predict
    &lt;dbl&gt;        &lt;dbl&gt;
-1   15          -4.23
-2   81.3        38.1 
+1   15          -2.13
+2   81.3        39.2 
 3  153.         84.0 
 4  189.        107.  
 5  210.        120.  </code></pre>
@@ -1636,8 +1636,8 @@ F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 <pre><code># A tibble: 5 × 2
   height mass_predict
    &lt;dbl&gt;        &lt;dbl&gt;
-1   15          -4.23
-2   81.3        38.1 
+1   15          -2.13
+2   81.3        39.2 
 3  153.         84.0 
 4  189.        107.  
 5  210.        120.  </code></pre>
@@ -1803,16 +1803,16 @@ lm(formula = mass ~ height, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
- -61.43  -30.03  -21.13  -17.73 1260.06 
+ -60.95  -29.51  -20.83  -17.65 1260.29 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept) -13.8103   111.1545  -0.124    0.902
-height        0.6386     0.6261   1.020    0.312
+(Intercept) -11.4868   111.3842  -0.103    0.918
+height        0.6240     0.6262   0.997    0.323
 
-Residual standard error: 169.4 on 57 degrees of freedom
-Multiple R-squared:  0.01792,   Adjusted R-squared:  0.0006956 
-F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
+Residual standard error: 169.5 on 57 degrees of freedom
+Multiple R-squared:  0.01712,   Adjusted R-squared:  -0.0001194 
+F-statistic: 0.9931 on 1 and 57 DF,  p-value: 0.3232</code></pre>
 </div>
 </div>
 <ul>
@@ -1835,16 +1835,16 @@ lm(formula = mass ~ height, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
- -61.43  -30.03  -21.13  -17.73 1260.06 
+ -60.95  -29.51  -20.83  -17.65 1260.29 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept) -13.8103   111.1545  -0.124    0.902
-height        0.6386     0.6261   1.020    0.312
+(Intercept) -11.4868   111.3842  -0.103    0.918
+height        0.6240     0.6262   0.997    0.323
 
-Residual standard error: 169.4 on 57 degrees of freedom
-Multiple R-squared:  0.01792,   Adjusted R-squared:  0.0006956 
-F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
+Residual standard error: 169.5 on 57 degrees of freedom
+Multiple R-squared:  0.01712,   Adjusted R-squared:  -0.0001194 
+F-statistic: 0.9931 on 1 and 57 DF,  p-value: 0.3232</code></pre>
 </div>
 </div>
 <ul>
@@ -1874,21 +1874,21 @@ F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">confint</span>(ajuste_lineal, <span class="at">level =</span> <span class="fl">0.99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                  0.5 %     99.5 %
-(Intercept) -310.022729 282.402102
-height        -1.029793   2.306935</code></pre>
+<pre><code>                 0.5 %     99.5 %
+(Intercept) -308.31117 285.337538
+height        -1.04467   2.292677</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">confint</span>(ajuste_lineal, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   2.5 %     97.5 %
-(Intercept) -236.3934126 208.772785
-height        -0.6150891   1.892231</code></pre>
+(Intercept) -234.5297439 211.556113
+height        -0.6298893   1.877896</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="fu">confint</span>(ajuste_lineal, <span class="at">level =</span> <span class="fl">0.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                     5 %       95 %
-(Intercept) -199.6638922 172.043265
-height        -0.4082166   1.685359</code></pre>
+(Intercept) -197.7243448 174.750713
+height        -0.4229783   1.670985</code></pre>
 </div>
 </div>
 </section>
@@ -1988,16 +1988,16 @@ lm(formula = mass ~ height, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
- -61.43  -30.03  -21.13  -17.73 1260.06 
+ -60.95  -29.51  -20.83  -17.65 1260.29 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept) -13.8103   111.1545  -0.124    0.902
-height        0.6386     0.6261   1.020    0.312
+(Intercept) -11.4868   111.3842  -0.103    0.918
+height        0.6240     0.6262   0.997    0.323
 
-Residual standard error: 169.4 on 57 degrees of freedom
-Multiple R-squared:  0.01792,   Adjusted R-squared:  0.0006956 
-F-statistic:  1.04 on 1 and 57 DF,  p-value: 0.312</code></pre>
+Residual standard error: 169.5 on 57 degrees of freedom
+Multiple R-squared:  0.01712,   Adjusted R-squared:  -0.0001194 
+F-statistic: 0.9931 on 1 and 57 DF,  p-value: 0.3232</code></pre>
 </div>
 </div>
 <p>Si te fijas ambos p-valores están por encima de <span class="math inline">\(\alpha = 0.05\)</span> (umbral adoptado habitualmente) los que nos dice que <span class="hl-yellow"><strong>no hay evidencias de los datos sean compatibles con afirmar que haya efectos lineales significativos</strong></span></p>
@@ -2017,17 +2017,17 @@ lm(formula = mass ~ -1 + height, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
- -60.53  -29.45  -21.98  -18.50 1259.59 
+ -60.22  -29.32  -21.83  -18.22 1259.88 
 
 Coefficients:
        Estimate Std. Error t value Pr(&gt;|t|)    
-height   0.5623     0.1232   4.566 2.64e-05 ***
+height   0.5607     0.1230    4.56  2.7e-05 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Residual standard error: 168 on 58 degrees of freedom
-Multiple R-squared:  0.2644,    Adjusted R-squared:  0.2517 
-F-statistic: 20.85 on 1 and 58 DF,  p-value: 2.638e-05</code></pre>
+Multiple R-squared:  0.2639,    Adjusted R-squared:  0.2512 
+F-statistic: 20.79 on 1 and 58 DF,  p-value: 2.697e-05</code></pre>
 </div>
 </div>
 <p>Fíjate que ahora, amén que <span class="hl-yellow"><strong>hay un efecto lineal significativo de la altura</strong></span> y de tener <span class="math inline">\(R^2\)</span> mayor, <span class="math inline">\(\beta_1\)</span> tiene una precisión mayor. En este caso <span class="hl-yellow"><strong>solo podía quitar uno</strong></span> (perderíamos <span class="math inline">\(X\)</span>), pero veremos más adelante cómo decidir cuál quitar si tuviésemos varias variables.</p>
@@ -2589,12 +2589,12 @@ Residuals:
 
 Coefficients:
               Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept)  2.148e-15  1.574e+00       0        1
-fitted      -3.084e-16  2.231e-01       0        1
+(Intercept) -1.101e-15  1.574e+00       0        1
+fitted       1.600e-16  2.231e-01       0        1
 
 Residual standard error: 0.4819 on 25 degrees of freedom
-Multiple R-squared:  3.694e-32, Adjusted R-squared:  -0.04 
-F-statistic: 9.234e-31 on 1 and 25 DF,  p-value: 1</code></pre>
+Multiple R-squared:  3.752e-32, Adjusted R-squared:  -0.04 
+F-statistic: 9.381e-31 on 1 and 25 DF,  p-value: 1</code></pre>
 </div>
 </div>
 <p>Si te fijas <span class="hl-green"><strong>ambos parámetros no son significativamente distintos de 0</strong></span>: no presentan una tendencia (lineal al menos)</p>
@@ -2723,7 +2723,7 @@ Anderson-Darling          0.2422         0.7457
 <div class="cell">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">check_autocorrelation</span>(ajuste_AGST)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.588).</code></pre>
+<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.586).</code></pre>
 </div>
 </div>
 <p>Por último, <code>check_autocorrelation()</code> comprueba como efectivamente los <span class="hl-yellow"><strong>residuales/errores son independientes</strong></span>, haciendo un test de autocorrelación (nos tiene que salir lo contrario a una serie temporal, que el error i no depende del i-1).</p>
@@ -3352,9 +3352,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 
 Name          | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 ------------------------------------------------------------------------------------------------------------
-ajuste_lineal |    lm | 3650.1 (0.980) | 3650.2 (0.981) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
-ajuste_6pred  |    lm | 3657.9 (0.020) | 3658.0 (0.019) | 3697.1 (&lt;.001) | 0.815 |     0.814 | 1.495 | 1.500
-ajuste_23pred |    lm | 3678.2 (&lt;.001) | 3679.5 (&lt;.001) | 3800.9 (&lt;.001) | 0.818 |     0.814 | 1.485 | 1.503</code></pre>
+ajuste_lineal |    lm | 3650.1 (0.979) | 3650.2 (0.980) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
+ajuste_6pred  |    lm | 3657.8 (0.021) | 3658.0 (0.020) | 3697.1 (&lt;.001) | 0.816 |     0.814 | 1.495 | 1.500
+ajuste_23pred |    lm | 3669.8 (&lt;.001) | 3671.1 (&lt;.001) | 3792.5 (&lt;.001) | 0.820 |     0.815 | 1.478 | 1.496</code></pre>
 </div>
 </div>
 <p>Con <code>compare_performance()</code> podemos comparar métricas de modelos.</p>
@@ -3399,12 +3399,12 @@ ajuste_23pred |    lm | 3678.2 (&lt;.001) | 3679.5 (&lt;.001) | 3800.9 (&lt;.001
 
 Name     | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 -------------------------------------------------------------------------------------------------------
-ajuste_1 |    lm |   82.9 (&gt;.999) |   82.9 (&gt;.999) |   97.6 (&gt;.999) | 0.997 |     0.997 | 0.251 | 0.252
-ajuste_2 |    lm | 2819.9 (&lt;.001) | 2819.9 (&lt;.001) | 2834.6 (&lt;.001) | 0.956 |     0.956 | 0.988 | 0.989
-ajuste_3 |    lm | 3606.7 (&lt;.001) | 3606.8 (&lt;.001) | 3621.5 (&lt;.001) | 0.909 |     0.909 | 1.464 | 1.466
-ajuste_4 |    lm | 4227.3 (&lt;.001) | 4227.3 (&lt;.001) | 4242.0 (&lt;.001) | 0.844 |     0.844 | 1.997 | 1.999
-ajuste_5 |    lm | 5561.2 (&lt;.001) | 5561.2 (&lt;.001) | 5575.9 (&lt;.001) | 0.570 |     0.569 | 3.891 | 3.895
-ajuste_6 |    lm | 6985.0 (&lt;.001) | 6985.1 (&lt;.001) | 6999.8 (&lt;.001) | 0.228 |     0.227 | 7.929 | 7.937</code></pre>
+ajuste_1 |    lm |   57.8 (&gt;.999) |   57.9 (&gt;.999) |   72.6 (&gt;.999) | 0.997 |     0.997 | 0.248 | 0.249
+ajuste_2 |    lm | 2836.3 (&lt;.001) | 2836.4 (&lt;.001) | 2851.1 (&lt;.001) | 0.957 |     0.957 | 0.996 | 0.997
+ajuste_3 |    lm | 3652.0 (&lt;.001) | 3652.0 (&lt;.001) | 3666.7 (&lt;.001) | 0.909 |     0.909 | 1.498 | 1.499
+ajuste_4 |    lm | 4241.7 (&lt;.001) | 4241.7 (&lt;.001) | 4256.4 (&lt;.001) | 0.837 |     0.837 | 2.012 | 2.014
+ajuste_5 |    lm | 5568.4 (&lt;.001) | 5568.4 (&lt;.001) | 5583.1 (&lt;.001) | 0.569 |     0.568 | 3.905 | 3.909
+ajuste_6 |    lm | 6996.6 (&lt;.001) | 6996.6 (&lt;.001) | 7011.3 (&lt;.001) | 0.264 |     0.263 | 7.975 | 7.983</code></pre>
 </div>
 </div>
 </section>
@@ -3465,18 +3465,18 @@ lm(formula = y ~ x, data = datos)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--1.81108 -0.36225 -0.03199  0.45864  1.95531 
+-1.63640 -0.41778  0.00225  0.38607  1.82782 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.91081    0.09628    9.46   &lt;2e-16 ***
-x           -1.83122    0.08013  -22.85   &lt;2e-16 ***
+(Intercept)  1.03151    0.09727   10.61   &lt;2e-16 ***
+x           -1.97113    0.08095  -24.35   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.6082 on 198 degrees of freedom
-Multiple R-squared:  0.7251,    Adjusted R-squared:  0.7237 
-F-statistic: 522.2 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.6145 on 198 degrees of freedom
+Multiple R-squared:  0.7496,    Adjusted R-squared:  0.7484 
+F-statistic: 592.9 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -3504,18 +3504,18 @@ lm(formula = y ~ x, data = datos)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--2.13575 -0.28567 -0.01292  0.19794  3.15748 
+-1.74713 -0.27752 -0.01983  0.23421  1.99050 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.96657    0.08582   11.26   &lt;2e-16 ***
-x           -1.95898    0.07405  -26.46   &lt;2e-16 ***
+(Intercept)  1.01443    0.08148   12.45   &lt;2e-16 ***
+x           -2.05865    0.07030  -29.28   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.6046 on 198 degrees of freedom
-Multiple R-squared:  0.7795,    Adjusted R-squared:  0.7784 
-F-statistic: 699.9 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.574 on 198 degrees of freedom
+Multiple R-squared:  0.8124,    Adjusted R-squared:  0.8115 
+F-statistic: 857.5 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
@@ -4143,20 +4143,20 @@ lm(formula = y ~ ., data = datos)
 
 Residuals:
        Min         1Q     Median         3Q        Max 
--3.831e-14 -5.420e-16  4.900e-17  7.360e-16  8.115e-15 
+-1.200e-14 -1.308e-15 -2.440e-16  6.340e-16  6.615e-14 
 
 Coefficients: (1 not defined because of singularities)
               Estimate Std. Error    t value Pr(&gt;|t|)    
-(Intercept)  5.000e-01  2.174e-16  2.300e+15   &lt;2e-16 ***
-x_1         -4.500e+00  1.144e-16 -3.934e+16   &lt;2e-16 ***
-x_2          5.000e-01  1.160e-16  4.312e+15   &lt;2e-16 ***
+(Intercept)  5.000e-01  3.557e-16  1.406e+15   &lt;2e-16 ***
+x_1         -4.500e+00  1.748e-16 -2.575e+16   &lt;2e-16 ***
+x_2          5.000e-01  1.665e-16  3.003e+15   &lt;2e-16 ***
 x_3                 NA         NA         NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 3.069e-15 on 197 degrees of freedom
+Residual standard error: 5.013e-15 on 197 degrees of freedom
 Multiple R-squared:      1, Adjusted R-squared:      1 
-F-statistic: 7.877e+32 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
+F-statistic: 3.341e+32 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
@@ -4813,9 +4813,6 @@ Coefficients:
 <section id="clase-17" class="title-slide slide level1 center">
 <h1>Clase 17: depuración</h1>
 <p><span style="color:#444442;"><strong>…</strong></span></p>
-</section>
-<section id="interacciones" class="slide level2">
-<h2>Interacciones</h2>
 </section>
 <section id="ausentes" class="slide level2">
 <h2>Ausentes</h2>
