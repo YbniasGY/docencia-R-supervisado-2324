@@ -1,0 +1,197 @@
+---
+title: "Entrega I"
+author: "C. Tangana - DNI: 00000000-X"
+format:
+  html:
+    theme: [style.scss]
+    toc: true
+    toc-location: right
+    toc-title: Índice
+editor: visual
+embed-resources: true
+---
+
+## Instrucciones (leer antes de empezar)
+
+-   Modifica de la **cabecera** del documento `.qmd` tus datos personales (nombre y DNI). IMPORTANTE: no modifiques nada más de la cabecera.
+
+-   Asegúrate, **ANTES de seguir editando** el documento, que el archivo `.qmd` se renderiza correctamente y se genera el `.html` correspondiente en tu carpeta local de tu ordenador (pulsa el botón `Render` o guarda el documento con `Render on Save` activado).
+
+-   Los chunks (cajas de código) creados están o vacíos o incompletos, de ahí que la mayoría tengan la opción `#| eval: false`. Una vez que edites lo que consideres, debes ir cambiando cada chunck a `#| eval: true` (o quitarlo directamente) para que se ejecuten.
+
+-   Recuerda que puedes ejecutar chunk a chunk con el botón *play* o ejecutar todos los chunk hasta uno dado (con el botón a la izquierda del anterior).
+
+-   **IMPORTANTE**: solo se podrá subir un archivo `.html` al campus, no se evaluarán entregas sin el `.html` correctamente generado. **Recuerda**: el código es una herramienta, no el fin en esta asignatura. Se evaluará especialmente las interpretaciones y conclusiones que detalles. Un ejercicio con el código perfecto pero sin ningún tipo de razonamiento, interpretación o conclusión no superará el 4 sobre 10 de nota.
+
+### Paquetes necesarios
+
+Necesitaremos los siguientes paquetes (haz play en el chunk para que se carguen):
+
+```{r paquetes}
+#| message: false
+#| warning: false
+rm(list = ls()) # Borramos variables de environment
+
+# descomentar si es la primera vez (y requieren instalación)
+# install.packages("tidyverse")
+# install.packages("performance")
+# install.packages("olsrr")
+# install.packages("corrr")
+# install.packages("corrplot")
+# install.packages("skimr")
+library(tidyverse)
+library(rsample)
+library(performance)
+library(olsrr)
+library(corrr)
+library(corrplot)
+library(skimr)
+```
+
+## Caso práctico: análisis de datos de cáncer
+
+El archivo de datos a usar lo cargaremos desde el csv `cancer.csv`.
+
+```{r carga-datos}
+#| message: false
+#| warning: false
+#| 
+# no cambies código
+datos <- read_csv(file = "./cancer.csv")
+datos
+```
+
+Los datos representan **diferentes características socioeconómicas** de distintas regiones, extraídas de the American Community Survey (census.gov), clinicaltrials.gov, y cancer.gov.
+
+**¿Nuestro objetivo?** Ser capaces de predecir de manera lineal y MULTIVARIANTE la variable `deathRate`, nuestra variable objetivo, que representa la mortalidad media de cancer, por cada 100 000 habitantes. 
+El resto de variables son:
+
+-   `medianIncome`: mediana de los ingresos de la región.
+-   `popEst2015`: población de la región
+-   `povertyPercent`: porcentaje de población en situación de pobreza.
+-   `studyPerCap`: ensayos clínicos relacionados por el cáncer realizados por cada 100 000 habitantes.
+-   `MedianAge`: edad mediana.
+-   `region`: nombre de la región.
+-   `AvgHouseholdSize`: tamaño medio de los hogares.
+-   `PercentMarried`: porcentaje de habitantes casados.
+-   `PctHS25_Over`: porcentaje de residentes por encima de los 25 años con (máximo) título de bachillerato.
+-   `PctUnemployed16_Over`: porcentaje de residentes de más de 16 años en paro.
+-   `PctPrivateCoverage`: porcentaje de residentes con seguro de salud privado.
+-   `BirthRate`: tasa de natalidad.
+
+**IMPORTANTE**: siempre que puedas, relaciona los valores numéricos de la salida de `R` con su fórmula.
+
+### Ejercicio 1 (1.25 puntos)
+
+> Chequea que no hay problemas de rango/codificación: en caso de que alguna variable tenga dichos problemas, debes sustituir los valores fueran del rango razonable por su media o mediana (sin esos datos fuera del rango), justificando por qué usas la media o por qué usas la mediana, ejecutando el código que consideres (si te atascas, sigue haciendo con el dataset original)
+
+
+```{r}
+#| eval: false
+
+# Escribe el código que consideres
+datos_preproc <-
+  datos |> ...
+```
+
+[Escribe en el chunk el código que consideres para responder la pregunta y aquí debajo como texto normal lo que consideres para responder, borrando esta frase]
+
+
+### Ejercicio 2 (0.75 puntos)
+
+
+> En caso de encontrar alguna variable cualitativa, procesa los datos como consideras para incluir su información de manera que pueda ser usada en la futura regresión. Recuerda: si tenemos una variable cualitativa que toma k valores, debemos crear k-1 nuevas variables numéricas (de un tipo muy concreto) en su lugar.
+
+```{r}
+#| eval: false
+
+# Escribe el código que consideres
+datos_preproc <-
+  datos_preproc |> 
+  mutate(...)
+```
+
+[Escribe en el chunk el código que consideres para responder la pregunta y aquí debajo como texto normal lo que consideres para responder, borrando esta frase]
+
+
+### Ejercicio 3 (1.5 puntos)
+
+> Ejecuta el código que consideres para realizar una selección inicial de variables de manera que se mitiguen los efectos adversos de la colinealidad. Comenta todo lo que consideres sobre. Tras ello separa las observaciones en dos datasets distintos: un dataset train y un segundo dataset test. Para ello realiza un muestreo aleatorio de manera que train contenga el 80% de los datos y test el 20% restante. IMPORTANTE: no cambies la semilla.
+
+
+
+```{r}
+#| eval: false
+
+# Escribe el código que consideres
+...
+
+# Escribe el código que consideres
+set.seed(12345)
+datos_split <- initial_split(...)
+```
+
+[Escribe en el chunk el código que consideres para responder la pregunta y aquí debajo como texto normal lo que consideres para responder, borrando esta frase]
+
+### Ejercicio 4 (1 punto)
+
+> No usaremos el dataset test hasta el final para evaluar las predicciones (con un dataset que el modelo no conoce). Con el dataset train ejecuta el ajuste de regresión lineal multivariante saturado (habiendo hecho lo pedido en los ejercicios anteriores) y comenta de manera MUY RESUMIDA la salida (SOLO lo que puedas interpretar hasta ahora, y al grano, que se te acaba el tiempo)
+
+
+```{r}
+#| eval: false
+
+# Escribe el código que consideres
+ajuste_saturado <- lm(data = train, ...)
+```
+
+[Escribe en el chunk el código que consideres para responder la pregunta y aquí debajo como texto normal lo que consideres para responder, borrando esta frase]
+
+### Ejercicio 5 (1.75 puntos)
+
+
+> Realiza una selección de modelos en base a los criterios BIC y AIC. Recuerda que para evitar incompatibilidad con otros paquetes, no debes hAcer library(MASS) sino MASS::... Comenta e interpreta todo lo que sepas de las salidas generadas. ¿Cuál penaliza más? ¿Por qué? ¿Qué ventajas tiene la selección de BIC? Interpreta los coeficientes de ambos modelos y comenta las diferencias (en caso de que existiesen)
+
+
+```{r}
+#| eval: false
+
+# Escribe el código que consideres
+```
+
+[Escribe en el chunk el código que consideres para responder la pregunta y aquí debajo como texto normal lo que consideres para responder, borrando esta frase]
+
+
+### Ejercicio 6 (1.5 puntos)
+
+> Compara la calidad de los 3 modelos (saturado, BIC y AIC) en train. Quédate con uno (justifica) y comprueba si se cumplen las hipotesis necesarias (fase de diagnosis SOLO en ese elegido). ¿Se cumplen las hipótesis? Argumenta porqué, más allá de lo que valga luego la bondad de ajuste, es importante que se cumplan.
+
+```{r}
+#| eval: false
+
+# Escribe el código que consideres
+```
+
+[Escribe en el chunk el código que consideres para responder la pregunta y aquí debajo como texto normal lo que consideres para responder, borrando esta frase]
+
+
+
+### Ejercicio 7 (0.75 puntos)
+
+> Asume que se cumplen las hipótesis (en caso de que no se cumpliesen) e interpreta todo lo que sepas sobre la segunda tabla de la salida de la regresión (la de inferencia de los parámetros). Elimina variables si su efecto no fuese significativo.
+
+[Escribe en el chunk el código que consideres para responder la pregunta y aquí debajo como texto normal lo que consideres para responder, borrando esta frase]
+
+
+### Ejercicio 8 (1.5 puntos)
+
+> Por último, utiliza el dataset test para, aplicando los 3 modelos entrenados (saturado, AIC y BIC), predecir las observaciones de test (con cada uno de los modelos. Con las observaciones de test construye un nuevo dataset de cuatro columnas: la variable objetivo, la variable predictora, la predicción y el modelo usado (saturado, BIC, AIC). Calcula el $R^2$ en el dataset de test para cada modelo. ¿Cuál funciona mejor en test? ¿Qué % de información explica cada modelo? ¿Cuánto vale su varianza residual?
+
+```{r}
+#| eval: false
+
+# Escribe el código que consideres
+```
+
+[Escribe en el chunk el código que consideres para responder la pregunta y aquí debajo como texto normal lo que consideres para responder, borrando esta frase]
+

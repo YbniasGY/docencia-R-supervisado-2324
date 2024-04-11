@@ -1,0 +1,586 @@
+---
+title: "Entrega I RESUELTA"
+author: "C. Tangana - DNI: 00000000-X"
+format:
+  html:
+    theme: [style.scss]
+    toc: true
+    toc-location: right
+    toc-title: Índice
+editor: visual
+embed-resources: true
+---
+
+
+## Instrucciones (leer antes de empezar)
+
+-   Modifica de la **cabecera** del documento `.qmd` tus datos personales (nombre y DNI). IMPORTANTE: no modifiques nada más de la cabecera.
+
+-   Asegúrate, **ANTES de seguir editando** el documento, que el archivo `.qmd` se renderiza correctamente y se genera el `.html` correspondiente en tu carpeta local de tu ordenador (pulsa el botón `Render` o guarda el documento con `Render on Save` activado).
+
+-   Los chunks (cajas de código) creados están o vacíos o incompletos, de ahí que la mayoría tengan la opción `#| eval: false`. Una vez que edites lo que consideres, debes ir cambiando cada chunck a `#| eval: true` (o quitarlo directamente) para que se ejecuten.
+
+-   Recuerda que puedes ejecutar chunk a chunk con el botón *play* o ejecutar todos los chunk hasta uno dado (con el botón a la izquierda del anterior).
+
+-   **IMPORTANTE**: solo se podrá subir un archivo `.html` al campus, no se evaluarán entregas sin el `.html` correctamente generado. **Recuerda**: el código es una herramienta, no el fin en esta asignatura. Se evaluará especialmente las interpretaciones y conclusiones que detalles. Un ejercicio con el código perfecto pero sin ningún tipo de razonamiento, interpretación o conclusión no superará el 4 sobre 10 de nota.
+
+### Paquetes necesarios
+
+Necesitaremos los siguientes paquetes (haz play en el chunk para que se carguen):
+
+
+```{r paquetes}
+#| message: false
+#| warning: false
+rm(list = ls()) # Borramos variables de environment
+
+# descomentar si es la primera vez (y requieren instalación)
+# install.packages("tidyverse")
+# install.packages("performance")
+# install.packages("olsrr")
+# install.packages("corrr")
+# install.packages("corrplot")
+# install.packages("skimr")
+library(tidyverse)
+library(performance)
+library(olsrr)
+library(corrr)
+library(corrplot)
+library(skimr)
+```
+
+
+## Caso práctico I: análisis de datos de cáncer
+
+El archivo de datos a usar lo cargaremos desde el csv `cancer.csv`.
+
+
+```{r carga-datos}
+#| message: false
+#| warning: false
+#| 
+# no cambies código
+datos <- read_csv(file = "./cancer.csv")
+datos
+```
+
+
+Los datos representan **diferentes características socioeconómicas** de distintas regiones, extraídas de the American Community Survey (census.gov), clinicaltrials.gov, y cancer.gov.
+
+**¿Nuestro objetivo?** Ser capaces de predecir la variable `deathRate`, nuestra variable objetivo, que representa la mortalidad media de cancer, por cada 100 000 habitantes. La idea es que seamos capaz de **determinar cual de las variables** es la que más efecto (lineal) tiene en la mortalidad de cáncer, realizando el ajuste posterior.
+
+El resto de variables son:
+
+-   `medianIncome`: mediana de los ingresos de la región.
+-   `popEst2015`: población de la región
+-   `povertyPercent`: porcentaje de población en situación de pobreza.
+-   `studyPerCap`: ensayos clínicos relacionados por el cáncer realizados por cada 100 000 habitantes.
+-   `MedianAge`: edad mediana.
+-   `Geography`: nombre de la región.
+-   `AvgHouseholdSize`: tamaño medio de los hogares.
+-   `PercentMarried`: porcentaje de habitantes casados.
+-   `PctHS25_Over`: porcentaje de residentes por encima de los 25 años con (máximo) título de bachillerato.
+-   `PctUnemployed16_Over`: porcentaje de residentes de más de 16 años en paro.
+-   `PctPrivateCoverage`: porcentaje de residentes con seguro de salud privado.
+-   `BirthRate`: tasa de natalidad.
+
+**IMPORTANTE**: siempre que puedas, relaciona los valores numéricos de la salida de `R` con su fórmula.
+
+### Ejercicio 1
+
+> Ejecuta el código que consideres para chequear que a) todas las variables son numéricas; b) no hay datos ausentes; c) no hay problemas de rango/codificación. En caso de que alguna de ellas no se cumpla, ejecuta el código que consideres para corregirlo y/o eliminar las variables que consideres. Sé conciso en el código.
+
+Simplemente había que darse cuenta de que
+
+1. No había ausentes (no se hace nada)
+2. `Geography` era no numérica --> fuera (de momento).
+3. los rangos permitidos:
+
+  - `deathRate`: entre 0 e infinito.
+  - `medianIncome`: entre 0 e infinito.
+  - `popEst2015`: entre 0 y 8.000.000.000 (habitantes del mundo xd)
+  - `povertyPercent`: entre 0 y 100 (al ser porcentaje)
+  - `studyPerCap`: entre 0 e infinito
+  - `MedianAge`: entre 0 y 130 años (por poner un tope)
+  - `AvgHouseholdSize`: entre 0 e infinito (si existe alguna finca enorme)
+  - `PercentMarried`: entre 0 y 100 (al ser porcentaje)
+  - `PctHS25_Over`: entre 0 y 100 (al ser porcentaje)
+  - `PctUnemployed16_Over`: entre 0 y 100 (al ser porcentaje)
+  - `ctPrivateCoverage`: entre 0 y 100 (al ser porcentaje)
+  - `BirthRate`: entre 0 e infinito.
+
+Lo comprobamos con `skim()` o `summary()`
+
+
+```{r}
+datos |> skim()
+```
+
+
+La única con problemas es `MedianAge` que tiene de máximo 600 años: filtramos por ese umbral de 130 años y los eliminamos (más adelante los pasaremos a `NA` y los depuraremos).
+
+
+```{r}
+datos_preproc <-
+  datos |>
+  select(where(is.numeric)) |> 
+  filter(MedianAge < 130)
+datos_preproc
+```
+
+
+
+### Ejercicio 2
+
+> Realiza un primer análisis exploratorio para entender nuestros datos (cada variable por separado). Hazlo tanto de manera numérica como de manera visual (no hace falta que ejecutas 19 000 gráficos, decide uno de los aprendidos para ello y saca conclusiones, al grano). ¿Hay datos atípicos?
+
+Por ejemplo densidades...
+
+
+```{r}
+datos_tidy <-
+  datos_preproc |> 
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "values")
+
+ggplot(datos_tidy) + 
+  geom_density(aes(x = values, color = variable, fill = variable)) +
+  facet_wrap(~variable, scale = "free") +
+  theme_minimal()
+```
+
+
+...o boxplots
+
+
+```{r}
+ggplot(datos_tidy) + 
+  geom_boxplot(aes(x = values, color = variable, fill = variable)) +
+  facet_wrap(~variable, scale = "free") +
+  theme_minimal()
+```
+
+
+Si se observan atípicos, en especial en `popEst2015` (hay algunas regiones muy grandes), en `studyPerCap` (es decir, no en todas las regiones se investiga por igual, hay algunas donde se hacen muchos estudios), y las variables de renta (`medIncome` y `PovertyPercent`), que muestran una gran desigualdad.
+
+De momento suficiente con darse cuenta de esto, ya intervendremos.
+
+### Ejercicio 3
+
+> Nuestro objetivo será predecir la mortalidad de cáncer. De momento trabajaremos en el contexto de la regresión univariante, así que lo primero que haremos tras preprocesar y entender los datos será seleccionar la variable predictora que mayor efecto lineal tenga respecto a la variable objetivo. Hazlo tanto de manera numérica como visual, de manera que puedas descartar correlaciones espúreas (que no haya un dinosaurio, por ejemplo).
+
+Sacamos primero la matriz de correlaciones
+
+
+```{r}
+datos_preproc |> correlate()
+```
+
+
+Con `focus()` del paquete `{corrr}` podemos filtrar solo la que nos interesa: predictoras vs objetivo
+
+
+```{r}
+datos_preproc |>
+  correlate() |> 
+  corrr::focus(deathRate)
+```
+
+
+Y podemos visualizarlas
+
+
+```{r}
+datos_preproc |>
+  cor() |> 
+  corrplot(method = "color")
+```
+
+
+La variable con una mayor correlación es `povertyPercent` (en positivo, a más pobreza, más mortalidad) y la variable `medIncome` (en negativo, a más ingresos, menos mortalidad). El signo importa y su interpretación también.
+
+Antes de quedarnos con una de ellas debemos comprobar que no son correlaciones espúreas, así que visualizamos todas vs objetivo
+
+
+```{r}
+datos_tidy <-
+  datos_preproc |> 
+  pivot_longer(cols = -deathRate, names_to = "variable", values_to = "values")
+
+ggplot(datos_tidy, aes(x = values, y = deathRate, color = variable)) + 
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~variable, scale = "free") +
+  theme_minimal()
+```
+
+
+Aunque sea una relación débil, no parece aberrante que podamos ajustar una recta a esa nube de puntos (no hay por ejemplo un...dinosaurio). Nos quedaremos por tanto con `povertyPercent` como predictora
+
+
+### Ejercicio 4
+
+> Una vez elegida la variable con mayor efecto lineal, el objetivo será usar dicha covariable para predecir la variable objetivo. Lo que haremos será separar las observaciones en dos datasets distintos: un dataset train con el que entrenaremos el modelo (el que usará la regresión para aprender y determinar sus coeficientes) y un segundo dataset test que usaremos en el futuro para obtener predicciones. Para ello realiza un muestreo aleatorio de manera que train contenga el 80% de los datos y test el 20% restante. IMPORTANTE: no cambies la semilla.
+
+Primero vamos a crear un id de la fila, para luego poder filtrar correctamente. Para ello usaremos `rowid_to_column()` que nos numera automáticamente las filas.
+
+Después usaremos `slice_sample(prop = 0.8, replace = FALSE)`. Importante: `replace = FALSE` viene ya así por defecto, pero es importante que entendamos por qué: no quieroe que haya dos observaciones repetidas.
+
+Y por último, para el otro 20% no puedo hacer otro slice_sample ya que no me garantiza que no caigan observaciones que ya están en train. Así que usaremos un `anti_join` o un `filter()`
+
+
+```{r}
+set.seed(12345)
+
+# Creamos id
+datos_preproc <-
+  datos_preproc |>
+  rowid_to_column(var = "id")
+train <- datos_preproc |> slice_sample(prop = 0.8)
+
+# versión antijoin
+test <- datos_preproc |> anti_join(train, by = "id")
+test
+
+# version filter
+test <- datos_preproc |> filter(!(id %in% train$id))
+test
+```
+
+
+
+
+### Ejercicio 5
+
+> No usaremos el dataset test hasta el final para evaluar las predicciones (con un dataset que el modelo no conoce). Con el dataset train a) ejecuta el ajuste de una regresión lineal univariante; b) interpreta los coeficientes; c) realiza la diagnosis de la manera más completa posible; d) comenta todo lo que sepas sobre la segunda tabla de la salida (la de inferencia de los parámetros). Elimina variables si su efecto no fuese significativo.
+
+Tras separar los datos, entrenamos el modelo con `train`
+
+
+```{r}
+ajuste <- lm(data = train, formula = deathRate ~ povertyPercent)
+ajuste |> summary()
+```
+
+
+
+De momento lo único que podemos interpretar es
+
+* $\beta_0 = 147.53777$, es decir, la predicción del modelo da un ratio de mortalidad de $147.53777$ (por cada 100 000 habitantes) cuando no hay un solo habitante pobre en la región.
+* $\beta_1 = 1.84645$, es decir, por cada punto que suba el porcentaje de pobreza, la mortalidad media por cada 100 000 sube $1.84645$ puntos. 
+
+Así el ajuste formulado sería
+
+$$Mortalidad = 147.53777 + 1.84645 * \%pobreza$$
+
+¿Se cumplen las hipótesis?
+
+
+```{r}
+check_model(ajuste)
+```
+
+
+A priori parece que gráficamente se cumplen todas. Vamos a chequear una a una
+
+4. Errores incorrelados: parece existir independencia entre los errores
+
+
+```{r}
+check_autocorrelation(ajuste)
+```
+
+
+3. Normalidad:
+
+
+```{r}
+ols_test_normality(ajuste)
+```
+
+
+Según el p-valor no hay normalidad...pero vamos a asumir que sí por el siguiente gráfico
+
+
+```{r}
+ggplot(tibble("residuals" = ajuste$residuals)) +
+  stat_qq(aes(sample = residuals)) + 
+  stat_qq_line(aes(sample = residuals)) +
+  theme_minimal()
+```
+
+
+Los valores se pegan a la línea, sobre todo en el centro que es lo importante.
+
+Además si pintamos su densidad vs una densidad de una normal (con misma media y desviación)
+
+
+```{r}
+set.seed(12345)
+ggplot(tibble("residuals" = ajuste$residuals,
+              "normal" =
+                rnorm(n = length(ajuste$residuals), mean = mean(ajuste$residuals),
+                      sd = sd(ajuste$residuals)))) +
+  geom_density(aes(x = residuals), color = "#822181",
+               linewidth = 1.5) +
+  geom_density(aes(x = normal), color = "#EFE981",
+               linewidth = 1.5) +
+  theme_minimal()
+```
+
+
+Vemos que por lo que puede estar fallando la normalidad es que, por tener poco tamaño muestral E IMPORTANTE NO ESTAR TRATANDO OUTLIERS, la distribución de los errores nos sale ligeramente más apuntada hacía arriba (leptocúrtica, kurtosis positiva).
+
+Esto no había que hacerlo de momento, pero para entender porque los p-valores no concuerdan con lo que ven nuestros ojos, vamos a detectar outliers en la variable predictora
+
+Para eso vamos a usar rápido la función `scores()` del paquete `{outliers}`: si ponemos en `type = "iqr"` (es decir, nos vamos a basar en un boxplot para detectar outliers), nos devuelve cuanto se aleja cada dato de los límites del rango intercuartílico
+
+
+```{r}
+distancia_x <- 
+  train$povertyPercent |>
+  outliers::scores(type = "iqr")
+distancia_x[1:20]
+
+distancia_y <- 
+  train$deathRate |>
+  outliers::scores(type = "iqr")
+distancia_y[1:20]
+```
+
+
+Un forma típica y rápida de detectar outliers es cuando dicha distancia supera el 1.5 (en valor absoluto), así que lo que hacemos es eliminar dichas observaciones
+
+
+```{r}
+train_sin_outliers <-
+  train |> 
+  filter(abs(distancia_x) < 1.5 & abs(distancia_y) < 1.5)
+
+ajuste_outliers <-
+  lm(data = train_sin_outliers, formula = deathRate ~ povertyPercent)
+ols_test_normality(ajuste_outliers)
+```
+
+
+Empieza a ser normal... Con un tamaño muestral más grande y un tratamiento más rigurosos de los atípicos lo tendríamos.
+
+2. Homocedasticidad
+
+
+```{r}
+check_heteroscedasticity(ajuste)
+check_heteroscedasticity(ajuste_outliers)
+```
+
+
+De la misma manera no parece que se cumpla a priori la homocedasticidad (por lo mismo) pero tenemos lo que nos interesa: errores en torno a una banda constante de varianza
+
+
+```{r}
+ggplot(tibble("id" = 1:length(ajuste$residuals),
+              "residuals" = ajuste$residuals),
+       aes(x = id, y = residuals)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal()
+
+ggplot(tibble("id" = 1:length(ajuste_outliers$residuals),
+              "residuals" = ajuste_outliers$residuals),
+       aes(x = id, y = residuals)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal()
+```
+
+
+En ambos casos están en torno a una banda, en el segundo aún más ya que se ha eliminado uno de los outliers en los residuales. Si siguiésemos con un tratamiento mejor de los mismos, voilá.
+
+1. Linealidad:
+
+
+```{r}
+ajuste_res <-
+  lm(data = tibble("residuals" = ajuste$residuals,
+                   "fitted" = ajuste$fitted.values),
+     formula = residuals ~ fitted)
+ajuste_res |> summary()
+
+ajuste_res <-
+  lm(data = tibble("residuals" = ajuste$residuals,
+                   "fitted" = ajuste$fitted.values),
+     formula = residuals ~ fitted + I(fitted^2))
+chisq.test(ajuste$residuals, ajuste$fitted.values,
+           simulate.p.value = TRUE, B = 300)
+```
+
+
+Respecto a la linealidad ídem: aunque el p-valor no salga como debería, no se aprecia patrón (ni lineal ni cuadrático)
+
+
+```{r}
+ggplot(tibble("residuals" = ajuste$residuals,
+                   "fitted" = ajuste$fitted.values),
+       aes(x = fitted, y = residuals)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal()
+
+ggplot(tibble("residuals" = ajuste$residuals,
+                   "fitted" = ajuste$fitted.values^2),
+       aes(x = fitted, y = residuals)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal()
+```
+
+
+
+De hecho fíjate que esa distribución leptocúrtica de nuestros errores hace que nuestra densidad de $y$ sea un poco más apuntada que las simulaciones (que lo que hacen es usar el ajuste y añadirle el error simulando que fuese normal)
+
+
+```{r}
+check_predictions(ajuste)
+```
+
+
+Fíjate como cambia al tratar mínimamente outliers
+
+
+```{r}
+check_predictions(ajuste_outliers)
+```
+
+
+### Ejercicio 6
+
+> ¿Se cumplen las hipótesis? Argumenta porqué, más allá de lo que valga luego la bondad de ajuste, es importante que se cumplan.
+
+dsadsa
+
+Respecto a por qué es importante que se cumplan las hipótesis, podemos dar muchos motivos pero principalmente dos vistos en clase con ejemplos simulados:
+
+* No cumplir hipótesis implica no poder hacer inferencia: la recta solo nos sirve de manera muestral, para esta no muestra, no pudiendo establecer conclusiones del ajuste a la población. Esto, entre otras cosas, hace que no podamos interpretar ninguno de los p-valores y contrastes, ni que el modelo sirva más allá de esta muestra.
+
+* No cumplir hipótesis puede implicar que aunque la bondad de ajuste parezca buena, las predicciones sean bastante malas (por ejemplo, por heterocedasticidad)
+
+### Ejercicio 7
+
+> Evalua el modelo realizando un ANOVA, detallando y explicando todo lo que puedas cada uno de los elementos. Analiza la bondad de ajuste. ¿Qué % de información explica nuestro modelo? Detalla que implica respecto a la calidad del ajuste (en caso de que lo haga).
+
+Para la significación gloval del modelo y el análisis de la varianza usamos `anova()`
+
+
+```{r}
+anova_ajuste <- ajuste |> anova()
+anova_ajuste
+```
+
+
+De aquí sacamos
+
+* que la suma de desviaciones al cuadrado de la variable estimada $\hat{y}$ respecto a su media es de 343293, lo que hemos llamado $SSR = 343293$ 
+* que la suma de los residuos al cuadrado es $SSE = 1531400$ 
+* que $SSE / (n-p-1)$ es aprox $635$, que es lo que hemos llamado como $\hat{\sigma}_{\varepsilon}^{2}$ (el estimador insesgado de la varianza residual), lo cual cuadra con la anterior salida donde Residual std error era de 25.2, que al cuadrado da 635.04
+* además en el contraste global $H_0:\beta_1=\ldots=\beta_p=0$ (en este caso...$p=1$), obtenemos un p-valor muy pequeño --> rechazamos la hipótesis nula, el modelo tiene alguna predictora con un efecto lineal significativo respecot a la objetivo (en este caso, la única que tenemos)
+
+
+Para el $R^2$ podemos hacerlo de tres formas:
+
+* con `summary()`, que vemos que $R^2 = 0.1831$
+
+
+```{r}
+ajuste |> summary()
+```
+
+* con `compare_performance()` aunque solo tengamos un modelo
+
+
+```{r}
+compare_performance(ajuste, ajuste)
+```
+
+
+* de manera manual con el `anova()`, dividiendo $SSR$ entre $SST = SSR + SSE$
+
+
+
+```{r}
+anova_ajuste$`Sum Sq`[1] / 
+  (anova_ajuste$`Sum Sq`[1] + anova_ajuste$`Sum Sq`[2])
+```
+
+
+El $R^2$ nos dice que nuestro modelo solo consigue explicar el 18% aproximadamente, lo cual puede parecer poco si queremos predecir, pero a nivel médico, implica que solo con tener la variable pobreza de una persona podemos explicar el 18% de su mortalidad de cáncer a futuro (solo con una variable, en un tema tan complejo como el cáncer, not bad)
+
+### Ejercicio 8
+
+> Por último, utiliza el dataset test para, aplicando el modelo entrenado, predecir las observaciones de test. Con las observaciones de test construye un nuevo dataset de tres columnas: la variable objetivo, la variable predictora y la predicción. Haz lo mismo con train. Junta ambos datasets con una cuarta variable que nos diga si la observación era de train o de test.
+
+Lo que hacemos primero es construir un dataset con la variable objetivo y predictora en test, y las predicciones usando `predict()` (ahora el `newdata` es literal el conjunto test que hemos apartado).
+
+
+```{r}
+pred_test <-
+  tibble("x" = test$povertyPercent,
+         "y" = test$deathRate,
+         "y_est" = predict(ajuste, newdata = test),
+         "split" = "test")
+```
+
+
+Hacemos lo mismo con `train` y los juntamos (fíjate que he añadido esa cuarta variable para distinguir si las filas vienen de test o de train)
+
+
+```{r}
+pred_train <-
+  tibble("x" = train$povertyPercent,
+         "y" = train$deathRate,
+         "y_est" = ajuste$fitted.values,
+         "split" = "train")
+pred_data <- 
+  bind_rows(pred_train, pred_test)
+pred_data
+```
+
+
+
+### Ejercicio 9
+
+> Con el dataset anterior, visualiza de alguna manera la calidad de las predicciones en train y en test (idea: reales vs predicciones) en dos gráficos en el mismo ggplot (pista: la cuarta columna que has añadido antes la puedes usar en un facet). ¿En cuál ha acertado más el modelo? Calcula el $R^2$ en el dataset de test (piensa como haciendo uso de los errores) y compáralo con el obtenido en la salida del `lm()` en train.
+
+Respecto al R2 cuadrado podemos compararlos a mano sabiendo que es siempre ratio de varianza explicada.
+
+
+```{r}
+R2_data <-
+  pred_data |> 
+  summarise(R2 = var(y_est)/var(y), .by = "split")
+R2_data
+```
+
+
+**IMPORTANTE**: no podemos hacer un segundo ajuste en test, y calcular el R2. Lo importante de test es que vamos a evaluar la predicción con el ajuste ya estimado de train, ¡no uno nuevo! queremos "simular" que pasaría si ese modelo ya construido y entrenado, se lo pasamos a unos datos que el modelo nunca conoció
+
+De ahí que salga algo peor en test que en train (lógicamente).
+
+
+Para el gráfico, vamos a visualizar predicciones vs valores reales, en cada uno
+
+
+```{r}
+ggplot(pred_data, aes(x = y, y = y_est)) +
+  geom_point(aes(color = split), size = 2, alpha = 0.7) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~split) +
+  theme_minimal()
+```
+
+
+En ambos casos obtenemos algo que sabíamos: como modelo predictivo, es un modelo de poca capacidad predictiva. 
+
+¿Y si metiésemos más variables? Continuará...
+
+
+
+

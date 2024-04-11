@@ -1,0 +1,147 @@
+---
+title: "Entrega I"
+author: "C. Tangana - DNI: 00000000-X"
+format:
+  html:
+    theme: [style.scss]
+    toc: true
+    toc-location: right
+    toc-title: Índice
+editor: visual
+---
+
+## Instrucciones (leer antes de empezar)
+
+-   Modifica dentro del documento `.qmd` tus datos personales (nombre y DNI) ubicados en la cabecera del archivo.
+
+-   Asegúrate, **ANTES de seguir editando** el documento, que el archivo `.qmd` se renderiza correctamente y se genera el `.html` correspondiente en tu carpeta local de tu ordenador.
+
+-   Los chunks (cajas de código) creados están o vacíos o incompletos, de ahí que la mayoría tengan la opción `#| eval: false`. Una vez que edites lo que consideres, debes ir cambiando cada chunck a `#| eval: true` (o quitarlo directamente) para que se ejecuten.
+
+-   Recuerda que puedes ejecutar chunk a chunk con el botón *play* o ejecutar todos los chunk hasta uno dado (con el botón a la izquierda del anterior).
+
+### Paquetes necesarios
+
+Necesitaremos los siguientes paquetes (haz play en el chunk para que se carguen):
+
+```{r paquetes}
+rm(list = ls()) # Borramos variables de environment
+
+# descomentar si es la primera vez (y requieren instalación)
+# install.packages("glue")
+# install.packages("dplyr")
+library(glue)
+library(dplyr)
+```
+
+## Caso práctico: análisis de Star Wars
+
+### Ejercicio 1: carga de datos (ya resuelto)
+
+El archivo de datos a usar lo cargaremos del paquete`{dplyr}`. En él tenemos diferentes variables de los **personajes de Star Wars**, con características de su pelo, piel, altura, nombre, etc.
+
+```{r}
+# no cambies código
+starwars
+```
+
+### Ejercicio 2
+
+> ¿Cuántos personajes hay guardados en la base de datos? ¿Cuántas características se han medido de cada uno?
+
+```{r}
+# Una forma: dim
+dim(starwars)
+
+# Otra forma: nrow() y ncol()
+ncol(starwars)
+nrow(starwars)
+```
+
+En la base de datos tenemos `r ncol(starwars)` variables (características) y `r nrow(starwars)` personajes.
+
+### Ejercicio 3
+
+> Extrae en dos variables distintas, nombres y edades, las variables correspondientes de la tbala. ¿De qué tipo es la variable nombre? ¿Y la variable birth_year?
+
+```{r}
+# Se accede a las variables por nombre, no por posición
+nombres <- starwars$name
+edades <- starwars$birth_year
+
+# Tipos
+class(edades)
+class(nombres)
+```
+
+La variable `nombres` es de tipo `r class(nombres)` (texto). La variable `edades` es de tipo `r class(edades)` (numérica). En ambos casos son vectores de longitud `r length(nombres)`
+
+### Ejercicio 4
+
+> Ordena la variable edad, primero de menor a mayor (de jóvenes a viejos) y luego al revés. Obtén el vector de nombres (ordenados de jóvenes a mayores)
+
+```{r}
+sort(edades) # menor a mayor
+sort(edades, decreasing = TRUE) # mayor a menor
+
+nombres[order(edades)] # nombres ordenados
+```
+
+Con `sort()` obtenemos el vector ordenado directamente. Con `order()` los índices (para ser usados y reordenar otro vector)
+
+### Ejercicio 5
+
+> Busca ayuda de la función unique(). Úsala para saber que modalidades tiene la variable cualitativa correspondiente al color de ojos. ¿Cuántos distintos hay?
+
+```{r}
+unique(starwars$eye_color)
+```
+
+La variable `eye_color` contiene `r length(unique(starwars$eye_color))` modalidades únicas.
+
+### Ejercicio 6
+
+> ¿Existe ALGÚN valor ausente en la variable de color ojos? En caso de que existan, ¿de cuántos personajes desconocemos su color de ojos?
+
+```{r}
+# La formá más correcta es usar any(condicion lógica)
+any(is.na(starwars$eye_color))
+
+# Saber cuantos
+sum(is.na(starwars$eye_color))
+
+# Si consideramos "ausente" los "unknown" en realidad
+any(starwars$eye_color == "unknown")
+sum(starwars$eye_color == "unknown")
+```
+
+Tenemos `r sum(is.na(starwars$eye_color))` valores con NA (missing data) y `r sum(starwars$eye_color == "unknown")` con valor "unknown".
+
+### Ejercicio 7
+
+> Calcula la media y desviación típica de las variables de estatura y peso. Recuerda: cuidado con los ausentes. Define un vector con los nombres, pesos y estaturas de los personajes que tienen los ojos azules. Define un tibble con esas tres variables e incorpora una cuarta variable que se llame "IMC" que calcule el índice de masa corporal.
+
+```{r}
+# medias y sd de estatura
+mean(starwars$height, na.rm = TRUE) 
+sd(starwars$height, na.rm = TRUE)
+
+# medias y sd de peso
+mean(starwars$mass, na.rm = TRUE)
+sd(starwars$mass, na.rm = TRUE)
+
+# vectores
+nombres_azules <- starwars$name[starwars$eye_color == "blue"]
+pesos_azules <- starwars$mass[starwars$eye_color == "blue"]
+estatura_azules <- starwars$height[starwars$eye_color == "blue"]
+
+personajes_azules <- tibble("nombres" = nombres_azules,
+                            "pesos" = pesos_azules,
+                            "estaturas" = estatura_azules,
+                            "IMC" = pesos/((estaturas/100)^2))
+personajes_azules
+
+# Otra opción podría haber sido definir todo directamente dentro del tibble (sin guardarlo en vectores)
+```
+
+Las medias y desv. típicas es importante calcularlas con `na.rm = TRUE` ya que sino devolverá `NA` (al tener valores desconocidos)

@@ -2723,7 +2723,7 @@ Anderson-Darling          0.2422         0.7457
 <div class="cell">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">check_autocorrelation</span>(ajuste_AGST)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.612).</code></pre>
+<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.600).</code></pre>
 </div>
 </div>
 <p>Por último, <code>check_autocorrelation()</code> comprueba como efectivamente los <span class="hl-yellow"><strong>residuales/errores son independientes</strong></span>, haciendo un test de autocorrelación (nos tiene que salir lo contrario a una serie temporal, que el error i no depende del i-1).</p>
@@ -3352,9 +3352,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 
 Name          | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 ------------------------------------------------------------------------------------------------------------
-ajuste_lineal |    lm | 3650.1 (0.986) | 3650.2 (0.987) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
-ajuste_6pred  |    lm | 3658.7 (0.014) | 3658.8 (0.013) | 3698.0 (&lt;.001) | 0.815 |     0.814 | 1.495 | 1.501
-ajuste_23pred |    lm | 3687.0 (&lt;.001) | 3688.3 (&lt;.001) | 3809.7 (&lt;.001) | 0.816 |     0.812 | 1.491 | 1.509</code></pre>
+ajuste_lineal |    lm | 3650.1 (0.828) | 3650.2 (0.836) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
+ajuste_6pred  |    lm | 3653.3 (0.172) | 3653.4 (0.164) | 3692.5 (&lt;.001) | 0.816 |     0.815 | 1.491 | 1.497
+ajuste_23pred |    lm | 3678.8 (&lt;.001) | 3680.1 (&lt;.001) | 3801.5 (&lt;.001) | 0.818 |     0.814 | 1.485 | 1.503</code></pre>
 </div>
 </div>
 <p>Con <code>compare_performance()</code> podemos comparar métricas de modelos.</p>
@@ -3399,12 +3399,12 @@ ajuste_23pred |    lm | 3687.0 (&lt;.001) | 3688.3 (&lt;.001) | 3809.7 (&lt;.001
 
 Name     | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 -------------------------------------------------------------------------------------------------------
-ajuste_1 |    lm |   38.6 (&gt;.999) |   38.6 (&gt;.999) |   53.3 (&gt;.999) | 0.997 |     0.997 | 0.246 | 0.246
-ajuste_2 |    lm | 2920.9 (&lt;.001) | 2920.9 (&lt;.001) | 2935.6 (&lt;.001) | 0.955 |     0.955 | 1.039 | 1.040
-ajuste_3 |    lm | 3687.2 (&lt;.001) | 3687.2 (&lt;.001) | 3701.9 (&lt;.001) | 0.910 |     0.910 | 1.524 | 1.526
-ajuste_4 |    lm | 4266.1 (&lt;.001) | 4266.1 (&lt;.001) | 4280.8 (&lt;.001) | 0.847 |     0.847 | 2.036 | 2.038
-ajuste_5 |    lm | 5599.7 (&lt;.001) | 5599.8 (&lt;.001) | 5614.5 (&lt;.001) | 0.611 |     0.611 | 3.967 | 3.971
-ajuste_6 |    lm | 6968.5 (&lt;.001) | 6968.5 (&lt;.001) | 6983.2 (&lt;.001) | 0.277 |     0.276 | 7.864 | 7.872</code></pre>
+ajuste_1 |    lm |  114.4 (&gt;.999) |  114.4 (&gt;.999) |  129.1 (&gt;.999) | 0.997 |     0.997 | 0.255 | 0.256
+ajuste_2 |    lm | 2768.2 (&lt;.001) | 2768.2 (&lt;.001) | 2782.9 (&lt;.001) | 0.961 |     0.961 | 0.963 | 0.964
+ajuste_3 |    lm | 3582.7 (&lt;.001) | 3582.7 (&lt;.001) | 3597.4 (&lt;.001) | 0.916 |     0.916 | 1.447 | 1.448
+ajuste_4 |    lm | 4253.7 (&lt;.001) | 4253.7 (&lt;.001) | 4268.4 (&lt;.001) | 0.855 |     0.855 | 2.024 | 2.026
+ajuste_5 |    lm | 5563.6 (&lt;.001) | 5563.6 (&lt;.001) | 5578.3 (&lt;.001) | 0.623 |     0.623 | 3.896 | 3.899
+ajuste_6 |    lm | 6904.8 (&lt;.001) | 6904.9 (&lt;.001) | 6919.6 (&lt;.001) | 0.278 |     0.277 | 7.618 | 7.625</code></pre>
 </div>
 </div>
 </section>
@@ -3464,19 +3464,19 @@ Call:
 lm(formula = y ~ x, data = datos)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--1.8827 -0.3800  0.0145  0.4699  1.7488 
+     Min       1Q   Median       3Q      Max 
+-1.69319 -0.52940  0.02003  0.49421  1.63203 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.89529    0.09966   8.984   &lt;2e-16 ***
-x           -1.84386    0.08294 -22.231   &lt;2e-16 ***
+(Intercept)  0.88009    0.10342    8.51 4.28e-15 ***
+x           -1.88547    0.08607  -21.91  &lt; 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.6296 on 198 degrees of freedom
-Multiple R-squared:  0.714, Adjusted R-squared:  0.7125 
-F-statistic: 494.2 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.6533 on 198 degrees of freedom
+Multiple R-squared:  0.7079,    Adjusted R-squared:  0.7064 
+F-statistic: 479.9 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -3504,18 +3504,18 @@ lm(formula = y ~ x, data = datos)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--1.99364 -0.29985 -0.00171  0.23070  2.49178 
+-2.46396 -0.29030  0.02476  0.25361  2.05961 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.94639    0.08292   11.41   &lt;2e-16 ***
-x           -1.88383    0.07155  -26.33   &lt;2e-16 ***
+(Intercept)  0.90828    0.09113   9.967   &lt;2e-16 ***
+x           -1.89690    0.07863 -24.126   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.5842 on 198 degrees of freedom
-Multiple R-squared:  0.7779,    Adjusted R-squared:  0.7767 
-F-statistic: 693.3 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.642 on 198 degrees of freedom
+Multiple R-squared:  0.7462,    Adjusted R-squared:  0.7449 
+F-statistic: 582.1 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
@@ -4143,20 +4143,20 @@ lm(formula = y ~ ., data = datos)
 
 Residuals:
        Min         1Q     Median         3Q        Max 
--1.259e-14 -1.261e-15 -6.100e-16  2.140e-16  9.033e-14 
+-2.080e-14 -5.470e-16 -1.660e-17  6.310e-16  5.798e-15 
 
 Coefficients: (1 not defined because of singularities)
               Estimate Std. Error    t value Pr(&gt;|t|)    
-(Intercept)  5.000e-01  4.731e-16  1.057e+15   &lt;2e-16 ***
-x_1         -4.500e+00  2.391e-16 -1.882e+16   &lt;2e-16 ***
-x_2          5.000e-01  2.275e-16  2.198e+15   &lt;2e-16 ***
+(Intercept)  5.000e-01  1.393e-16  3.590e+15   &lt;2e-16 ***
+x_1         -4.500e+00  6.632e-17 -6.786e+16   &lt;2e-16 ***
+x_2          5.000e-01  6.724e-17  7.436e+15   &lt;2e-16 ***
 x_3                 NA         NA         NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 6.643e-15 on 197 degrees of freedom
+Residual standard error: 1.943e-15 on 197 degrees of freedom
 Multiple R-squared:      1, Adjusted R-squared:      1 
-F-statistic: 1.798e+32 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
+F-statistic: 2.335e+33 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
@@ -4721,7 +4721,7 @@ Coefficients:
  -2.213e-05  </code></pre>
 </div>
 </div>
-<p>El argumento <code>direction = ...</code> puede tomar los valores <code>"both"</code> (por defecto), <code>"forward"</code> y <code>"backward"</code> que nos determina la <span class="hl-yellow"><strong>dirección de búsqueda</strong></span>:</p>
+<p>El argumento <code>direction = ...</code> puede tomar los valores <code>"both"</code>, <code>"forward"</code> y <code>"backward"</code> (por defecto) que nos determina la <span class="hl-yellow"><strong>dirección de búsqueda</strong></span>:</p>
 <ul>
 <li><code>direction = "forward"</code>: empieza con el modelo proporcionado y va <span class="hl-yellow"><strong>añadiendo</strong></span> predictoras haciendo modelos cada vez más complejos.</li>
 </ul>
@@ -4814,6 +4814,9 @@ Coefficients:
 <h1>Clase 17: depuración</h1>
 <p><span style="color:#444442;"><strong>…</strong></span></p>
 </section>
+<section id="interacciones" class="slide level2">
+<h2>Interacciones</h2>
+</section>
 <section id="ausentes" class="slide level2">
 <h2>Ausentes</h2>
 </section>
@@ -4828,8 +4831,821 @@ Coefficients:
 <h1>Clase 18: …</h1>
 <p><span style="color:#444442;"><strong>…</strong></span></p>
 </section>
-<section id="section-2" class="slide level2">
-<h2>..</h2>
+<section id="cosas-que-faltan-por-añadir" class="slide level2">
+<h2>Cosas que faltan por añadir</h2>
+<ul>
+<li><p>ejemplo seatpos</p></li>
+<li><p>ejemplo one-hot-encoding</p></li>
+<li><p>ejemplo boston</p></li>
+</ul>
+<p>¿Algo más?</p>
+</section></section>
+<section>
+<section id="clase-x" class="title-slide slide level1 center">
+<h1>Clase X:</h1>
+
+</section>
+<section id="regresión-penalizada" class="slide level2">
+<h2>Regresión penalizada</h2>
+<p>Hagamos un resumen: <span class="hl-yellow"><strong>¿cuál era el objetivo de la regresión ordinaria?</strong></span></p>
+<div class="fragment">
+<p>Asumiendo que</p>
+<p><span class="math display">\[E \left[Y | \boldsymbol{X} = x \right]  = \beta_0 + \displaystyle \sum_{j=1}^{p} \beta_j X_j, \quad \widehat{Y} = \widehat{\beta_0} + \displaystyle \sum_{j=1}^{p} \widehat{\beta_j} X_j, \quad E \left[ \varepsilon | \left( X_1 = x_1, \ldots, X_p = x_p \right) \right] = 0 \]</span></p>
+<p>El objetivo ha sido obtener la estimación de los <span class="math inline">\(\widehat{\beta}\)</span> tal que <span class="hl-yellow"><strong>minimicemos la varianza residual o suma de errores al cuadrado</strong></span> <span class="math inline">\(SSR\)</span></p>
+<p><span class="math display">\[SSR \left(\boldsymbol{\beta} \right) =  \displaystyle \sum_{i=1}^{n} \widehat{\varepsilon}_{i}^{2} = \displaystyle \sum_{i=1}^{n} \left(Y_i - \beta_0 - \beta_1 X_{i1} - \ldots - \beta_p X_{ip} \right)^2 = \left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right)^{T}\left( \mathbf{Y} - \mathbf{X} \boldsymbol{\beta} \right) \]</span></p>
+</div>
+<div class="fragment">
+<p>Tras derivar e igualar a cero obteníamos <span class="math inline">\(\widehat{\boldsymbol{\beta}}=\left(\mathbf{X}^{T}\mathbf{X} \right)^{-1}\mathbf{X}^{T}\mathbf{Y}\)</span></p>
+</div>
+</section>
+<section id="regresión-penalizada-1" class="slide level2">
+<h2>Regresión penalizada</h2>
+<p>El estimador <span class="math inline">\(\widehat{\boldsymbol{\beta}}\)</span> es aquel que nos garantiza</p>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}} = \arg \min_{\beta \in \mathbb{R}^{p+1}} SSR \left(\boldsymbol{\beta} \right)\]</span></p>
+<div class="fragment">
+<p>También tenemos garantizado que si se <span class="hl-green"><strong>cumple las hipótesis</strong></span> tenemos que</p>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}} \sim N_{p+1}\left(\boldsymbol{\beta}, \sigma_{\varepsilon}^2 \left( \mathbf{X}^{T}\mathbf{X} \right)^{-1}\right)\]</span></p>
+<p>lo que implica que <span class="math inline">\(E \left[ \widehat{\boldsymbol{\beta}}\right] = \boldsymbol{\beta}\)</span>, es decir, tenemos un <span class="hl-yellow"><strong>estimador insesgado</strong></span>.</p>
+</div>
+<div class="fragment">
+<p>El <span class="hl-yellow"><strong>sesgo en una estimación</strong></span> es un <span class="hl-yellow"><strong>error sistemático</strong></span> en la misma. Pero hay otra componente importante que hasta ahora solo hemos mencionado pero que no hemos tenido en cuenta: la <span class="hl-yellow"><strong>varianza de la estimación</strong></span></p>
+</div>
+</section>
+<section id="balance-sesgo-varianza" class="slide level2">
+<h2>Balance sesgo-varianza</h2>
+<p>Si descomponemos el error cuadrático medio de una estimación obtenemos que</p>
+<p><span class="math display">\[\begin{eqnarray}MSE \left(\widehat{Y} \right) &amp;=&amp; E \left[ \left( \widehat{Y} - Y \right)^2 \right] = E \left[ \left( \left(\widehat{Y} - E \left[ \widehat{Y}\right] \right) - \left(E \left[ \widehat{Y}\right] - Y \right)\right)^2 \right] \nonumber \\ &amp;=&amp; E \left[  \left(\widehat{Y} - E \left[ \widehat{Y}\right] \right)^2 \right] +\left( E \left[  \widehat{Y}\right] - Y \right)^2 + 2*cosas \nonumber \\ &amp;=&amp; \underbrace{\left( E \left[  \widehat{Y}\right] - Y \right)^2}_{Sesgo^2}+\underbrace{Var \left[ \widehat{Y} \right]}_{Varianza} + ruido\end{eqnarray}\]</span></p>
+<div class="fragment">
+<p>El <span class="hl-yellow"><strong>eror cuadrático medio podemos descomponerlo</strong></span> en una suma de sesgo (al cuadrado), varianza y ruido. El último es intrínseco a los datos, por lo que la metodología de estimación puede bajar el sesgo (subiendo la varianza) o bajar la varianza (subiendo el sesgo).</p>
+</div>
+</section>
+<section id="balance-sesgo-varianza-1" class="slide level2">
+<h2>Balance sesgo-varianza</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li><p><span class="hl-yellow"><strong>Bajoajuste (underfitting)</strong></span>: modelos muy simples proporcionan un <strong>sesgo muy grande</strong> y <strong>poca varianza</strong> ya que la predicción siempre será muy parecida (errores altos en train).</p></li>
+<li><p><span class="hl-yellow"><strong>Sobreajuste (overfitting)</strong></span>: modelos muy complicados proporcionan un <strong>sesgo bajo</strong> pero al ser tan complejas proporcionarán una <strong>mayor varianza</strong> para cada intento (errores altos en test).</p></li>
+</ul>
+</div><div class="column" style="width:60%;">
+<p><img data-src="img/bias_varianc_tradeoff.jpg"></p>
+<p>Extraída de <a href="https://mlu-explain.github.io/bias-variance/" class="uri">https://mlu-explain.github.io/bias-variance/</a></p>
+</div>
+</div>
+</section>
+<section id="balance-sesgo-varianza-2" class="slide level2">
+<h2>Balance sesgo-varianza</h2>
+<p>Si lo visto en las estimaciones lo trasladamos a los <span class="hl-yellow"><strong>coeficientes estimados</strong></span> tenemos</p>
+<p><span class="math display">\[\begin{eqnarray}MSE \left(\widehat{\beta}_j \right) =  \underbrace{\left( E \left[  \widehat{\beta}_j \right] - \beta_j \right)^2}_{Sesgo^2}+\underbrace{Var \left[ \widehat{\beta}_j \right]}_{Varianza} + ruido \end{eqnarray} \]</span></p>
+<div class="fragment">
+<p>En este caso además sabemos que <span class="math inline">\(Var \left[ \widehat{\beta}_j \right] = SE \left(\widehat{\beta}_j\right)^2 = \sigma_{\varepsilon}^2 v_j\)</span>, con <span class="math inline">\(v_j\)</span> el elemento <span class="math inline">\(j\)</span>-ésimo de la diagonal de <span class="math inline">\(\left( \mathbf{X}^{T}\mathbf{X} \right)^{-1}\)</span>.</p>
+</div>
+<div class="fragment">
+<p>La forma más sencilla de reducir drásticamente la varianza residual es aumentando el número de parámetros, es decir sobreajustando. Dicho de otra forma: para conseguir <span class="hl-yellow"><strong>simplificar modelos vamos a reducir la varianza de las estimaciones</strong></span>, y para ello lo que haremos será <span class="hl-yellow"><strong>introducir un pequeño sesgo</strong></span></p>
+</div>
+</section>
+<section id="regresión-penalizada-2" class="slide level2">
+<h2>Regresión penalizada</h2>
+<p><span class="math display">\[\begin{eqnarray}MSE \left(\widehat{\beta}_j \right) &amp;=&amp;  \underbrace{\left( E \left[  \widehat{\beta}_j \right] - \beta_j \right)^2}_{Sesgo^2}+\underbrace{Var \left[ \widehat{\beta}_j \right]}_{Varianza} + ruido = cte\end{eqnarray} \]</span></p>
+<p>La idea será <span class="hl-yellow"><strong>sesgar los coeficientes</strong></span> de tal manera que se busque obtener <span class="hl-yellow"><strong>coeficientes que, en caso de no ser tan importantes como otros, tiendan a cero</strong></span>, un sesgo hacia lo que se conoce como <span class="hl-purple"><strong>sparsity</strong></span>.</p>
+<div class="fragment">
+<p>Para ello haremos uso de lo que se conoce como <span class="hl-yellow"><strong>shrinkage methods</strong></span>, y en particular hablaremos de <span class="hl-yellow"><strong>regresión penalizada</strong></span></p>
+</div>
+</section>
+<section id="regresión-penalizada-3" class="slide level2">
+<h2>Regresión penalizada</h2>
+<p>Si en el caso de la regresión lineal ordinaria teníamos</p>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}} = \arg \min_{\beta \in \mathbb{R}^{p+1}} SSR \left(\boldsymbol{\beta} \right)\]</span></p>
+<p>Ahora incluiremos una <span class="hl-red"><strong>penalización <span class="math inline">\(\lambda \geq 0\)</span></strong></span></p>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda \left\| \beta_{-1} \right\| \right), \quad \lambda \geq 0\]</span></p>
+<p>donde <span class="math inline">\(\left\| \beta \right\|\)</span> será <span class="hl-yellow"><strong>alguna norma del vector de coeficientes (excluyendo el intercepto)</strong></span> (distancia del vector a 0) y <span class="math inline">\(\lambda\)</span> deberemos determinar su valor óptimo.</p>
+<div class="fragment">
+<p>Por tanto ahora el objetivo no será solo <span class="hl-yellow"><strong>minimizar los errores al cuadrado</strong></span> sino también <span class="hl-yellow"><strong>minimizar la penalización</strong></span>, y la única forma de hacerlo (dado que una norma siempre devuelve algo positiva) es que los <span class="hl-yellow"><strong>coeficientes sean lo más pequeño posibles</strong></span></p>
+</div>
+</section>
+<section id="penalización" class="slide level2">
+<h2>Penalización</h2>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda \left\| \beta_{-1} \right\| \right), \quad \lambda \geq 0\]</span></p>
+<p>¿Qué sucede cuando <span class="math inline">\(\lambda\)</span> <strong>crece o decrece</strong>?</p>
+<div class="fragment">
+<ul>
+<li><p>Si <span class="math inline">\(\lambda \to 0\)</span> –&gt; estamos en el caso de <strong>mínimos cuadrados ordinarios</strong> (no hay penalización)</p></li>
+<li><p>Si <span class="math inline">\(\lambda \to \infty\)</span> –&gt; <span class="math inline">\(\beta_j \to 0\)</span> para todo <span class="math inline">\(j \geq 0\)</span> (el modelo tiende a desaparecer)</p></li>
+</ul>
+</div>
+</section>
+<section id="familia-de-normas" class="slide level2">
+<h2>Familia de normas</h2>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda \left\| \beta_{-1} \right\| \right), \quad \lambda \geq 0\]</span></p>
+<p>Una de las <span class="hl-yellow"><strong>familias de normas</strong></span> más habituales son las <span class="hl-yellow"><strong>normas <span class="math inline">\(\ell^p\)</span></strong></span></p>
+<p><span class="math display">\[\left\| x \right\|_{p} = \left\| \left(x_1, \ldots, x_k \right)\right\|_{p} = \left( \sum_{j=1}^{k} \left| x_{j} \right|^{p} \right)^{1/p}, \quad x \in \mathbb{R}^{k}\]</span></p>
+<div class="fragment">
+<ul>
+<li><p>Si <span class="math inline">\(p=1\)</span> –&gt; <span class="math inline">\(\left\| x \right\|_{1} = \sum_{j=1}^{k} \left| x_{j} \right|\)</span> se conoce como <span class="hl-yellow"><strong>norma taxicab o de Manhattan</strong></span> (la métrica que usaríamos para recorrer calles en un mapa)</p></li>
+<li><p>Si <span class="math inline">\(p=2\)</span> –&gt; <span class="math inline">\(\left\| x \right\|_{2} = \left(\sum_{j=1}^{k} x_{j}^{2} \right)^{1/2}\)</span> se conoce como <span class="hl-yellow"><strong>norma Euclídea</strong></span> (la habitual)</p></li>
+<li><p>Si <span class="math inline">\(p=\infty\)</span> –&gt; <span class="math inline">\(\left\| x \right\|_{\infty} = \lim_{p \to \infty} \left(\sum_{j=1}^{k} \left| x_{j} \right|^{p} \right)^{1/p} = \displaystyle \max_{j} \left| x_{j} \right|\)</span> se conoce como <span class="hl-yellow"><strong>norma infinita o de Chebyshev</strong></span> (movimientos de rey en ajedrez)</p></li>
+</ul>
+</div>
+</section>
+<section id="regresión-elastic-net" class="slide level2">
+<h2>Regresión elastic-net</h2>
+<p>Dado que las más usadas son la <span class="hl-yellow"><strong>norma Manhattan y la Euclídea</strong></span>, podemos generalizar la regresión penalizada anterior combinando ambas penalizaciones</p>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, \alpha} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda \left(\alpha \left\| \beta_{-1} \right\|_1  + (1-\alpha) \left\| \beta_{-1} \right\|_{2}^{2} \right)\right), \quad \lambda \geq 0,~0 \leq \alpha \leq 1\]</span></p>
+<p>La <span class="hl-yellow"><strong>regresión elastic-net</strong></span> es una regresión penalizada que combina una <span class="hl-red"><strong>penalización <span class="math inline">\(\lambda\)</span></strong></span> (que nos cuantifica lo agresivo que queremos hacer tender los coeficientes a cero) y una <span class="hl-green"><strong>proporción <span class="math inline">\(\alpha\)</span></strong></span> (que nos permite combinar ambas penalizaciones)</p>
+<div class="fragment">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Importante</strong></p>
+</div>
+<div class="callout-content">
+<p>Dado que la penalización depende de la norma de los coeficientes, su magnitud será importante, por lo que <span class="hl-yellow"><strong>deberemos estandarizar antes los predictores</strong></span>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="ridge-y-lasso" class="slide level2">
+<h2>Ridge y lasso</h2>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, \alpha} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda \left(\alpha \left\| \beta_{-1} \right\|_1  + (1-\alpha) \left\| \beta_{-1} \right\|_{2}^{2} \right)\right), \quad \lambda \geq 0,~0 \leq \alpha \leq 1\]</span></p>
+<p>Hay dos escenarios de penalización principalmente conocidos:</p>
+<ul>
+<li><span class="hl-yellow"><strong>Regresión ridge</strong></span>: cuando <span class="math inline">\(\alpha = 0\)</span> (penalización cuadrática)</li>
+</ul>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, ridge} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda  \left\| \beta_{-1} \right\|_{2}^{2} \right), \quad \lambda \geq 0\]</span></p>
+<ul>
+<li><span class="hl-yellow"><strong>Regresión LASSO</strong></span>: cuando <span class="math inline">\(\alpha = 1\)</span> (penalización absoluta)</li>
+</ul>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, LASSO} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda  \left\| \beta_{-1} \right\|_1  \right), \quad \lambda \geq 0\]</span></p>
+</section>
+<section id="ridge-y-lasso-1" class="slide level2">
+<h2>Ridge y lasso</h2>
+<ul>
+<li><span class="hl-yellow"><strong>Regresión ridge</strong></span>: cuando <span class="math inline">\(\alpha = 0\)</span> (penalización cuadrática)</li>
+</ul>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, ridge} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda  \left\| \beta_{-1} \right\|_{2}^{2} \right), \quad \lambda \geq 0\]</span></p>
+<p>Una de las <span class="hl-green"><strong>ventajas de la regresión ridge</strong></span> es que podemos calcular su <span class="hl-green"><strong>expresión explícita</strong></span> (algo que no sucede en la regresión lasso, solo se puede obtener mediante simulación numérica)</p>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, ridge} = \left(\mathbf{X}^{T}\mathbf{X} + \lambda \mathbf{I}_{p \times p} \right)^{-1}\mathbf{X}^{T}\mathbf{Y}\]</span> donde <span class="math inline">\(\mathbf{I}_{p \times p}\)</span> es la matriz identidad.</p>
+</section>
+<section id="ridge-y-lasso-2" class="slide level2">
+<h2>Ridge y lasso</h2>
+<ul>
+<li><span class="hl-yellow"><strong>Regresión LASSO</strong></span>: cuando <span class="math inline">\(\alpha = 1\)</span> (penalización absoluta)</li>
+</ul>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, LASSO} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda  \left\| \beta_{-1} \right\|_1  \right), \quad \lambda \geq 0\]</span></p>
+<p>Una de las <span class="hl-green"><strong>ventajas de la regresión LASSO</strong></span> es que nos realiza una <span class="hl-green"><strong>selección de variables</strong></span> ya hace <span class="hl-yellow"><strong>tender más rápido los coeficientes a cero</strong></span>.</p>
+<p>&nbsp;</p>
+<p>¿Por qué?</p>
+</section>
+<section id="regresión-elastic-net-1" class="slide level2">
+<h2>Regresión elastic-net</h2>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, \alpha} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda \left(\alpha \left\| \beta_{-1} \right\|_1  + (1-\alpha) \left\| \beta_{-1} \right\|_{2}^{2} \right)\right), \quad \lambda \geq 0,~0 \leq \alpha \leq 1\]</span></p>
+<p>La <span class="hl-yellow"><strong>regresión elastic-net</strong></span> puede ser también vista como un <span class="hl-yellow"><strong>problema de minimización de la suma de los residuos al cuadrado</strong></span> con una restricción en los argumentos</p>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{s_\lambda, \alpha} = \arg \min_{\beta \in \mathbb{R}^{p+1}:~\sum_{j=1}^{p} \left(\alpha \left| \beta_{j} \right| + (1-\alpha) \left| \beta_{j} \right|^{2} \right) \leq s_\lambda} SSR \left(\boldsymbol{\beta} \right) , \quad 0 \leq \alpha \leq 1\]</span></p>
+<p>donde <span class="math inline">\(s_\lambda\)</span> es un valor numérico que no depende de <span class="math inline">\(\beta\)</span>.</p>
+</section>
+<section id="regresión-elastic-net-2" class="slide level2">
+<h2>Regresión elastic-net</h2>
+<p>Por ejemplo, si tenemos solo dos predictoras…</p>
+
+<img data-src="img/elastic-net.jpg" class="r-stretch"><p>Las elipses nos muestran los valores para los que <span class="math inline">\(SSR \left( \boldsymbol{\beta} \right)\)</span> es constante (lo que queremos minimizar), y las <strong>regiones sombreadas representan el espacio de valores posibles</strong> debido a la penalización (ver más en <a href="https://link.springer.com/book/10.1007/978-1-4614-7138-7" class="uri">https://link.springer.com/book/10.1007/978-1-4614-7138-7</a>)</p>
+</section>
+<section id="lasso" class="slide level2">
+<h2>LASSO</h2>
+<p>Si nos fijamos en ambas regiones, dado que el <span class="hl-yellow"><strong>LASSO usa una norma absoluta</strong></span>, el espacio de restricciones es más “picudo”, lo que hará más probable que cuando la <strong>elipse corte con la zona sombreada</strong> lo haga en los vértices (donde uno de los coeficientes es cero) en lugar de en los laterales.</p>
+
+<img data-src="img/elastic-net.jpg" class="r-stretch"><p>Ver más en <a href="https://link.springer.com/book/10.1007/978-1-4614-7138-7" class="uri">https://link.springer.com/book/10.1007/978-1-4614-7138-7</a></p>
+</section>
+<section id="selección-de-la-penalización" class="slide level2">
+<h2>Selección de la penalización</h2>
+<p>En todo este proceso de regresión penalizada hay un “elefante en la habitación”: <span class="hl-yellow"><strong>¿cómo seleccionar el <span class="math inline">\(\lambda\)</span> más óptimo?</strong></span></p>
+<div class="fragment">
+<p>Una de las más formas más habituales para ello es lo que se conoce como <span class="hl-yellow"><strong>validación cruzada</strong></span>. La idea se basa en un ideal: poder <strong>disponer de muchas muestras</strong> tal que, probando en cada una distintos valores de <span class="math inline">\(\lambda\)</span>, consigamos obtener aquel que nos proporcione (en media) el menor error.</p>
+</div>
+<div class="fragment">
+<p><span class="hl-red"><strong>¿El problema?</strong></span> Casi nunca disponemos de un gran número de muestras de la misma población, así que una <span class="hl-green"><strong>solución es “simularlas” nosotros mismos a partir de la muestra original</strong></span></p>
+</div>
+</section>
+<section id="validación-cruzada" class="slide level2">
+<h2>Validación cruzada</h2>
+<p>Supongamos que tenemos una muestra tal que contamos con una variable objetivo a predecir en función de <span class="math inline">\(p\)</span> predictoras <span class="math inline">\(\left\lbrace Y_i, \left(X_{i1}, \ldots, X_{ip} \right) \right\rbrace_{i=1,\ldots,n}\)</span>, y que pretendemos usar un <span class="hl-yellow"><strong>estimador <span class="math inline">\(\widehat{f}_{\lambda}\)</span> que depende de un parámetro <span class="math inline">\(\lambda\)</span></strong></span>, tal que</p>
+<p><span class="math display">\[\widehat{Y} =\widehat{f}_{\lambda} \left(X_{1}, \ldots, X_{p} \right)\]</span></p>
+<p>La opción más sencilla es lo que se conoce como <span class="hl-yellow"><strong>validación simple</strong></span>:</p>
+</section>
+<section id="validación-simple" class="slide level2">
+<h2>Validación simple</h2>
+<p><span class="math display">\[\widehat{Y} =\widehat{f}_{\lambda} \left(X_{1}, \ldots, X_{p} \right)\]</span> La opción más sencilla es lo que se conoce como <span class="hl-yellow"><strong>validación simple</strong></span>:</p>
+<ol type="1">
+<li>Hacemos una partición de train y test. De los datos de train, realizamos una segunda partición que llamamos <span class="hl-yellow"><strong>conjunto de validación</strong></span>.</li>
+</ol>
+<div class="fragment">
+<ol start="2" type="1">
+<li><span class="hl-yellow"><strong>Entrenamos solo con train</strong></span> el modelo para distintos valores de <span class="math inline">\(\lambda\)</span></li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="3" type="1">
+<li>Evaluamos el error que produce cada <span class="math inline">\(\widehat{f}_{\lambda}\)</span> en el <span class="hl-yellow"><strong>conjunto de validación</strong></span> (un conjunto del que el modelo no ha aprendido) para <span class="hl-yellow"><strong>elegir el mejor parámetro</strong></span> <span class="math inline">\(\lambda\)</span>.</li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="4" type="1">
+<li>Proporcionamos una evaluación final en la tercera partición (test), que no ha sido usada ni para la estimación ni para la elección del mejor parámetro.</li>
+</ol>
+</div>
+</section>
+<section id="validación-cruzada-1" class="slide level2">
+<h2>Validación cruzada</h2>
+<p>La <span class="hl-yellow"><strong>validación simple</strong></span> tiene un problema: <span class="hl-red"><strong>depende muchísimo de la partición aleatoria</strong></span> que se realice (si tenemos mala o buena suerta) y, además, puede provocar un <span class="hl-red"><strong>problema de tamaño muestral</strong></span> si <span class="math inline">\(n\)</span> no es muy grande (ya que necesitamos 3 particiones de los datos).</p>
+<div class="fragment">
+<p>Para solventarlo existe una alternativa conocida como <span class="hl-yellow"><strong>validación cruzada</strong></span>: en lugar de extraer un subconjunto de train, lo que se hace es que <strong>cada observación pueda jugar ambos roles</strong>: el rol de entrenamiento y el rol de validación.</p>
+</div>
+</section>
+<section id="validación-cruzada-2" class="slide level2">
+<h2>Validación cruzada</h2>
+<p>La más famosa es la conocida como <span class="hl-yellow"><strong>leave-one-out cross-validation (LOOCV)</strong></span>:</p>
+<ol type="1">
+<li><p>Hacemos una partición de train (con <span class="math inline">\(m\)</span> elementos) y test (<span class="math inline">\(n - m\)</span>).</p></li>
+<li><p>De los datos de train <span class="math inline">\(\left\lbrace X_{i} \right\rbrace_{i=1,\ldots,m}\)</span>, entrenamos el modelo sin una de las observaciones de entrenamiento <span class="math inline">\(\boldsymbol{X}_{-1} = \left\lbrace X_{i} \right\rbrace_{i=2,\ldots,m}\)</span>, y usamos esa observación <span class="math inline">\(X_{1}\)</span> para obtener una métrica del error para cada <span class="math inline">\(\lambda\)</span> (un conjunto de validación de tamaño muestral igual a 1).</p></li>
+<li><p>Repetimos el proceso para cada una de ellas, considerando como entrenamiento <span class="math inline">\(\boldsymbol{X}_{-j} = \left\lbrace X_{i} \right\rbrace_{i=1,\ldots, j-1, j+1, \ldots,m}\)</span> y <span class="math inline">\(X_j\)</span> como conjunto de validación.</p></li>
+<li><p>En total se entrena el modelo con <span class="math inline">\(n\)</span> conjuntos train (de <span class="math inline">\(n-1\)</span> observaciones cada uno) y <span class="math inline">\(n\)</span> conjuntos de validación (de una observación cada uno), obteniendo al final una media del error en entrenamiento y otra en validación, usando esta última para <span class="hl-yellow"><strong>elegir el mejor parámetro</strong></span> <span class="math inline">\(\lambda\)</span>.</p></li>
+</ol>
+</section>
+<section id="validación-cruzada-3" class="slide level2">
+<h2>Validación cruzada</h2>
+<p>La anterior idea puede ser generalizada a lo que se conoce como <span class="hl-yellow"><strong>leave-k-out cross-validation (LOOCV)</strong></span>:</p>
+<ol type="1">
+<li><p>Hacemos una partición de train (con <span class="math inline">\(m\)</span> elementos) y test (<span class="math inline">\(n - m\)</span>).</p></li>
+<li><p>De los datos de train <span class="math inline">\(\left\lbrace X_{i} \right\rbrace_{i=1,\ldots,m}\)</span>, entrenamos el modelo sin <span class="math inline">\(k\)</span> observaciones de entrenamiento <span class="math inline">\(\boldsymbol{X}_{-i_1, \ldots, -i_k}\)</span>, y usamos esa <span class="math inline">\(k\)</span> observaciónes <span class="math inline">\(\left\lbrace X_{i_1}, \ldots, X_{i_k} \right\rbrace\)</span> para obtener una métrica del error (un conjunto de validación de tamaño muestral igual a <span class="math inline">\(k\)</span>).</p></li>
+<li><p>Repetimos el proceso para cada posible forma de combinar <span class="math inline">\(m\)</span> elementos de <span class="math inline">\(k\)</span> en <span class="math inline">\(k\)</span></p></li>
+<li><p>En total se entrena el modelo con <span class="math inline">\(C_{k}^{m}\)</span> conjuntos train (de <span class="math inline">\(m-k\)</span> observaciones cada uno) y <span class="math inline">\(C_{k}^{m}\)</span> conjuntos de validación (de <span class="math inline">\(k\)</span> observaciones cada uno), obteniendo estos últimos para <span class="hl-yellow"><strong>elegir el mejor parámetro</strong></span> <span class="math inline">\(\lambda\)</span>.</p></li>
+</ol>
+<p>&nbsp;</p>
+<p>Aunque esta opción nos da una métrica más robusta del error, si hacemos unas sencillas cuentas vemos que puede no ser factible si <span class="math inline">\(m\)</span> y/o <span class="math inline">\(k\)</span> toman valores elevados. Por ejemplo, si <span class="math inline">\(m = 100\)</span> y <span class="math inline">\(k = 30\)</span>, tendríamos que entrenar <span class="math inline">\(C_{k}^{m} \simeq 10^{25}\)</span> modelos</p>
+</section>
+<section id="validación-cruzada-k-folds" class="slide level2">
+<h2>Validación cruzada k-folds</h2>
+<p>Dado que las dos opciones anteriores pueden no servirnos existe una tercera vía, la conocida como <span class="hl-yellow"><strong>validación cruzada k-folds</strong></span>:</p>
+
+<img data-src="img/k-fold.png" class="r-stretch"></section>
+<section id="validación-cruzada-k-folds-1" class="slide level2">
+<h2>Validación cruzada k-folds</h2>
+<p>Dado que las dos opciones anteriores pueden no servirnos existe una tercera vía, la conocida como <span class="hl-yellow"><strong>validación cruzada k-folds</strong></span>:</p>
+<ol type="1">
+<li><p>Hacemos una partición de train (con <span class="math inline">\(m\)</span> elementos) y test (<span class="math inline">\(n - m\)</span>).</p></li>
+<li><p>De los datos de train <span class="math inline">\(\left\lbrace X_{i} \right\rbrace_{i=1,\ldots,m}\)</span>, dividimos dicho conjunto en <span class="math inline">\(k\)</span> particiones (<span class="math inline">\(k\)</span> folds) que denotaremos como <span class="math inline">\(\boldsymbol{X}_{fold_1}, \ldots, \boldsymbol{X}_{fold_k}\)</span> (con <span class="math inline">\(m/k\)</span> observaciones cada una aproximadamente).</p></li>
+<li><p>Entrenamos <span class="math inline">\(k\)</span> modelos, de manera que en la iteración <span class="math inline">\(j\)</span>, usaremos las <span class="math inline">\(m-m/k\)</span> observaciones de las particiones <span class="math inline">\(\boldsymbol{X}_{fold_1}, \ldots, \boldsymbol{X}_{fold_{j-1}}, \boldsymbol{X}_{fold_{j+1}}, \ldots, \boldsymbol{X}_{fold_{k}}\)</span> para entrenar y las <span class="math inline">\(m/k\)</span> observaciones de <span class="math inline">\(\boldsymbol{X}_{fold_{j}}\)</span> para validar.</p></li>
+<li><p>De esta manera <strong>cada observación jugará <span class="math inline">\(k-1\)</span> veces el rol de entrenamiento</strong> y <strong>una sola vez el rol de validación</strong>, teniendo <span class="math inline">\(k\)</span> validaciones cuyos resultados promediaremos para <span class="hl-yellow"><strong>elegir el mejor parámetro</strong></span> <span class="math inline">\(\lambda\)</span>.</p></li>
+</ol>
+</section>
+<section id="selección-de-la-penalización-1" class="slide level2">
+<h2>Selección de la penalización</h2>
+<p>Así llamaremos <span class="math inline">\(\widehat{\lambda}_{k-CV}\)</span> a la <span class="hl-yellow"><strong>penalización óptima elegida a través de validación k-fold</strong></span></p>
+<p><span class="math display">\[\widehat{\lambda}_{k-CV} = \arg \min_{\lambda \geq 0} CV_k(\lambda),\quad CV_k(\lambda)=\sum_{j=1}^k  SSR \left(\widehat{\boldsymbol{\beta}_{(j)} } \right)\]</span> donde <span class="math inline">\(SSR \left(\widehat{\boldsymbol{\beta}}_{(k)} \right)\)</span> es la suma de residuos al cuadrado del <span class="math inline">\(j\)</span>-ésimo slot de validación (con los parámetros obtenidos en el entrenamiento sin ese slot).</p>
+</section>
+<section id="selección-de-la-penalización-2" class="slide level2">
+<h2>Selección de la penalización</h2>
+<p><span class="math display">\[\widehat{\lambda}_{k-CV} = \arg \min_{\lambda \geq 0} CV_k(\lambda),\quad CV_k(\lambda)=\sum_{j=1}^k  SSR \left(\widehat{\boldsymbol{\beta}_{(j)} } \right)\]</span></p>
+<p>Con el objetivo de <span class="hl-yellow"><strong>simplificar aún más el modelo</strong></span> existe una variante de penalización <span class="math inline">\(\widehat{\lambda}_{k-1SE}\)</span> conocida como <span class="hl-yellow"><strong>«one standard error rule»</strong></span>: la idea es elegir el <span class="hl-yellow"><strong>modelo más sencillo de los modelos aceptanles</strong></span>, la penalización más grande posible (es decir, el modelo más sencillo posible) acercándose lo máximo que pueda a <span class="math inline">\(\widehat{\lambda}_{k-CV}\)</span>. La idea consiste en estimar <span class="math inline">\(\widehat{\lambda}_{k-CV}\)</span> y calcular su correspondiente <span class="math inline">\(CV_k(\widehat{\lambda}_{k-CV})\)</span> para cada partición de validación(que es en sí una variable aleatoria), para posteriormente <span class="hl-yellow"><strong>estimar su variabilidad</strong></span> (<span class="math inline">\(SE\)</span> igual a desviación típica dividida entre <span class="math inline">\(\sqrt{n}\)</span>) entre todas las particiones de validación, tal que</p>
+<p><span class="math display">\[\widehat{\lambda}_{k-1SE}= \max \left\lbrace \lambda \geq 0: CV_k(\lambda) \in \left(CV_k(\widehat{\lambda}_{k-CV})\pm\widehat{\mathrm{SE}}\left(CV_k(\widehat{\lambda}_{k-CV})\right)\right)\right\rbrace\]</span></p>
+</section>
+<section id="regresión-penalizada-en-r" class="slide level2">
+<h2>Regresión penalizada en R</h2>
+<p>Vamos a realizar un pequeño ejemplo con el famoso dataset <code>iris</code>, al que primero lo preprocesaremos convenientemente para tener solo variables numéricas (la variable objetivo será <code>Sepal.Length</code>)</p>
+<div class="cell">
+<details>
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb208"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(iris)</span>
+<span id="cb208-2"><a href="#cb208-2"></a>datos_preproc <span class="ot">&lt;-</span></span>
+<span id="cb208-3"><a href="#cb208-3"></a>  datos <span class="sc">|&gt;</span> </span>
+<span id="cb208-4"><a href="#cb208-4"></a>  fastDummies<span class="sc">::</span><span class="fu">dummy_cols</span>(<span class="at">select_columns =</span> <span class="st">"Species"</span>, <span class="at">remove_first_dummy =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb208-5"><a href="#cb208-5"></a>  <span class="fu">select</span>(<span class="sc">-</span>Species)</span>
+<span id="cb208-6"><a href="#cb208-6"></a></span>
+<span id="cb208-7"><a href="#cb208-7"></a><span class="co"># Ajuste Saturado</span></span>
+<span id="cb208-8"><a href="#cb208-8"></a>ajuste_saturado <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> datos_preproc, Sepal.Length <span class="sc">~</span> .)</span>
+<span id="cb208-9"><a href="#cb208-9"></a>ajuste_saturado <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Sepal.Length ~ ., data = datos_preproc)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.79424 -0.21874  0.00899  0.20255  0.73103 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         2.17127    0.27979   7.760 1.43e-12 ***
+Sepal.Width         0.49589    0.08607   5.761 4.87e-08 ***
+Petal.Length        0.82924    0.06853  12.101  &lt; 2e-16 ***
+Petal.Width        -0.31516    0.15120  -2.084  0.03889 *  
+Species_versicolor -0.72356    0.24017  -3.013  0.00306 ** 
+Species_virginica  -1.02350    0.33373  -3.067  0.00258 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3068 on 144 degrees of freedom
+Multiple R-squared:  0.8673,    Adjusted R-squared:  0.8627 
+F-statistic: 188.3 on 5 and 144 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="regresión-penalizada-en-r-1" class="slide level2">
+<h2>Regresión penalizada en R</h2>
+<p>Tras realizar el ajuste saturado (vamos a hacer una prueba sencilla, no hacemos colinealidad ni diagnosis, solo ajuste), <span class="hl-yellow"><strong>seleccionamos modelos con AIC y BIC</strong></span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb210"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb210-1"><a href="#cb210-1"></a>ajuste_AIC <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">stepAIC</span>(ajuste_saturado, <span class="at">direction =</span> <span class="st">"both"</span>, <span class="at">k =</span> <span class="dv">2</span>)</span>
+<span id="cb210-2"><a href="#cb210-2"></a>ajuste_BIC <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">stepAIC</span>(ajuste_saturado, <span class="at">direction =</span> <span class="st">"both"</span>, <span class="at">k =</span> <span class="fu">log</span>(<span class="fu">nrow</span>(datos_preproc)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb211"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb211-1"><a href="#cb211-1"></a>ajuste_AIC <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span>
+<span id="cb211-2"><a href="#cb211-2"></a>ajuste_BIC <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="regresión-ridge-en-r" class="slide level2">
+<h2>Regresión ridge en R</h2>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, \alpha} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda \left(\alpha \left\| \beta_{-1} \right\|_1  + (1-\alpha) \left\| \beta_{-1} \right\|_{2}^{2} \right)\right), \quad \lambda \geq 0,~0 \leq \alpha \leq 1\]</span></p>
+<p><span class="hl-yellow"><strong>¿Cómo realizar una regresión penalizada en R?</strong></span>. Para ello vamos a usar el completísimo paquete <code>{glmnet}</code>, cuya documentación puedes consultar en <a href="https://glmnet.stanford.edu/articles/glmnet.html#linear-regression-family-gaussian-default" class="uri">https://glmnet.stanford.edu/articles/glmnet.html#linear-regression-family-gaussian-default</a></p>
+<div class="fragment">
+<p>Para realizar una ridge regresión, es decir <span class="math inline">\(\alpha = 0\)</span>, basta con hacer uso de la función <code>glmnet()</code>, dándole en <code>x</code> matriz de variables (solo numéricas en formato matriz), en <code>y</code> la variable objetivo y <code>alpha = 0</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb212"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb212-1"><a href="#cb212-1"></a><span class="fu">library</span>(glmnet)</span>
+<span id="cb212-2"><a href="#cb212-2"></a></span>
+<span id="cb212-3"><a href="#cb212-3"></a>y <span class="ot">&lt;-</span> datos_preproc <span class="sc">|&gt;</span> <span class="fu">select</span>(Sepal.Length) <span class="sc">|&gt;</span> <span class="fu">as.matrix</span>()</span>
+<span id="cb212-4"><a href="#cb212-4"></a>x <span class="ot">&lt;-</span> datos_preproc <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>Sepal.Length) <span class="sc">|&gt;</span> <span class="fu">as.matrix</span>()</span>
+<span id="cb212-5"><a href="#cb212-5"></a></span>
+<span id="cb212-6"><a href="#cb212-6"></a>ajuste_ridge <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">alpha =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="regresión-ridge-en-r-1" class="slide level2">
+<h2>Regresión ridge en R</h2>
+<p><span class="hl-yellow"><strong>¿Qué tenemos guardado?</strong></span></p>
+<ul>
+<li><code>$lambda</code>: tenemos los valores de <span class="math inline">\(\lambda\)</span> probados (por defecto, hay un argumento <code>nlambda</code> en <code>glmnet()</code> que vale 100, y la secuencia de valores los decide en función de otro argumento <code>lambda.min.ratio</code> que por defecto vale 0.01)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb213"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb213-1"><a href="#cb213-1"></a>ajuste_ridge<span class="sc">$</span>lambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 719.45951736 655.54471675 597.30793087 544.24474054 495.89553779
+  [6] 451.84154496 411.70118743 375.12678864 341.80155863 311.43685020
+ [11] 283.76965879 258.56034440 235.59055603 214.66134035 195.59141850
+ [16] 178.21561595 162.38343182 147.95773528 134.81357787 122.83711117
+ [21] 111.92460077 101.98152771  92.92176986  84.66685593  77.14528580
+ [26]  70.29191123  64.04737157  58.35757960  53.17325307  48.44948782
+ [31]  44.14536885  40.22361596  36.65026077  33.39435262  30.42769037
+ [36]  27.72457822  25.26160310  23.01743191  20.97262670  19.10947634
+ [41]  17.41184313  15.86502298  14.45561806  13.17142080  12.00130807
+ [46]  10.93514494   9.96369680   9.07854944   8.27203613   7.53717124
+ [51]   6.86758972   6.25749198   5.70159364   5.19507977   4.73356320
+ [56]   4.31304649   3.92988733   3.58076697   3.26266150   2.97281565
+ [61]   2.70871890   2.46808378   2.24882602   2.04904651   1.86701487
+ [66]   1.70115441   1.55002854   1.41232828   1.28686093   1.17253975
+ [71]   1.06837455   0.97346310   0.88698332   0.80818617   0.73638914
+ [76]   0.67097035   0.61136320   0.55705138   0.50756447   0.46247384
+ [81]   0.42138894   0.38395391   0.34984450   0.31876528   0.29044705
+ [86]   0.26464453   0.24113424   0.21971254   0.20019388   0.18240921
+ [91]   0.16620448   0.15143933   0.13798588   0.12572759   0.11455830
+ [96]   0.10438126   0.09510831   0.08665915   0.07896059   0.07194595</code></pre>
+</div>
+</div>
+</section>
+<section id="regresión-ridge-en-r-2" class="slide level2">
+<h2>Regresión ridge en R</h2>
+<p><span class="hl-yellow"><strong>¿Qué tenemos guardado?</strong></span></p>
+<ul>
+<li><code>$dev.ratio</code>: tenemos lo que se conoce como «deviance» para las penalizaciones probadas, que es una generalización de <span class="math inline">\(R^2\)</span> para modelos más complejos (en nuestro caso es equivalente)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb215"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb215-1"><a href="#cb215-1"></a>ajuste_ridge<span class="sc">$</span>dev.ratio</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 3.749855e-36 4.649958e-03 5.100797e-03 5.595078e-03 6.136933e-03
+  [6] 6.730875e-03 7.381832e-03 8.095183e-03 8.876794e-03 9.733060e-03
+ [11] 1.067095e-02 1.169804e-02 1.282258e-02 1.405354e-02 1.540066e-02
+ [16] 1.687446e-02 1.848640e-02 2.024882e-02 2.217508e-02 2.427958e-02
+ [21] 2.657782e-02 2.908643e-02 3.182326e-02 3.480739e-02 3.805914e-02
+ [26] 4.160012e-02 4.545324e-02 4.964263e-02 5.419367e-02 5.913286e-02
+ [31] 6.448777e-02 7.028683e-02 7.655922e-02 8.333455e-02 9.064263e-02
+ [36] 9.851306e-02 1.069748e-01 1.160558e-01 1.257821e-01 1.361777e-01
+ [41] 1.472633e-01 1.590559e-01 1.715678e-01 1.848060e-01 1.987710e-01
+ [46] 2.134560e-01 2.288464e-01 2.449191e-01 2.616415e-01 2.789718e-01
+ [51] 2.968584e-01 3.152404e-01 3.340476e-01 3.532019e-01 3.726178e-01
+ [56] 3.922041e-01 4.118659e-01 4.315057e-01 4.510264e-01 4.703327e-01
+ [61] 4.893335e-01 5.079439e-01 5.260868e-01 5.436942e-01 5.607114e-01
+ [66] 5.770852e-01 5.927825e-01 6.077783e-01 6.220574e-01 6.356142e-01
+ [71] 6.484515e-01 6.605788e-01 6.720118e-01 6.827706e-01 6.928786e-01
+ [76] 7.023514e-01 7.112339e-01 7.195478e-01 7.273222e-01 7.345867e-01
+ [81] 7.413706e-01 7.477221e-01 7.536297e-01 7.591428e-01 7.642901e-01
+ [86] 7.691003e-01 7.736015e-01 7.778445e-01 7.818415e-01 7.856024e-01
+ [91] 7.891877e-01 7.926015e-01 7.958499e-01 7.989911e-01 8.020236e-01
+ [96] 8.049648e-01 8.078121e-01 8.106137e-01 8.133596e-01 8.160575e-01</code></pre>
+</div>
+</div>
+</section>
+<section id="regresión-ridge-en-r-3" class="slide level2">
+<h2>Regresión ridge en R</h2>
+<p>Fíjate que a <span class="hl-yellow"><strong>mayor penalización (modelos más simples, más sparsity)</strong></span>, el <span class="math inline">\(R^2\)</span> disminuye (o lo que es lo mismo, aumenta el SSR)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb217"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb217-1"><a href="#cb217-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(<span class="st">"lambda"</span> <span class="ot">=</span> <span class="fu">log</span>(ajuste_ridge<span class="sc">$</span>lambda),</span>
+<span id="cb217-2"><a href="#cb217-2"></a>              <span class="st">"R2"</span> <span class="ot">=</span> ajuste_ridge<span class="sc">$</span>dev.ratio)) <span class="sc">+</span></span>
+<span id="cb217-3"><a href="#cb217-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> lambda, <span class="at">y =</span> R2)) <span class="sc">+</span></span>
+<span id="cb217-4"><a href="#cb217-4"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"log-lambda"</span>, <span class="at">y =</span> <span class="st">"R2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-130-1.png" width="960" class="r-stretch"></section>
+<section id="regresión-ridge-en-r-4" class="slide level2">
+<h2>Regresión ridge en R</h2>
+<ul>
+<li><p><code>$a0</code>: tenemos guardados los <span class="hl-yellow"><strong>interceptos <span class="math inline">\(\widehat{\beta}_0\)</span></strong></span> de las regresiones ajustadas para cada penalización (en este caso 100 valores distintos)</p></li>
+<li><p><code>$beta</code>: tenemos guardados en formato matricial los <span class="hl-yellow"><strong>coeficientes <span class="math inline">\(\widehat{\beta}_j\)</span></strong></span> (para <span class="math inline">\(j \geq 1\)</span>) de las regresiones ajustadas para cada penalización (en este caso una matriz de 5 filas (5 predictoras) y 100 columnas (100 penalizaciones)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb218"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb218-1"><a href="#cb218-1"></a><span class="fu">dim</span>(ajuste_ridge<span class="sc">$</span>beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]   5 100</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb220"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb220-1"><a href="#cb220-1"></a><span class="fu">length</span>(ajuste_ridge<span class="sc">$</span>a0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 100</code></pre>
+</div>
+</div>
+</section>
+<section id="regresión-ridge-en-r-5" class="slide level2">
+<h2>Regresión ridge en R</h2>
+<p>Fíjate que a <span class="hl-yellow"><strong>mayor penalización (modelos más simples, más sparsity)</strong></span>, la <span class="hl-yellow"><strong>norma Euclídea <span class="math inline">\(\left\| \cdot \right\|_2\)</span> de los coeficientes</strong></span> disminuye (ya que penaliza más)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb222"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb222-1"><a href="#cb222-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(<span class="st">"lambda"</span> <span class="ot">=</span> <span class="fu">log</span>(ajuste_ridge<span class="sc">$</span>lambda),</span>
+<span id="cb222-2"><a href="#cb222-2"></a>              <span class="st">"norma"</span> <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">colSums</span>(ajuste_ridge<span class="sc">$</span>beta<span class="sc">^</span><span class="dv">2</span>)))) <span class="sc">+</span></span>
+<span id="cb222-3"><a href="#cb222-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> lambda, <span class="at">y =</span> norma)) <span class="sc">+</span></span>
+<span id="cb222-4"><a href="#cb222-4"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"log-lambda"</span>, <span class="at">y =</span> <span class="st">"norma"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-132-1.png" width="960" class="r-stretch"></section>
+<section id="selección-de-lambda-en-r" class="slide level2">
+<h2>Selección de lambda en R</h2>
+<p>Para no tener que elegir manualmente el mejor <span class="math inline">\(\lambda\)</span>, la función <code>cv.glmnet()</code> nos permite elegir el mejor <span class="math inline">\(\widehat{\lambda}_{k-CV}\)</span> (<span class="hl-yellow"><strong>penalización óptima elegida a través de validación k-fold</strong></span>)</p>
+<ul>
+<li><p><code>nfolds</code>: indica el número <span class="math inline">\(k\)</span> de particiones en la validación cruzada.</p></li>
+<li><p><code>type.measure</code>: métrica de error usada (por defecto lo que hemos llamado <span class="math inline">\(SSR\)</span> o <span class="math inline">\(MSE\)</span>)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb223"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb223-1"><a href="#cb223-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb223-2"><a href="#cb223-2"></a>kfolds_lambda_ridge <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">nfolds =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="selección-de-lambda-en-r-1" class="slide level2">
+<h2>Selección de lambda en R</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb224"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb224-1"><a href="#cb224-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb224-2"><a href="#cb224-2"></a>kfolds_lambda_ridge <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">nfolds =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><code>$lambda</code>: los valores <span class="math inline">\(\lambda\)</span> probados.</li>
+<li><code>$lambda.min</code>: el valor que nos proporciona el promedio de errores en validación más pequeño</li>
+<li><code>$cvm</code>: valores <span class="math inline">\(CV_k(\lambda)\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb225"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb225-1"><a href="#cb225-1"></a><span class="co"># Lambda mínimo</span></span>
+<span id="cb225-2"><a href="#cb225-2"></a>kfolds_lambda_ridge<span class="sc">$</span>lambda.min</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.07194595</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb227"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb227-1"><a href="#cb227-1"></a><span class="co"># Lambda mínimo manualmente</span></span>
+<span id="cb227-2"><a href="#cb227-2"></a>cv_min <span class="ot">&lt;-</span> <span class="fu">which.min</span>(kfolds_lambda_ridge<span class="sc">$</span>cvm)</span>
+<span id="cb227-3"><a href="#cb227-3"></a>kfolds_lambda_ridge<span class="sc">$</span>lambda[cv_min]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.07194595</code></pre>
+</div>
+</div>
+</section>
+<section id="selección-de-lambda-en-r-2" class="slide level2">
+<h2>Selección de lambda en R</h2>
+<p>Es <span class="hl-yellow"><strong>importante chequear que el mínimo no sea un extremo</strong></span> de la secuencia de <span class="math inline">\(\lambda\)</span> (ya que sino no sabemos si el mínimo está fuera del rango).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb229"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb229-1"><a href="#cb229-1"></a><span class="fu">min</span>(kfolds_lambda_ridge<span class="sc">$</span>lambda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.07194595</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb231"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb231-1"><a href="#cb231-1"></a>kfolds_lambda_ridge<span class="sc">$</span>lambda.min</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.07194595</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Para solventarlo podemos <span class="hl-yellow"><strong>proporcionar manualmente un grid (normalmente logarítmico)</strong></span> de penalizaciones con las que debe probar la función <code>glmnet(..., lambda = ...)</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb233"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb233-1"><a href="#cb233-1"></a><span class="co"># grid logarítmico</span></span>
+<span id="cb233-2"><a href="#cb233-2"></a>lambda_seq <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="fu">log10</span>(<span class="fu">max</span>(kfolds_lambda_ridge<span class="sc">$</span>lambda)), <span class="fu">log10</span>(<span class="fl">0.0001</span>), <span class="at">l =</span> <span class="dv">200</span>)</span>
+<span id="cb233-3"><a href="#cb233-3"></a></span>
+<span id="cb233-4"><a href="#cb233-4"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb233-5"><a href="#cb233-5"></a>kfolds_lambda_ridge <span class="ot">&lt;-</span></span>
+<span id="cb233-6"><a href="#cb233-6"></a>  <span class="fu">cv.glmnet</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">nfolds =</span> <span class="dv">20</span>, <span class="at">lambda =</span> lambda_seq)</span>
+<span id="cb233-7"><a href="#cb233-7"></a>kfolds_lambda_ridge<span class="sc">$</span>lambda.min</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.000786847</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="selección-de-lambda-en-r-3" class="slide level2">
+<h2>Selección de lambda en R</h2>
+<ul>
+<li><code>$lambda.1se</code>: mejor penalización <span class="math inline">\(\widehat{\lambda}_{k-1SE}\)</span> según <span class="hl-yellow"><strong>«one standard error rule»</strong></span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb235"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb235-1"><a href="#cb235-1"></a>kfolds_lambda_ridge<span class="sc">$</span>lambda<span class="fl">.1</span>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01604236</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb237"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb237-1"><a href="#cb237-1"></a>kfolds_lambda_ridge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:  cv.glmnet(x = x, y = y, lambda = lambda_seq, nfolds = 20, alpha = 0) 
+
+Measure: Mean-Squared Error 
+
+      Lambda Index Measure      SE Nonzero
+min 0.000787   174 0.09912 0.01013       5
+1se 0.016042   136 0.10881 0.01192       5</code></pre>
+</div>
+</div>
+</section>
+<section id="selección-de-lambda-en-r-4" class="slide level2">
+<h2>Selección de lambda en R</h2>
+<p>Con la función <code>plot()</code> podemos dibujar de manera automática los distintos valores <span class="math inline">\(CV_k(\lambda)\)</span>, resultado de promediar en los <span class="math inline">\(k\)</span>-folds de la validación (la incertidumbre se representa con las barras de error). Con <code>abline()</code> podemos pintar las lineas horizontales para <span class="math inline">\(\widehat{\lambda}_{k-CV}\)</span> y <span class="math inline">\(\widehat{\lambda}_{k-1SE}\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb239"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb239-1"><a href="#cb239-1"></a><span class="fu">plot</span>(kfolds_lambda_ridge)</span>
+<span id="cb239-2"><a href="#cb239-2"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">min</span>(kfolds_lambda_ridge<span class="sc">$</span>cvm) <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">min</span>(kfolds_lambda_ridge<span class="sc">$</span>cvsd)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-139-1.png" width="960" class="r-stretch"></section>
+<section id="selección-de-lambda-en-r-5" class="slide level2">
+<h2>Selección de lambda en R</h2>
+<p>Podemos replicarlo en ggplot ya que en <code>$cvlo</code> y <code>$cvup</code> tenemos guardado los valores superiores e inferiores en las validaciones probadas (los extremos de las barras de error)</p>
+<div class="cell">
+<details>
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb240"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb240-1"><a href="#cb240-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb240-2"><a href="#cb240-2"></a>  <span class="fu">geom_errorbar</span>(<span class="at">data =</span></span>
+<span id="cb240-3"><a href="#cb240-3"></a>                  <span class="fu">tibble</span>(<span class="st">"log_lambda"</span> <span class="ot">=</span> <span class="fu">log</span>(kfolds_lambda_ridge<span class="sc">$</span>lambda),</span>
+<span id="cb240-4"><a href="#cb240-4"></a>                         <span class="st">"cvlo"</span> <span class="ot">=</span> kfolds_lambda_ridge<span class="sc">$</span>cvlo,</span>
+<span id="cb240-5"><a href="#cb240-5"></a>                         <span class="st">"cvup"</span> <span class="ot">=</span> kfolds_lambda_ridge<span class="sc">$</span>cvup),</span>
+<span id="cb240-6"><a href="#cb240-6"></a>                <span class="fu">aes</span>(<span class="at">x =</span> log_lambda,</span>
+<span id="cb240-7"><a href="#cb240-7"></a>                    <span class="at">ymin =</span> cvlo, <span class="at">ymax =</span> cvup), <span class="at">color =</span> <span class="st">"gray60"</span>) <span class="sc">+</span> </span>
+<span id="cb240-8"><a href="#cb240-8"></a>        <span class="fu">geom_point</span>(<span class="at">data =</span></span>
+<span id="cb240-9"><a href="#cb240-9"></a>                     <span class="fu">tibble</span>(<span class="st">"log_lambda"</span> <span class="ot">=</span> <span class="fu">log</span>(kfolds_lambda_ridge<span class="sc">$</span>lambda),</span>
+<span id="cb240-10"><a href="#cb240-10"></a>                            <span class="st">"MSE"</span> <span class="ot">=</span> kfolds_lambda_ridge<span class="sc">$</span>cvm),</span>
+<span id="cb240-11"><a href="#cb240-11"></a>                   <span class="fu">aes</span>(<span class="at">x =</span> log_lambda, <span class="at">y =</span> MSE), <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb240-12"><a href="#cb240-12"></a>        <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">log</span>(kfolds_lambda_ridge<span class="sc">$</span>lambda.min),</span>
+<span id="cb240-13"><a href="#cb240-13"></a>                   <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb240-14"><a href="#cb240-14"></a>        <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">log</span>(kfolds_lambda_ridge<span class="sc">$</span>lambda<span class="fl">.1</span>se),</span>
+<span id="cb240-15"><a href="#cb240-15"></a>                   <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb240-16"><a href="#cb240-16"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-140-1.png" width="960" class="r-stretch"></section>
+<section id="regresión-ridge-en-r-6" class="slide level2">
+<h2>Regresión ridge en R</h2>
+<p>Para <span class="hl-yellow"><strong>aplicar el modelo de regresión ridge con la penalización óptima considerada</strong></span> se puede hacer uso de <code>predict(kfolds_lambda_ridge, ...)</code>, indicándole que quieres «predecir» los coeficientes (<code>type = "coefficients"</code>) o con <code>coef()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb241"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb241-1"><a href="#cb241-1"></a><span class="fu">predict</span>(kfolds_lambda_ridge, <span class="at">type =</span> <span class="st">"coefficients"</span>,</span>
+<span id="cb241-2"><a href="#cb241-2"></a>        <span class="at">s =</span> kfolds_lambda_ridge<span class="sc">$</span>lambda<span class="fl">.1</span>se)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6 x 1 sparse Matrix of class "dgCMatrix"
+                           s1
+(Intercept)         2.3047587
+Sepal.Width         0.5600840
+Petal.Length        0.5496809
+Petal.Width        -0.1088164
+Species_versicolor -0.1158683
+Species_virginica  -0.2110796</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb243"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb243-1"><a href="#cb243-1"></a><span class="fu">coef</span>(kfolds_lambda_ridge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6 x 1 sparse Matrix of class "dgCMatrix"
+                           s1
+(Intercept)         2.3047587
+Sepal.Width         0.5600840
+Petal.Length        0.5496809
+Petal.Width        -0.1088164
+Species_versicolor -0.1158683
+Species_virginica  -0.2110796</code></pre>
+</div>
+</div>
+</section>
+<section id="regresión-ridge-en-r-7" class="slide level2">
+<h2>Regresión ridge en R</h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Importante</strong></p>
+</div>
+<div class="callout-content">
+<p>Los coeficientes calculados son los promedios en validación. Si se quiere un ajuste “exacto” en el dataset original…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb245"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb245-1"><a href="#cb245-1"></a>ajuste_ridge_CV <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">alpha =</span> <span class="dv">0</span>,</span>
+<span id="cb245-2"><a href="#cb245-2"></a>                          <span class="at">lambda =</span> kfolds_lambda_ridge<span class="sc">$</span>lambda<span class="fl">.1</span>se)</span>
+<span id="cb245-3"><a href="#cb245-3"></a>ajuste_ridge_CV<span class="sc">$</span>dev.ratio</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8519883</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb247"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb247-1"><a href="#cb247-1"></a>ajuste_ridge_CV<span class="sc">$</span>a0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      s0 
+2.304107 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb249"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb249-1"><a href="#cb249-1"></a>ajuste_ridge_CV<span class="sc">$</span>beta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5 x 1 sparse Matrix of class "dgCMatrix"
+                           s0
+Sepal.Width         0.5600173
+Petal.Length        0.5503804
+Petal.Width        -0.1095168
+Species_versicolor -0.1170738
+Species_virginica  -0.2126737</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb251"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb251-1"><a href="#cb251-1"></a><span class="fu">predict</span>(kfolds_lambda_ridge, <span class="at">type =</span> <span class="st">"coefficients"</span>,</span>
+<span id="cb251-2"><a href="#cb251-2"></a>        <span class="at">s =</span> kfolds_lambda_ridge<span class="sc">$</span>lambda<span class="fl">.1</span>se, <span class="at">newx =</span> x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6 x 1 sparse Matrix of class "dgCMatrix"
+                           s1
+(Intercept)         2.3047587
+Sepal.Width         0.5600840
+Petal.Length        0.5496809
+Petal.Width        -0.1088164
+Species_versicolor -0.1158683
+Species_virginica  -0.2110796</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="regresión-lasso-en-r" class="slide level2">
+<h2>Regresión lasso en R</h2>
+<p><span class="math display">\[\widehat{\boldsymbol{\beta}}_{\lambda, \alpha} = \arg \min_{\beta \in \mathbb{R}^{p+1}} \left( SSR \left(\boldsymbol{\beta} \right) + \lambda \left(\alpha \left\| \beta_{-1} \right\|_1  + (1-\alpha) \left\| \beta_{-1} \right\|_{2}^{2} \right)\right), \quad \lambda \geq 0,~0 \leq \alpha \leq 1\]</span></p>
+<p>La única diferencia para implementar la <span class="hl-yellow"><strong>regresión lasso en R</strong></span> es <span class="math inline">\(\alpha = 1\)</span> (con la misma función <code>glmnet()</code>)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb253"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb253-1"><a href="#cb253-1"></a>ajuste_lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb253-2"><a href="#cb253-2"></a><span class="fu">dim</span>(ajuste_lasso<span class="sc">$</span>beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  5 83</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb255"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb255-1"><a href="#cb255-1"></a><span class="fu">length</span>(ajuste_lasso<span class="sc">$</span>a0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 83</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb257"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb257-1"><a href="#cb257-1"></a>ajuste_lasso<span class="sc">$</span>lambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.7194595174 0.6555447167 0.5973079309 0.5442447405 0.4958955378
+ [6] 0.4518415450 0.4117011874 0.3751267886 0.3418015586 0.3114368502
+[11] 0.2837696588 0.2585603444 0.2355905560 0.2146613403 0.1955914185
+[16] 0.1782156160 0.1623834318 0.1479577353 0.1348135779 0.1228371112
+[21] 0.1119246008 0.1019815277 0.0929217699 0.0846668559 0.0771452858
+[26] 0.0702919112 0.0640473716 0.0583575796 0.0531732531 0.0484494878
+[31] 0.0441453689 0.0402236160 0.0366502608 0.0333943526 0.0304276904
+[36] 0.0277245782 0.0252616031 0.0230174319 0.0209726267 0.0191094763
+[41] 0.0174118431 0.0158650230 0.0144556181 0.0131714208 0.0120013081
+[46] 0.0109351449 0.0099636968 0.0090785494 0.0082720361 0.0075371712
+[51] 0.0068675897 0.0062574920 0.0057015936 0.0051950798 0.0047335632
+[56] 0.0043130465 0.0039298873 0.0035807670 0.0032626615 0.0029728156
+[61] 0.0027087189 0.0024680838 0.0022488260 0.0020490465 0.0018670149
+[66] 0.0017011544 0.0015500285 0.0014123283 0.0012868609 0.0011725397
+[71] 0.0010683745 0.0009734631 0.0008869833 0.0008081862 0.0007363891
+[76] 0.0006709704 0.0006113632 0.0005570514 0.0005075645 0.0004624738
+[81] 0.0004213889 0.0003839539 0.0003498445</code></pre>
+</div>
+</div>
+</section>
+<section id="regresión-lasso-en-r-1" class="slide level2">
+<h2>Regresión lasso en R</h2>
+<p>Fíjate que, de nuevo, a <span class="hl-yellow"><strong>mayor penalización (modelos más simples, más sparsity)</strong></span>, el <span class="math inline">\(R^2\)</span> disminuye (o lo que es lo mismo, aumenta el SSR)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb259"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb259-1"><a href="#cb259-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(<span class="st">"lambda"</span> <span class="ot">=</span> <span class="fu">log</span>(ajuste_lasso<span class="sc">$</span>lambda),</span>
+<span id="cb259-2"><a href="#cb259-2"></a>              <span class="st">"R2"</span> <span class="ot">=</span> ajuste_lasso<span class="sc">$</span>dev.ratio)) <span class="sc">+</span></span>
+<span id="cb259-3"><a href="#cb259-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> lambda, <span class="at">y =</span> R2)) <span class="sc">+</span></span>
+<span id="cb259-4"><a href="#cb259-4"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"log-lambda"</span>, <span class="at">y =</span> <span class="st">"R2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-144-1.png" width="960" class="r-stretch"></section>
+<section id="regresión-lasso-en-r-2" class="slide level2">
+<h2>Regresión lasso en R</h2>
+<p>De nuevo a <span class="hl-yellow"><strong>mayor penalización (modelos más simples, más sparsity)</strong></span>, la <span class="hl-yellow"><strong>norma absoluta <span class="math inline">\(\left\| \cdot \right\|_1\)</span> de los coeficientes</strong></span> disminuye (ya que penaliza más)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb260"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb260-1"><a href="#cb260-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(<span class="st">"lambda"</span> <span class="ot">=</span> <span class="fu">log</span>(ajuste_lasso<span class="sc">$</span>lambda),</span>
+<span id="cb260-2"><a href="#cb260-2"></a>              <span class="st">"norma"</span> <span class="ot">=</span> <span class="fu">colSums</span>(<span class="fu">abs</span>(ajuste_lasso<span class="sc">$</span>beta)))) <span class="sc">+</span></span>
+<span id="cb260-3"><a href="#cb260-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> lambda, <span class="at">y =</span> norma)) <span class="sc">+</span></span>
+<span id="cb260-4"><a href="#cb260-4"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"log-lambda"</span>, <span class="at">y =</span> <span class="st">"norma"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-145-1.png" width="960" class="r-stretch"></section>
+<section id="selección-de-lambda-en-r-6" class="slide level2">
+<h2>Selección de lambda en R</h2>
+<p>De nuevo podemos hacer uso de <code>cv.glmnet()</code> para elegir la (<span class="hl-yellow"><strong>penalización óptima elegida a través de validación k-fold</strong></span>)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb261"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb261-1"><a href="#cb261-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb261-2"><a href="#cb261-2"></a>kfolds_lambda_lasso <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">nfolds =</span> <span class="dv">20</span>)</span>
+<span id="cb261-3"><a href="#cb261-3"></a><span class="fu">min</span>(kfolds_lambda_lasso<span class="sc">$</span>lambda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0003498445</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb263"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb263-1"><a href="#cb263-1"></a>kfolds_lambda_lasso<span class="sc">$</span>lambda.min</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0003498445</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb265"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb265-1"><a href="#cb265-1"></a>kfolds_lambda_lasso<span class="sc">$</span>lambda<span class="fl">.1</span>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.009078549</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb267"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb267-1"><a href="#cb267-1"></a>lambda_seq <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="fu">log10</span>(<span class="fu">max</span>(kfolds_lambda_ridge<span class="sc">$</span>lambda)), <span class="fu">log10</span>(<span class="fl">0.0001</span>), <span class="at">l =</span> <span class="dv">200</span>)</span>
+<span id="cb267-2"><a href="#cb267-2"></a></span>
+<span id="cb267-3"><a href="#cb267-3"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb267-4"><a href="#cb267-4"></a>kfolds_lambda_lasso <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">nfolds =</span> <span class="dv">20</span>, <span class="at">lambda =</span> lambda_seq)</span>
+<span id="cb267-5"><a href="#cb267-5"></a><span class="fu">min</span>(kfolds_lambda_lasso<span class="sc">$</span>lambda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1e-04</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb269"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb269-1"><a href="#cb269-1"></a>kfolds_lambda_lasso<span class="sc">$</span>lambda.min</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0002042283</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb271"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb271-1"><a href="#cb271-1"></a>kfolds_lambda_lasso<span class="sc">$</span>lambda<span class="fl">.1</span>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.009205919</code></pre>
+</div>
+</div>
+</section>
+<section id="selección-de-lambda-en-r-7" class="slide level2">
+<h2>Selección de lambda en R</h2>
+<p>Con la función <code>plot()</code> podemos dibujar de nuevo de manera automática los distintos valores <span class="math inline">\(CV_k(\lambda)\)</span>: los números que aparecen arriba indican el <span class="hl-yellow"><strong>número de predictores distintos de 0</strong></span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb273"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb273-1"><a href="#cb273-1"></a><span class="fu">plot</span>(kfolds_lambda_lasso)</span>
+<span id="cb273-2"><a href="#cb273-2"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">min</span>(kfolds_lambda_lasso<span class="sc">$</span>cvm) <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">min</span>(kfolds_lambda_lasso<span class="sc">$</span>cvsd)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-147-1.png" width="960" class="r-stretch"></section>
+<section id="regresión-lasso-en-r-3" class="slide level2">
+<h2>Regresión lasso en R</h2>
+<p>La predicción se realiza de la misma manera (depende de si queremos el promedio en validación o del conjunto de train original): ahora <strong>algunos coeficientes están a 0</strong> lo cual nos puede servir no solo como modelo sino como <span class="hl-yellow"><strong>método de selección de variables</strong></span> (ejecutando ahora una regresión sin penalizar pero sin las variables cuyos coeficientes son 0).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb274"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb274-1"><a href="#cb274-1"></a><span class="fu">predict</span>(kfolds_lambda_lasso, <span class="at">type =</span> <span class="st">"coefficients"</span>,</span>
+<span id="cb274-2"><a href="#cb274-2"></a>        <span class="at">s =</span> kfolds_lambda_lasso<span class="sc">$</span>lambda<span class="fl">.1</span>se, <span class="at">newx =</span> x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6 x 1 sparse Matrix of class "dgCMatrix"
+                            s1
+(Intercept)         2.21977156
+Sepal.Width         0.58624860
+Petal.Length        0.54669558
+Petal.Width        -0.17323359
+Species_versicolor  .         
+Species_virginica  -0.04653838</code></pre>
+</div>
+</div>
+</section>
+<section id="mínimo-global" class="slide level2">
+<h2>Mínimo global</h2>
+<p>Uno de los <span class="hl-red"><strong>problemas de la validación cruzada</strong></span> es que podemos encontrarnos con lo que se conoce como <span class="hl-yellow"><strong>L-shaped problem</strong></span>: la curva de la cual pretendemos encontrar el mínimo no tiene un mínimo global. Veamos un ejemplo.</p>
+<div class="cell">
+<details>
+<summary>Código</summary>
+<div class="sourceCode cell-code" id="cb276"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb276-1"><a href="#cb276-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb276-2"><a href="#cb276-2"></a>p <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb276-3"><a href="#cb276-3"></a>n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
+<span id="cb276-4"><a href="#cb276-4"></a>x <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
+<span id="cb276-5"><a href="#cb276-5"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb276-6"><a href="#cb276-6"></a>lambdaGrid <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">3</span>, <span class="at">l =</span> <span class="dv">200</span>))</span>
+<span id="cb276-7"><a href="#cb276-7"></a></span>
+<span id="cb276-8"><a href="#cb276-8"></a><span class="co"># Validación leave-1-out</span></span>
+<span id="cb276-9"><a href="#cb276-9"></a><span class="fu">plot</span>(<span class="fu">cv.glmnet</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">nfolds =</span> n, <span class="at">lambda =</span> lambdaGrid))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-149-1.png" width="960" class="r-stretch"><p>Esto puede ser un indicio de que el <strong>intercepto es significativo y no así el resto de predictores</strong></p>
+</section>
+<section id="consistencia-reg.-penalizada" class="slide level2">
+<h2>Consistencia reg. penalizada</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<p><img data-src="img/consistency-lasso.jpg"></p>
+</div><div class="column" style="width:45%;">
+<p>Como sucedía entre el BIC/AIC, en <a href="https://www.jmlr.org/papers/v7/zhao06a.html">Zhao and Yu (2006)</a> se prueba como la <span class="hl-yellow"><strong>selección lasso es consistente bajo la one standard rule</strong></span> (bajo ciertas condiciones), pero no así cuando <span class="math inline">\(\lambda\)</span> es seleccionado por validación cruzada (incluye demasiados más predictores de los necesarios, como le sucedía al AIC)</p>
+<p>Imagen obtenida de <a href="https://bookdown.org/egarpor/PM-UC3M/lm-iii-shrink.html#lm-iii-shrink-varsel" class="uri">https://bookdown.org/egarpor/PM-UC3M/lm-iii-shrink.html#lm-iii-shrink-varsel</a></p>
+</div>
+</div>
+</section>
+<section id="deberes" class="slide level2">
+<h2>Deberes</h2>
+<blockquote>
+<p>Diseña un estudio que, con el dataset iris y considerando el modelo general de elastic-net, nos determina el mejor par <span class="math inline">\(\left(\alpha, \lambda \right)\)</span> (de manera conjunta).</p>
+</blockquote>
 </section></section>
 <section>
 <section id="el-mundo-github" class="title-slide slide level1 center">
@@ -4907,7 +5723,7 @@ Coefficients:
 <div class="fragment">
 <p>Para ello antes tendremos que instalar un <span class="hl-yellow"><strong>conjunto de paquetes para desarrolladores</strong></span> llamado <code>{devtools}</code>, que nos permitirá la instalación desde Github</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb208"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb277"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb277-1"><a href="#cb277-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -4924,7 +5740,7 @@ Coefficients:
 <div class="fragment">
 <p>En la mayoría de casos bastará con la función <code>install_github()</code> (del paquete que acabamos de instalar), pasándole como argumento la <span class="hl-yellow"><strong>ruta del repositorio</strong></span> (sin “github.com/”).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb209"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb209-1"><a href="#cb209-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"jbgb13/peRReo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb278"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb278-1"><a href="#cb278-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"jbgb13/peRReo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Ya puedes perrear con ggplot ;)</p>
 </div>
@@ -5010,8 +5826,8 @@ Coefficients:
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb210"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb210-1"><a href="#cb210-1"></a><span class="co"># Carga de datos desde ISCIII</span></span>
-<span id="cb210-2"><a href="#cb210-2"></a>datos_covid <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"https://cnecovid.isciii.es/covid19/resources/casos_hosp_uci_def_sexo_edad_provres.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb279"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb279-1"><a href="#cb279-1"></a><span class="co"># Carga de datos desde ISCIII</span></span>
+<span id="cb279-2"><a href="#cb279-2"></a>datos_covid <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"https://cnecovid.isciii.es/covid19/resources/casos_hosp_uci_def_sexo_edad_provres.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="fragment">
@@ -5021,15 +5837,15 @@ Coefficients:
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb211"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb211-1"><a href="#cb211-1"></a><span class="co"># Depuración</span></span>
-<span id="cb211-2"><a href="#cb211-2"></a>datos_madrid <span class="ot">&lt;-</span></span>
-<span id="cb211-3"><a href="#cb211-3"></a>  datos_covid <span class="sc">|&gt;</span></span>
-<span id="cb211-4"><a href="#cb211-4"></a>  <span class="co"># Filtrado por Madrid y fecha</span></span>
-<span id="cb211-5"><a href="#cb211-5"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"M"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb211-6"><a href="#cb211-6"></a>  <span class="co"># Selección de columnas</span></span>
-<span id="cb211-7"><a href="#cb211-7"></a>  <span class="fu">select</span>(provincia_iso<span class="sc">:</span>fecha, num_casos) <span class="sc">|&gt;</span> </span>
-<span id="cb211-8"><a href="#cb211-8"></a>  <span class="co"># Resumen de casos diarios por fecha y sexo</span></span>
-<span id="cb211-9"><a href="#cb211-9"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb280"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb280-1"><a href="#cb280-1"></a><span class="co"># Depuración</span></span>
+<span id="cb280-2"><a href="#cb280-2"></a>datos_madrid <span class="ot">&lt;-</span></span>
+<span id="cb280-3"><a href="#cb280-3"></a>  datos_covid <span class="sc">|&gt;</span></span>
+<span id="cb280-4"><a href="#cb280-4"></a>  <span class="co"># Filtrado por Madrid y fecha</span></span>
+<span id="cb280-5"><a href="#cb280-5"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"M"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb280-6"><a href="#cb280-6"></a>  <span class="co"># Selección de columnas</span></span>
+<span id="cb280-7"><a href="#cb280-7"></a>  <span class="fu">select</span>(provincia_iso<span class="sc">:</span>fecha, num_casos) <span class="sc">|&gt;</span> </span>
+<span id="cb280-8"><a href="#cb280-8"></a>  <span class="co"># Resumen de casos diarios por fecha y sexo</span></span>
+<span id="cb280-9"><a href="#cb280-9"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div>
@@ -5042,8 +5858,8 @@ Coefficients:
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb212"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb212-1"><a href="#cb212-1"></a><span class="co"># Exportamos datos</span></span>
-<span id="cb212-2"><a href="#cb212-2"></a><span class="fu">write_csv</span>(datos_madrid, <span class="at">file =</span> <span class="st">"./exportado/datos_madrid.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb281"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb281-1"><a href="#cb281-1"></a><span class="co"># Exportamos datos</span></span>
+<span id="cb281-2"><a href="#cb281-2"></a><span class="fu">write_csv</span>(datos_madrid, <span class="at">file =</span> <span class="st">"./exportado/datos_madrid.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="fragment">
@@ -5055,14 +5871,14 @@ Coefficients:
 <div class="cell">
 <details>
 <summary>Código</summary>
-<div class="sourceCode cell-code" id="cb213"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb213-1"><a href="#cb213-1"></a><span class="co"># Gráfica</span></span>
-<span id="cb213-2"><a href="#cb213-2"></a><span class="fu">ggplot</span>(datos_madrid) <span class="sc">+</span></span>
-<span id="cb213-3"><a href="#cb213-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> fecha, <span class="at">y =</span> num_casos, <span class="at">color =</span> sexo),</span>
-<span id="cb213-4"><a href="#cb213-4"></a>            <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">linewidth =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb213-5"><a href="#cb213-5"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#85519D"</span>, <span class="st">"#278862"</span>)) <span class="sc">+</span></span>
-<span id="cb213-6"><a href="#cb213-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>sexo) <span class="sc">+</span></span>
-<span id="cb213-7"><a href="#cb213-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb213-8"><a href="#cb213-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb282"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb282-1"><a href="#cb282-1"></a><span class="co"># Gráfica</span></span>
+<span id="cb282-2"><a href="#cb282-2"></a><span class="fu">ggplot</span>(datos_madrid) <span class="sc">+</span></span>
+<span id="cb282-3"><a href="#cb282-3"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> fecha, <span class="at">y =</span> num_casos, <span class="at">color =</span> sexo),</span>
+<span id="cb282-4"><a href="#cb282-4"></a>            <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">linewidth =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb282-5"><a href="#cb282-5"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#85519D"</span>, <span class="st">"#278862"</span>)) <span class="sc">+</span></span>
+<span id="cb282-6"><a href="#cb282-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>sexo) <span class="sc">+</span></span>
+<span id="cb282-7"><a href="#cb282-7"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb282-8"><a href="#cb282-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </div><div class="column" style="width:60%;">
@@ -5075,8 +5891,8 @@ Coefficients:
 <li>Tras ello <span class="hl-yellow"><strong>exportamos la gráfica</strong></span></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb214"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb214-1"><a href="#cb214-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"./exportado/ggplot.png"</span>, <span class="at">plot =</span> <span class="fu">last_plot</span>(),</span>
-<span id="cb214-2"><a href="#cb214-2"></a>       <span class="at">bg =</span> <span class="st">"white"</span>, <span class="at">width =</span> <span class="dv">12</span>, <span class="at">height =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb283"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb283-1"><a href="#cb283-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"./exportado/ggplot.png"</span>, <span class="at">plot =</span> <span class="fu">last_plot</span>(),</span>
+<span id="cb283-2"><a href="#cb283-2"></a>       <span class="at">bg =</span> <span class="st">"white"</span>, <span class="at">width =</span> <span class="dv">12</span>, <span class="at">height =</span> <span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -5120,11 +5936,11 @@ Coefficients:
 <h2>Repo de código</h2>
 <p>Vamos a realizar un <span class="hl-yellow"><strong>cambio en nuestro código</strong></span>: en tu código local (local –&gt; tu ordenador), en lugar de filtrar por Madrid haz el <span class="hl-yellow"><strong>filtro por Barcelona</strong></span>, guarda el código y sube en el repositorio el nuevo archivo (con el mismo nombre, Github hará la sobrescritura)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb215" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb215-1"><a href="#cb215-1"></a>datos_bcn <span class="ot">&lt;-</span></span>
-<span id="cb215-2"><a href="#cb215-2"></a>  datos_covid <span class="sc">|&gt;</span></span>
-<span id="cb215-3"><a href="#cb215-3"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"B"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb215-4"><a href="#cb215-4"></a>  <span class="fu">select</span>(fecha, sexo, grupo_edad, num_casos) <span class="sc">|&gt;</span> </span>
-<span id="cb215-5"><a href="#cb215-5"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb284" data-code-line-numbers="3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb284-1"><a href="#cb284-1"></a>datos_bcn <span class="ot">&lt;-</span></span>
+<span id="cb284-2"><a href="#cb284-2"></a>  datos_covid <span class="sc">|&gt;</span></span>
+<span id="cb284-3"><a href="#cb284-3"></a>  <span class="fu">filter</span>(provincia_iso <span class="sc">==</span> <span class="st">"B"</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">"2020-12-31"</span> <span class="sc">&amp;</span> sexo <span class="sc">!=</span> <span class="st">"NC"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb284-4"><a href="#cb284-4"></a>  <span class="fu">select</span>(fecha, sexo, grupo_edad, num_casos) <span class="sc">|&gt;</span> </span>
+<span id="cb284-5"><a href="#cb284-5"></a>  <span class="fu">summarise</span>(<span class="at">num_casos =</span> <span class="fu">sum</span>(num_casos), <span class="at">.by =</span> <span class="fu">c</span>(fecha, sexo))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="consulta-de-commits" class="slide level2">
@@ -5371,7 +6187,7 @@ Coefficients:
 <li><span class="hl-yellow"><strong>Añadir comentarios</strong></span> al que ha solicitado el <code>merge</code> por si queremos solicitar algún cambio <span class="hl-yellow"><strong>antes de ser aprobado</strong></span></li>
 </ul>
 </section>
-<section id="section-3" class="slide level2">
+<section id="section-2" class="slide level2">
 <h2><img data-src="img/menu-pr-2.png"></h2>
 </section>
 <section id="pull-request-4" class="slide level2">
