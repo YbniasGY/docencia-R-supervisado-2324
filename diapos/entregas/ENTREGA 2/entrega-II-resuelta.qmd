@@ -1,0 +1,429 @@
+---
+title: "Entrega II"
+author: "C. Tangana - DNI: 00000000-X"
+format:
+  html:
+    theme: [style.scss]
+    toc: true
+    toc-location: right
+    toc-title: Índice
+editor: visual
+embed-resources: true
+---
+
+## Instrucciones (leer antes de empezar)
+
+-   Modifica de la **cabecera** del documento `.qmd` tus datos personales (nombre y DNI). IMPORTANTE: no modifiques nada más de la cabecera.
+
+-   Asegúrate, **ANTES de seguir editando** el documento, que el archivo `.qmd` se renderiza correctamente y se genera el `.html` correspondiente en tu carpeta local de tu ordenador (pulsa el botón `Render` o guarda el documento con `Render on Save` activado).
+
+-   Los chunks (cajas de código) creados están o vacíos o incompletos, de ahí que la mayoría tengan la opción `#| eval: false`. Una vez que edites lo que consideres, debes ir cambiando cada chunck a `#| eval: true` (o quitarlo directamente) para que se ejecuten.
+
+-   Recuerda que puedes ejecutar chunk a chunk con el botón *play* o ejecutar todos los chunk hasta uno dado (con el botón a la izquierda del anterior).
+
+-   **IMPORTANTE**: solo se podrá subir un archivo `.html` al campus, no se evaluarán entregas sin el `.html` correctamente generado. **Recuerda**: el código es una herramienta, no el fin en esta asignatura. Se evaluará especialmente las interpretaciones y conclusiones que detalles. Un ejercicio con el código perfecto pero sin ningún tipo de razonamiento, interpretación o conclusión no superará el 4 sobre 10 de nota.
+
+### Paquetes necesarios
+
+Necesitaremos los siguientes paquetes (haz play en el chunk para que se carguen):
+
+```{r paquetes}
+#| message: false
+#| warning: false
+rm(list = ls()) # Borramos variables de environment
+
+# descomentar si es la primera vez (y requieren instalación)
+# install.packages("tidyverse")
+# install.packages("performance")
+# install.packages("olsrr")
+# install.packages("corrr")
+# install.packages("corrplot")
+# install.packages("skimr")
+library(tidyverse)
+library(rsample)
+library(performance)
+library(olsrr)
+library(corrr)
+library(corrplot)
+library(skimr)
+```
+
+## Caso práctico: análisis de datos de cáncer
+
+El archivo de datos a usar lo cargaremos desde el csv `cancer.csv`.
+
+```{r carga-datos}
+#| message: false
+#| warning: false
+#| 
+# no cambies código
+datos <- read_csv(file = "./cancer.csv")
+datos
+```
+
+Los datos representan **diferentes características socioeconómicas** de distintas regiones, extraídas de the American Community Survey (census.gov), clinicaltrials.gov, y cancer.gov.
+
+**¿Nuestro objetivo?** Ser capaces de predecir de manera lineal y MULTIVARIANTE la variable `deathRate`, nuestra variable objetivo, que representa la mortalidad media de cancer, por cada 100 000 habitantes. El resto de variables son:
+
+-   `medianIncome`: mediana de los ingresos de la región.
+-   `popEst2015`: población de la región
+-   `povertyPercent`: porcentaje de población en situación de pobreza.
+-   `studyPerCap`: ensayos clínicos relacionados por el cáncer realizados por cada 100 000 habitantes.
+-   `MedianAge`: edad mediana.
+-   `region`: nombre de la región.
+-   `AvgHouseholdSize`: tamaño medio de los hogares.
+-   `PercentMarried`: porcentaje de habitantes casados.
+-   `PctHS25_Over`: porcentaje de residentes por encima de los 25 años con (máximo) título de bachillerato.
+-   `PctUnemployed16_Over`: porcentaje de residentes de más de 16 años en paro.
+-   `PctPrivateCoverage`: porcentaje de residentes con seguro de salud privado.
+-   `BirthRate`: tasa de natalidad.
+
+**IMPORTANTE**: siempre que puedas, relaciona los valores numéricos de la salida de `R` con su fórmula.
+
+### Ejercicio 1 (1.25 puntos)
+
+> Chequea que no hay problemas de rango/codificación: en caso de que alguna variable tenga dichos problemas, debes sustituir los valores fueran del rango razonable por su media o mediana (sin esos datos fuera del rango), justificando por qué usas la media o por qué usas la mediana, ejecutando el código que consideres (si te atascas, sigue haciendo con el dataset original)
+
+Como se vio en la entrega anterior, por los rangos aportados, el único problema de rango/codificación lo tenemos en `MedianAge`, con valores por encima de un rango razonable.
+
+```{r}
+datos |> skim()
+```
+
+```{r}
+ggplot(datos) + 
+  geom_histogram(aes(x = MedianAge)) +
+  theme_minimal()
+```
+
+En el histograma vemos que hay un corte muy claro, por lo que estableceremos (por ejemplo) un máximo de 120 años: por encima de dicha cantidad, se considerará una **observación mal codificada**. En lugar de eliminarlas lo que vamos a hacer es sustituirla por una medida de centralidad (imputación), que podemos hacer en base a dos argumentos:
+
+-   Si usamos todos los datos, el histograma anterior, tenemos una distribución muy asimétrica, por lo que deberíamos usar la mediana (que se ve menos afectada por esos valores mal codificados, ya que es más robusta)
+
+```{r}
+ggplot(datos) + 
+  geom_density(aes(x = MedianAge)) +
+  theme_minimal()
+
+ggplot(datos) + 
+  geom_boxplot(aes(x = MedianAge)) +
+  theme_minimal()
+```
+
+-   En esta solución usaremos la media PERO sin esos datos (ya que en realidad...deberían ser `NA` ya que están mal recopilados).
+
+```{r}
+ggplot(datos |> filter(MedianAge < 120)) + 
+  geom_histogram(aes(x = MedianAge)) +
+  theme_minimal()
+
+ggplot(datos |> filter(MedianAge < 120)) + 
+  geom_density(aes(x = MedianAge)) +
+  theme_minimal()
+
+ggplot(datos |> filter(MedianAge < 120)) + 
+  geom_boxplot(aes(x = MedianAge)) +
+  theme_minimal()
+```
+
+Vemos en los gráficos que es bastante simétrica y, de hecho, su distribución se asemeja mucho a una normal, por lo que la media (sin esos datos) si es representativa de la población, y lo que haremos será sustituir los valores por encima del límite permitido por dicha media
+
+```{r}
+media <-
+  datos |>
+  filter(MedianAge < 120) |>
+  summarise(mean = mean(MedianAge)) |>
+  pull(mean)
+
+# Escribe el código que consideres
+datos_preproc <-
+  datos |>
+  mutate(MedianAge = if_else(MedianAge < 120, MedianAge,
+                             media))
+```
+
+### Ejercicio 2 (0.75 puntos)
+
+> En caso de encontrar alguna variable cualitativa, procesa los datos como consideras para incluir su información de manera que pueda ser usada en la futura regresión. Recuerda: si tenemos una variable cualitativa que toma k valores, debemos crear k-1 nuevas variables numéricas (de un tipo muy concreto) en su lugar.
+
+Sí tenemos una variable cualitativa que toma 4 categorías (cualitativa nominal)
+
+```{r}
+datos_preproc |> count(region)
+```
+
+Para poder incluirla en la regresión la recodificaremos con la técnica conocida como **one-hot encoding**: creamos nuevas variables binarias (si tenemos $k=4$ modalidades, crearemos $k-1 = 3$ variables) que nos diga si el registro toma dicho valor o no (hacemos una menos para evitar colinealidad)
+
+```{r}
+# Escribe el código que consideres
+datos_preproc2 <-
+  datos_preproc |> 
+  mutate(region_Northeast = region == "Northeast",
+         region_south = region == "South",
+         region_West = region == "West") |> 
+  select(-region)
+```
+
+Esto lo podemos hacer de manera automática con `dummy_cols` del paquete `{fastDummies}`
+
+```{r}
+# Escribe el código que consideres
+datos_preproc2 <-
+  datos_preproc |>
+  fastDummies::dummy_cols(select_columns = "region",
+                          remove_first_dummy = TRUE) |> 
+  select(-region)
+```
+
+### Ejercicio 3 (1.5 puntos)
+
+> Ejecuta el código que consideres para realizar una selección inicial de variables de manera que se mitiguen los efectos adversos de la colinealidad. Comenta todo lo que consideres sobre. Tras ello separa las observaciones en dos datasets distintos: un dataset train y un segundo dataset test. Para ello realiza un muestreo aleatorio de manera que train contenga el 80% de los datos y test el 20% restante. IMPORTANTE: no cambies la semilla.
+
+Vamos a realizar un análisis de correlaciones previo
+
+```{r}
+datos_preproc2 |>
+  corrr::correlate()
+datos_preproc2 |>
+  cor() |> 
+  corrplot::corrplot(method = "color")
+```
+
+Concretamente vamos a fijarnos en las correlaciones vs la variable objetivo
+
+```{r}
+datos_preproc2 |>
+  corrr::correlate() |> 
+  corrr::focus("deathRate") |> 
+  filter(abs(deathRate) < 0.05)
+```
+
+Como vemos tenemos **3 variables** con una correlación con la variable objetivo por debajo de 0.05 en valor absoluto (prácticamente incorreladas): `studyPerCap`, `MedianAge` y `AvgHouseholdSize`. Podríamos no haberlo hecho (ya que no se pedía el enunciado pero si lo has hecho, es lo correcto) o incluso ser más exigente y subir el umbral de correlación. Vamos a quitar de momento solo esas 3 que presentan una aparente incorrelación lineal (!= independencia) con la objetivo
+
+```{r}
+datos_cor <-
+  datos_preproc2 |>
+  select(-studyPerCap, -MedianAge, -AvgHouseholdSize)
+datos_cor |> 
+  cor() |> 
+  corrplot::corrplot(method = "color")
+```
+
+Tras ello vemos que hay predictoras altamente correlacionadas entre sí:
+
+-   `medIncome` con `povertyPercent` con \$-0.789 \$ (lógico: más ingresos, menos pobre)
+
+-   `PctPrivateCoverage` y `medIncome` con $0.724$
+
+-   `PctPrivateCoverage` y `povertyPercent` con $-0.822$
+
+Para decidir cuál quitamos vamos a basarnos en dos criterios: aquella cuya relación lineal con el conjunto de las demás sea más alta y que tenga menos dependencia con la variable objetivo (tienen más o menos similar entre $0.43$ y $0.38$ en valor absoluto)
+
+Este análisis de correlaciones solo nos permite ver relaciones 2 a 2 entre las variables, pero no dependencias lineales más complejas, y para eso vamos a realizar un análisis de multicolinealidad con `check_collinearity()`
+
+```{r}
+ajuste_saturado <- lm(data = datos_cor, formula = deathRate ~ .)
+performance::check_collinearity(ajuste_saturado)
+```
+
+Parece que de lsa 3 la que "colisiona" más con el resto de predictoras es `povertyPercent` por lo que procederemos retirarla
+
+```{r}
+datos_cor <-
+  datos_cor |> 
+  select(-povertyPercent)
+ajuste_saturado <- lm(data = datos_cor, formula = deathRate ~ .)
+performance::check_collinearity(ajuste_saturado)
+```
+
+Por último vamos a realizar la partición pedida
+
+```{r}
+# Escribe el código que consideres
+set.seed(12345)
+datos_split <- initial_split(datos_cor, prop = 0.8)
+train <- training(datos_split)
+test <- testing(datos_split)
+```
+
+### Ejercicio 4 (1 punto)
+
+> No usaremos el dataset test hasta el final para evaluar las predicciones (con un dataset que el modelo no conoce). Con el dataset train ejecuta el ajuste de regresión lineal multivariante saturado (habiendo hecho lo pedido en los ejercicios anteriores) y comenta de manera MUY RESUMIDA la salida (SOLO lo que puedas interpretar hasta ahora, y al grano, que se te acaba el tiempo)
+
+```{r}
+# Escribe el código que consideres
+ajuste_saturado <- lm(data = train, formula = deathRate ~ .)
+ajuste_saturado |> summary()
+```
+
+Algunos comentarios que se podrían hacer:
+
+-   El $R^2$ es 0.3736 y el ajustado $0.371$, lo que nos da un indicio de que tampoco tenemos un sobreajuste muy grande (tras quitar lo que hemos quitado ya, claro)
+
+-   Ese $R^2$ prácticamente duplica el univariante de la primera entrega
+
+-   A mayores ingresos, disminuye la tasa de mortalidad: por cada 10000\$ que suba los ingresos medianos, la tasa de mortalidad baja 1.69 puntos.
+
+-   La educación y empleo importa tanto que por cada % que se incrementa en `PctHS25_Over` (es decir, más gente cuyo máximo título es solo bachillerato) o por cada % que se incrementa `PctUnemployed16_Over`, la tasa de mortalidad sube 1.2 y 1.66 puntos respectivamente (menos formación o menos empleo --\> peores condiciones de vida --\> más mortalidad)
+
+-   El código postal importa: simplemente por el hecho de estar en el Sur, tu tasa de mortalidad sube ¡7 puntos!
+
+NO SE PUEDE COMENTAR LOS P-VALORES YA QUE NO SABEMOS SI LA DIAGNOSIS ES CORRECTA
+
+### Ejercicio 5 (1.75 puntos)
+
+> Realiza una selección de modelos en base a los criterios BIC y AIC. Recuerda que para evitar incompatibilidad con otros paquetes, no debes hAcer library(MASS) sino MASS::... Comenta e interpreta todo lo que sepas de las salidas generadas. ¿Cuál penaliza más? ¿Por qué? ¿Qué ventajas tiene la selección de BIC? Interpreta los coeficientes de ambos modelos y comenta las diferencias (en caso de que existiesen)
+
+```{r}
+# Escribe el código que consideres
+ajuste_AIC <- MASS::stepAIC(ajuste_saturado, direction = "both",
+                            k = 2)
+ajuste_AIC <-
+  lm(data = train,
+     formula = 
+       deathRate ~ medIncome + PercentMarried + PctHS25_Over +
+       PctUnemployed16_Over + BirthRate + region_Northeast +
+       region_South + region_West)
+ajuste_AIC |> summary()
+ajuste_BIC <- MASS::stepAIC(ajuste_saturado, direction = "both",
+                            k = log(nrow(train)))
+ajuste_BIC <-
+  lm(data = train,
+     formula = 
+       deathRate ~ medIncome + PercentMarried + PctHS25_Over + PctUnemployed16_Over + region_South + region_West)
+ajuste_BIC |> summary()
+
+performance::compare_performance(ajuste_saturado, ajuste_AIC, ajuste_BIC)
+```
+
+-   Ajuste AIC: ha eliminado las variables `popEst2015` y `PctPrivateCoverage`, empeorando ligeramente $R^2$ pero incrementando ligeramente el $R^2$ (menos variables pero más necesarias)
+
+-   Ajuste BIC: ha eliminado además las variables `BirthRate` y `region_Northeast`, empeorando ligeramente $R^2$
+
+La diferencia de ambos es que el segundo es más "agresivo" penalizando. ¿La ventaja? Que asintóticamente (si $n$ fuese incrementándose) tenemos garantizado que el BIC acaba eligiendo el modelo real que subyace en los datos (consistencia)
+
+Al final tenemos 3 modelos con prácticamente la misma cantidad de información explicada, pero uno tiene 10 variables, otro 8 y otro 6 variables (con casi la misma calidad, pero con casi la mitad de predictoras) --\> nos qedamos con el ajuste BIC para la diagnosis.
+
+### Ejercicio 6 (1.5 puntos)
+
+> Compara la calidad de los 3 modelos (saturado, BIC y AIC) en train. Quédate con uno (justifica) y comprueba si se cumplen las hipotesis necesarias (fase de diagnosis SOLO en ese elegido). ¿Se cumplen las hipótesis? Argumenta porqué, más allá de lo que valga luego la bondad de ajuste, es importante que se cumplan.
+
+```{r}
+# Escribe el código que consideres
+performance::check_model(ajuste_BIC)
+```
+
+En un primer vistazo visual vemos que es bastante probable que muchas hipótesis se cumplan o estén derca de complirse (teniendo en cuenta que no hemos tratado los outliers que pueden estar influenciando)
+
+#### Linealidad
+
+```{r}
+ggplot(tibble("fitted" = ajuste_BIC$fitted.values,
+              "residuals" = ajuste_BIC$residuals),
+       aes(x = fitted, y = residuals)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal()
+```
+
+A la izquierda y arriba se observan algunas observaciones que probablemente sean outliers peor el resto si parece presentar un patrón independiente entre residuos y valores ajustados, no viéndose ninguna tendencia o modelo posible a ajustar entre ellos, así que podríamos dar por válida la linealidad
+
+#### Homocedasticidad
+
+```{r}
+performance::check_heteroscedasticity(ajuste_BIC)
+ggplot(tibble("id" = 1:length(ajuste_BIC$residuals),
+              "residuals" = ajuste_BIC$residuals),
+       aes(x = id, y = residuals)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal()
+```
+
+A pesar de que el p-valor nos dice que se rechaz ala homocedasticidad, los errores no presentan ningún patrón ni aumentan su varianza, estando prácticamente todos dentro de una banda constante (salvo unos que probablemente sean outliers y deberíamos analizarlos de manera particular)
+
+#### Normalidad
+
+```{r}
+performance::check_normality(ajuste_BIC)
+ggplot(tibble("residuals" = ajuste_BIC$residuals)) +
+  geom_qq(aes(sample = residuals)) +
+  geom_qq_line(aes(sample = residuals)) +
+  theme_minimal()
+```
+
+Normalidad no parece cumplirse. Recuerda que aquí influye:
+
+-   tamaño muestral
+-   outliers que hace que en los extremos de los quantiles la distribució se aleje
+
+```{r}
+ggplot(tibble("residuals" = ajuste_BIC$residuals,
+              "normal" = rnorm(n = length(ajuste_BIC$residuals), mean = 0,
+                               sd = sd(ajuste_BIC$residuals)))) +
+  geom_density(aes(x = residuals), color = "blue") +
+  geom_density(aes(x = normal), color = "red") +
+  theme_minimal()
+```
+
+Vemos como la distribución de los residuos es algo más apuntada que lo que correspondería a una distribución normal (probablemente por los outliers que contienen nuestros datos)
+
+#### Correlación
+
+```{r}
+performance::check_autocorrelation(ajuste_BIC)
+acf(ajuste_BIC$residuals)
+```
+
+Vemos tanto numérica como visualmente uqe los residuos están incorrelados (con `acf()` debemos obtener lo contrario a lo que tendríamos al inicio de un análisis de series temporales: los residuos retardados sin correlacion entre ellos)
+
+#### Predicciones simulación
+
+```{r}
+performance::check_predictions(ajuste_BIC)
+```
+
+Las simulaciones (bajo la hipotesis de que el modelo ajustado fuese el modelo real subyacente) están ligeramente por debajo del dato observado, probablemente producido por ese apuntamiento que se observaba en los residuales estimados.
+
+### Ejercicio 7 (0.75 puntos)
+
+> Asume que se cumplen las hipótesis (en caso de que no se cumpliesen) e interpreta todo lo que sepas sobre la segunda tabla de la salida de la regresión (la de inferencia de los parámetros). Elimina variables si su efecto no fuese significativo.
+
+```{r}
+ajuste_BIC |> summary()
+```
+Asumiendo que las hipótesis son ciertas, interpretando los p-valores, vemos todas las covariables presentan un efecto lineal significativo así como a nivel global según el ANOVA realizado
+
+
+```{r}
+ajuste_BIC |> anova()
+```
+
+Así lo confirmamos con el anova secuencial: en cada paso, se calcula la diferencia de SSR entre el modelo con las variables anteriroes y el modelo con todas más la variable correspondiente
+
+
+### Ejercicio 8 (1.5 puntos)
+
+> Por último, utiliza el dataset test para, aplicando los 3 modelos entrenados (saturado, AIC y BIC), predecir las observaciones de test (con cada uno de los modelos. Con las observaciones de test construye un nuevo dataset de 3 columnas: la variable objetivo, la predicción y el modelo usado (saturado, BIC, AIC). Calcula el $R^2$ en el dataset de test para cada modelo. ¿Cuál funciona mejor en test? ¿Qué % de información explica cada modelo? ¿Cuánto vale su varianza residual?
+
+```{r}
+# Escribe el código que consideres
+pred <-
+  tibble("modelo" = "saturado",
+         "real" = test$deathRate,
+         "pred" = predict(ajuste_saturado, test)) |> 
+  bind_rows(tibble("modelo" = "AIC",
+                   "real" = test$deathRate,
+         "pred" = predict(ajuste_AIC, test))) |> 
+  bind_rows(tibble("modelo" = "BIC",
+                   "real" = test$deathRate,
+         "pred" = predict(ajuste_BIC, test)))
+pred |> 
+  summarise(SSR = sum((real - pred)^2),
+            SST = sum((real - mean(real))^2),
+            var_res = SSR / nrow(train),
+            R2 = 1 - SSR/SST, .by = modelo)
+            
+```
+
+Vemos como el modelo con un $R^2$ más bajo es el ajuste BIC, pero con muy poca diferencia (algo que ya intuíamos ya que sucedía así en train). En los 3 casos los modelos explican aprox el 30% de información contenida en la variable objetivo
