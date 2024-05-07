@@ -5876,14 +5876,12 @@ Para ello **filtramos los individuos de la clase mayoritaria**, **seleccionamos 
 ```{r}
 set.seed(12345)
 downsampling_data <-
-  train |>
-  filter(man == 0) |> 
+  train |> filter(man == 0) |> 
   slice_sample(prop = 0.33, replace = FALSE) |> 
   bind_rows(train |> filter(man == 1))
 
 downsampling_data |>
-  count(man) |> 
-  mutate(porc = 100*n/sum(n))
+  count(man) |> mutate(porc = 100*n/sum(n))
 ```
 
 
@@ -5999,17 +5997,17 @@ conf_mat_train_over |> summary(event_level = "second")
 
 ---
 
-## Otros métodos
-
-imbalance
-
----
-
-## Predicción en test
-
----
-
 ## Caso real: challenger
+
+Práctica con el dataset `challenger.txt` subido al campus. El objetivo será obtener la probabilidad de accidente en distintos lanzamientos espaciales, donde `fail.field` es **nuestra variable objetivo (si hubo o no accidente debido a un fallo en las juntas)** en función de si hubo o no fallo en los inyectores, la temperatura exterior, la presión de las juntas y la presión de los inyectores
+
+```{r}
+datos <-
+  read_delim(file = "./datos/challenger.txt")
+datos <- 
+  datos |> select(-contains("nfails"))
+datos
+```
 
 ---
 
@@ -6017,6 +6015,6 @@ imbalance
 
 ![](img/me.jpeg)
 
-[**Espero que hayáis aprendido algo :)**]{style="color:#444442;"}
+[**Espero que hayáis aprendido algo <3**]{style="color:#444442;"}
 
 

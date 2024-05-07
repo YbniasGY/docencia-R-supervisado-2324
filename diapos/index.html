@@ -2723,7 +2723,7 @@ Anderson-Darling          0.2422         0.7457
 <div class="cell">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1"></a><span class="fu">check_autocorrelation</span>(ajuste_AGST)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.576).</code></pre>
+<pre><code>OK: Residuals appear to be independent and not autocorrelated (p = 0.598).</code></pre>
 </div>
 </div>
 <p>Por último, <code>check_autocorrelation()</code> comprueba como efectivamente los <span class="hl-yellow"><strong>residuales/errores son independientes</strong></span>, haciendo un test de autocorrelación (nos tiene que salir lo contrario a una serie temporal, que el error i no depende del i-1).</p>
@@ -3352,9 +3352,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 
 Name          | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 ------------------------------------------------------------------------------------------------------------
-ajuste_lineal |    lm | 3650.1 (0.961) | 3650.2 (0.964) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
-ajuste_6pred  |    lm | 3656.6 (0.039) | 3656.7 (0.036) | 3695.8 (&lt;.001) | 0.816 |     0.815 | 1.494 | 1.499
-ajuste_23pred |    lm | 3671.8 (&lt;.001) | 3673.1 (&lt;.001) | 3794.5 (&lt;.001) | 0.819 |     0.815 | 1.480 | 1.498</code></pre>
+ajuste_lineal |    lm | 3650.1 (0.906) | 3650.2 (0.912) | 3664.9 (&gt;.999) | 0.815 |     0.815 | 1.496 | 1.498
+ajuste_6pred  |    lm | 3654.7 (0.093) | 3654.8 (0.088) | 3693.9 (&lt;.001) | 0.816 |     0.815 | 1.492 | 1.498
+ajuste_23pred |    lm | 3663.5 (0.001) | 3664.8 (&lt;.001) | 3786.2 (&lt;.001) | 0.821 |     0.816 | 1.474 | 1.492</code></pre>
 </div>
 </div>
 <p>Con <code>compare_performance()</code> podemos comparar métricas de modelos.</p>
@@ -3399,12 +3399,12 @@ ajuste_23pred |    lm | 3671.8 (&lt;.001) | 3673.1 (&lt;.001) | 3794.5 (&lt;.001
 
 Name     | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
 -------------------------------------------------------------------------------------------------------
-ajuste_1 |    lm |   98.1 (&gt;.999) |   98.1 (&gt;.999) |  112.8 (&gt;.999) | 0.997 |     0.997 | 0.253 | 0.254
-ajuste_2 |    lm | 2891.7 (&lt;.001) | 2891.7 (&lt;.001) | 2906.4 (&lt;.001) | 0.956 |     0.956 | 1.024 | 1.025
-ajuste_3 |    lm | 3585.0 (&lt;.001) | 3585.0 (&lt;.001) | 3599.7 (&lt;.001) | 0.914 |     0.914 | 1.449 | 1.450
-ajuste_4 |    lm | 4253.2 (&lt;.001) | 4253.2 (&lt;.001) | 4267.9 (&lt;.001) | 0.849 |     0.849 | 2.023 | 2.025
-ajuste_5 |    lm | 5618.2 (&lt;.001) | 5618.2 (&lt;.001) | 5632.9 (&lt;.001) | 0.589 |     0.589 | 4.003 | 4.007
-ajuste_6 |    lm | 7013.1 (&lt;.001) | 7013.2 (&lt;.001) | 7027.9 (&lt;.001) | 0.253 |     0.253 | 8.042 | 8.050</code></pre>
+ajuste_1 |    lm |  123.3 (&gt;.999) |  123.3 (&gt;.999) |  138.0 (&gt;.999) | 0.997 |     0.997 | 0.257 | 0.257
+ajuste_2 |    lm | 2868.3 (&lt;.001) | 2868.3 (&lt;.001) | 2883.0 (&lt;.001) | 0.955 |     0.955 | 1.012 | 1.013
+ajuste_3 |    lm | 3649.1 (&lt;.001) | 3649.1 (&lt;.001) | 3663.8 (&lt;.001) | 0.904 |     0.904 | 1.496 | 1.497
+ajuste_4 |    lm | 4294.8 (&lt;.001) | 4294.8 (&lt;.001) | 4309.5 (&lt;.001) | 0.842 |     0.842 | 2.066 | 2.068
+ajuste_5 |    lm | 5620.5 (&lt;.001) | 5620.6 (&lt;.001) | 5635.3 (&lt;.001) | 0.571 |     0.570 | 4.008 | 4.012
+ajuste_6 |    lm | 7087.1 (&lt;.001) | 7087.1 (&lt;.001) | 7101.8 (&lt;.001) | 0.241 |     0.240 | 8.344 | 8.353</code></pre>
 </div>
 </div>
 </section>
@@ -3465,18 +3465,18 @@ lm(formula = y ~ x, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--2.4241 -0.4068  0.0690  0.3682  1.2941 
+-1.5514 -0.3966  0.0531  0.4308  1.4051 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.88609    0.09621    9.21   &lt;2e-16 ***
-x           -1.82937    0.08007  -22.85   &lt;2e-16 ***
+(Intercept)  0.93752    0.09947   9.425   &lt;2e-16 ***
+x           -1.89214    0.08279 -22.855   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.6078 on 198 degrees of freedom
-Multiple R-squared:  0.725, Adjusted R-squared:  0.7236 
-F-statistic: 521.9 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.6284 on 198 degrees of freedom
+Multiple R-squared:  0.7251,    Adjusted R-squared:  0.7237 
+F-statistic: 522.3 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -3504,18 +3504,18 @@ lm(formula = y ~ x, data = datos)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
--2.08056 -0.27510  0.04554  0.22732  2.72500 
+-1.88732 -0.31063  0.03454  0.20884  2.52492 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.89740    0.09316   9.633   &lt;2e-16 ***
-x           -1.88677    0.08038 -23.474   &lt;2e-16 ***
+(Intercept)  0.88798    0.08718   10.19   &lt;2e-16 ***
+x           -1.82274    0.07522  -24.23   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.6563 on 198 degrees of freedom
-Multiple R-squared:  0.7357,    Adjusted R-squared:  0.7343 
-F-statistic:   551 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.6141 on 198 degrees of freedom
+Multiple R-squared:  0.7478,    Adjusted R-squared:  0.7466 
+F-statistic: 587.2 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
@@ -4143,20 +4143,20 @@ lm(formula = y ~ ., data = datos)
 
 Residuals:
        Min         1Q     Median         3Q        Max 
--8.199e-15 -1.495e-15 -8.200e-16  1.110e-16  1.339e-13 
+-5.595e-15 -1.073e-15 -4.250e-16  1.710e-16  8.243e-14 
 
 Coefficients: (1 not defined because of singularities)
               Estimate Std. Error    t value Pr(&gt;|t|)    
-(Intercept)  5.000e-01  6.857e-16  7.292e+14   &lt;2e-16 ***
-x_1         -4.500e+00  3.392e-16 -1.327e+16   &lt;2e-16 ***
-x_2          5.000e-01  3.414e-16  1.465e+15   &lt;2e-16 ***
+(Intercept)  5.000e-01  4.264e-16  1.172e+15   &lt;2e-16 ***
+x_1         -4.500e+00  2.098e-16 -2.145e+16   &lt;2e-16 ***
+x_2          5.000e-01  2.169e-16  2.305e+15   &lt;2e-16 ***
 x_3                 NA         NA         NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 9.697e-15 on 197 degrees of freedom
+Residual standard error: 6.03e-15 on 197 degrees of freedom
 Multiple R-squared:      1, Adjusted R-squared:      1 
-F-statistic: 8.968e+31 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
+F-statistic: 2.342e+32 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
@@ -6343,14 +6343,12 @@ Prediction  0  1
 <div class="cell">
 <div class="sourceCode cell-code" id="cb335"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb335-1"><a href="#cb335-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
 <span id="cb335-2"><a href="#cb335-2"></a>downsampling_data <span class="ot">&lt;-</span></span>
-<span id="cb335-3"><a href="#cb335-3"></a>  train <span class="sc">|&gt;</span></span>
-<span id="cb335-4"><a href="#cb335-4"></a>  <span class="fu">filter</span>(man <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb335-5"><a href="#cb335-5"></a>  <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.33</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb335-6"><a href="#cb335-6"></a>  <span class="fu">bind_rows</span>(train <span class="sc">|&gt;</span> <span class="fu">filter</span>(man <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb335-7"><a href="#cb335-7"></a></span>
-<span id="cb335-8"><a href="#cb335-8"></a>downsampling_data <span class="sc">|&gt;</span></span>
-<span id="cb335-9"><a href="#cb335-9"></a>  <span class="fu">count</span>(man) <span class="sc">|&gt;</span> </span>
-<span id="cb335-10"><a href="#cb335-10"></a>  <span class="fu">mutate</span>(<span class="at">porc =</span> <span class="dv">100</span><span class="sc">*</span>n<span class="sc">/</span><span class="fu">sum</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb335-3"><a href="#cb335-3"></a>  train <span class="sc">|&gt;</span> <span class="fu">filter</span>(man <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb335-4"><a href="#cb335-4"></a>  <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.33</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb335-5"><a href="#cb335-5"></a>  <span class="fu">bind_rows</span>(train <span class="sc">|&gt;</span> <span class="fu">filter</span>(man <span class="sc">==</span> <span class="dv">1</span>))</span>
+<span id="cb335-6"><a href="#cb335-6"></a></span>
+<span id="cb335-7"><a href="#cb335-7"></a>downsampling_data <span class="sc">|&gt;</span></span>
+<span id="cb335-8"><a href="#cb335-8"></a>  <span class="fu">count</span>(man) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">porc =</span> <span class="dv">100</span><span class="sc">*</span>n<span class="sc">/</span><span class="fu">sum</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
     man     n  porc
@@ -6518,20 +6516,37 @@ Prediction  0  1
 </div>
 <p><span class="hl-red"><strong>Empeora el accuracy y mucho la especificidad</strong></span> pero <span class="hl-green"><strong>mejora la sensibilidad</strong></span></p>
 </section>
-<section id="otros-métodos" class="slide level2">
-<h2>Otros métodos</h2>
-<p>imbalance</p>
-</section>
-<section id="predicción-en-test" class="slide level2">
-<h2>Predicción en test</h2>
-</section>
 <section id="caso-real-challenger" class="slide level2">
 <h2>Caso real: challenger</h2>
+<p>Práctica con el dataset <code>challenger.txt</code> subido al campus. El objetivo será obtener la probabilidad de accidente en distintos lanzamientos espaciales, donde <code>fail.field</code> es <strong>nuestra variable objetivo (si hubo o no accidente debido a un fallo en las juntas)</strong> en función de si hubo o no fallo en los inyectores, la temperatura exterior, la presión de las juntas y la presión de los inyectores</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb349"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb349-1"><a href="#cb349-1"></a>datos <span class="ot">&lt;-</span></span>
+<span id="cb349-2"><a href="#cb349-2"></a>  <span class="fu">read_delim</span>(<span class="at">file =</span> <span class="st">"./datos/challenger.txt"</span>)</span>
+<span id="cb349-3"><a href="#cb349-3"></a>datos <span class="ot">&lt;-</span> </span>
+<span id="cb349-4"><a href="#cb349-4"></a>  datos <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">contains</span>(<span class="st">"nfails"</span>))</span>
+<span id="cb349-5"><a href="#cb349-5"></a>datos</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 23 × 7
+   flight date     fail.field fail.nozzle  temp pres.field pres.nozzle
+   &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+ 1 1      12/04/81          0           0  18.9         50          50
+ 2 2      12/11/81          1           0  21.1         50          50
+ 3 3      22/03/82          0           0  20.6         50          50
+ 4 5      11/11/82          0           0  20           50          50
+ 5 6      04/04/83          0           1  19.4         50          50
+ 6 7      18/06/83          0           0  22.2         50          50
+ 7 8      30/08/83          0           0  22.8        100          50
+ 8 9      28/11/83          0           0  21.1        100         100
+ 9 41-B   03/02/84          1           1  13.9        100         100
+10 41-C   06/04/84          1           1  17.2        200         200
+# ℹ 13 more rows</code></pre>
+</div>
+</div>
 </section>
 <section id="puesha-sido-un-placer" class="slide level2">
 <h2>Pues…ha sido un placer</h2>
 
-<img data-src="img/me.jpeg" class="r-stretch"><p><span style="color:#444442;"><strong>Espero que hayáis aprendido algo :)</strong></span></p>
+<img data-src="img/me.jpeg" class="r-stretch"><p><span style="color:#444442;"><strong>Espero que hayáis aprendido algo &lt;3</strong></span></p>
 <div class="footer footer-default">
 <p><a href="..."><strong>Javier Álvarez Liébana</strong></a> • Grado en Ciencia de Datos Aplicada (UCM) • curso 2023-2024</p>
 </div>

@@ -1,0 +1,333 @@
+---
+title: "Entrega I"
+author: "Eva López Corazón - DNI: 71313437-M"
+format:
+  html:
+    theme: [style.scss]
+    toc: true
+    toc-location: right
+    toc-title: Índice
+editor: visual
+embed-resources: true
+---
+
+## Instrucciones (leer antes de empezar)
+
+-   Modifica de la **cabecera** del documento `.qmd` tus datos personales (nombre y DNI). IMPORTANTE: no modifiques nada más de la cabecera.
+
+-   Asegúrate, **ANTES de seguir editando** el documento, que el archivo `.qmd` se renderiza correctamente y se genera el `.html` correspondiente en tu carpeta local de tu ordenador (pulsa el botón `Render` o guarda el documento con `Render on Save` activado).
+
+-   Los chunks (cajas de código) creados están o vacíos o incompletos, de ahí que la mayoría tengan la opción `#| eval: false`. Una vez que edites lo que consideres, debes ir cambiando cada chunck a `#| eval: true` (o quitarlo directamente) para que se ejecuten.
+
+-   Recuerda que puedes ejecutar chunk a chunk con el botón *play* o ejecutar todos los chunk hasta uno dado (con el botón a la izquierda del anterior).
+
+-   **IMPORTANTE**: solo se podrá subir un archivo `.html` al campus, no se evaluarán entregas sin el `.html` correctamente generado. **Recuerda**: el código es una herramienta, no el fin en esta asignatura. Se evaluará especialmente las interpretaciones y conclusiones que detalles. Un ejercicio con el código perfecto pero sin ningún tipo de razonamiento, interpretación o conclusión no superará el 4 sobre 10 de nota.
+
+### Paquetes necesarios
+
+Necesitaremos los siguientes paquetes (haz play en el chunk para que se carguen):
+
+```{r paquetes}
+#| message: false
+#| warning: false
+rm(list = ls()) # Borramos variables de environment
+
+# descomentar si es la primera vez (y requieren instalación)
+# install.packages("tidyverse")
+# install.packages("performance")
+# install.packages("olsrr")
+# install.packages("corrr")
+# install.packages("corrplot")
+# install.packages("skimr")
+library(tidyverse)
+library(rsample)
+library(performance)
+library(olsrr)
+library(corrr)
+library(corrplot)
+library(skimr)
+```
+
+## Caso práctico: análisis de datos de cáncer
+
+El archivo de datos a usar lo cargaremos desde el csv `cancer.csv`.
+
+```{r carga-datos}
+#| message: false
+#| warning: false
+#| 
+# no cambies código
+datos <- read_csv(file = "./cancer.csv")
+datos
+```
+
+Los datos representan **diferentes características socioeconómicas** de distintas regiones, extraídas de the American Community Survey (census.gov), clinicaltrials.gov, y cancer.gov.
+
+**¿Nuestro objetivo?** Ser capaces de predecir de manera lineal y MULTIVARIANTE la variable `deathRate`, nuestra variable objetivo, que representa la mortalidad media de cancer, por cada 100 000 habitantes. El resto de variables son:
+
+-   `medianIncome`: mediana de los ingresos de la región.
+-   `popEst2015`: población de la región
+-   `povertyPercent`: porcentaje de población en situación de pobreza.
+-   `studyPerCap`: ensayos clínicos relacionados por el cáncer realizados por cada 100 000 habitantes.
+-   `MedianAge`: edad mediana.
+-   `region`: nombre de la región.
+-   `AvgHouseholdSize`: tamaño medio de los hogares.
+-   `PercentMarried`: porcentaje de habitantes casados.
+-   `PctHS25_Over`: porcentaje de residentes por encima de los 25 años con (máximo) título de bachillerato.
+-   `PctUnemployed16_Over`: porcentaje de residentes de más de 16 años en paro.
+-   `PctPrivateCoverage`: porcentaje de residentes con seguro de salud privado.
+-   `BirthRate`: tasa de natalidad.
+
+**IMPORTANTE**: siempre que puedas, relaciona los valores numéricos de la salida de `R` con su fórmula.
+
+### Ejercicio 1 (1.25 puntos)
+
+> Chequea que no hay problemas de rango/codificación: en caso de que alguna variable tenga dichos problemas, debes sustituir los valores fueran del rango razonable por su media o mediana (sin esos datos fuera del rango), justificando por qué usas la media o por qué usas la mediana, ejecutando el código que consideres (si te atascas, sigue haciendo con el dataset original)
+
+```{r}
+#| eval: true 
+datos |> str()
+datos |> skim()
+
+#region variable cualitativa
+#variable edad media se pasa
+unique(datos$MedianAge) |> sort()
+datos_preproc <- 
+  datos |> 
+  mutate(MedianAge = ifelse(MedianAge > 130, median(MedianAge), MedianAge))
+unique(datos_preproc$MedianAge) |> sort()
+
+```
+
+\- \`deathRate\`: entre 0 e infinito.
+
+\- \`medianIncome\`: entre 0 e infinito.
+
+\- \`popEst2015\`: entre 0 y 8.000.000.000 (habitantes del mundo xd)
+
+\- \`povertyPercent\`: entre 0 y 100 (al ser porcentaje)
+
+-   \`studyPerCap\`: entre 0 e infinito
+
+-   \`MedianAge\`: entre 0 y 130 años (por poner un tope)
+
+-   \`AvgHouseholdSize\`: entre 0 e infinito (si existe alguna finca enorme)
+
+\- \`PercentMarried\`: entre 0 y 100 (al ser porcentaje)
+
+\- \`PctHS25_Over\`: entre 0 y 100 (al ser porcentaje)
+
+-   \`PctUnemployed16_Over\`: entre 0 y 100 (al ser porcentaje)
+
+\- \`ctPrivateCoverage\`: entre 0 y 100 (al ser porcentaje)
+
+\- \`BirthRate\`: entre 0 e infinito.
+
+a la hora de sustituir usa lo mediana porque es menos sensible a valores extremos como un 500 y pico que había
+
+### Ejercicio 2 (0.75 puntos)
+
+> En caso de encontrar alguna variable cualitativa, procesa los datos como consideras para incluir su información de manera que pueda ser usada en la futura regresión. Recuerda: si tenemos una variable cualitativa que toma k valores, debemos crear k-1 nuevas variables numéricas (de un tipo muy concreto) en su lugar.
+
+```{r}
+#| eval: true 
+
+# region cualitativa
+unique(datos$region)
+# hay 4 valores posibles: creamos 3 variables nuevas binarias
+datos_preproc <-
+  datos_preproc |> 
+  mutate('West' = ifelse(region == "West", 1, 0),
+            'South' = ifelse(region == "South", 1, 0),
+         'Midwest' = ifelse(region == "Midwest", 1, 0)) |> 
+  select(-region)
+```
+
+region es cualitativa con 4 posibles calores: creamso 3 nuevas variables y quitamos region
+
+### Ejercicio 3 (1.5 puntos)
+
+> Ejecuta el código que consideres para realizar una selección inicial de variables de manera que se mitiguen los efectos adversos de la colinealidad. Comenta todo lo que consideres sobre. Tras ello separa las observaciones en dos datasets distintos: un dataset train y un segundo dataset test. Para ello realiza un muestreo aleatorio de manera que train contenga el 80% de los datos y test el 20% restante. IMPORTANTE: no cambies la semilla.
+
+```{r}
+#| eval: true
+
+
+#correlacion con deathrate
+#datos_preproc |> correlate() |> focus(deathRate)
+#datos_preproc |> cor() |> corrplot(method='ellipse')
+#quitamos predictoras muy pococ correladas para simplificarnos los calculos
+datos_2<- datos_preproc |> dplyr::select(-c(studyPerCap,MedianAge,AvgHouseholdSize))
+
+
+set.seed(12345)
+split<-initial_split(datos_2, prop=0.8 )
+train<-training(split)
+test<-testing(split)
+```
+
+por tomar una medida quitamos las variables poco correladas con la objetivo deathrate, en este caso las menores al \|0.1\| aunque tambien podriamos considerar quitar popEst2015
+
+### Ejercicio 4 (1 punto)
+
+> No usaremos el dataset test hasta el final para evaluar las predicciones (con un dataset que el modelo no conoce). Con el dataset train ejecuta el ajuste de regresión lineal multivariante saturado (habiendo hecho lo pedido en los ejercicios anteriores) y comenta de manera MUY RESUMIDA la salida (SOLO lo que puedas interpretar hasta ahora, y al grano, que se te acaba el tiempo)
+
+```{r}
+#| eval: true
+
+
+ajuste_saturado<-lm(train, formula=deathRate~.)
+ajuste_saturado |> summary()
+
+# comprobamos colinealidad entre predictoras con VIF
+check_collinearity(ajuste_saturado)
+train2<- train|> select(-povertyPercent)
+
+ajuste_saturado2<-lm(train2, formula=deathRate~.)
+ajuste_saturado2 |> summary()
+check_collinearity(ajuste_saturado2)
+
+```
+
+consideramos un VIF mayor a 5 demasiado por lo que eliminamos povertyPercent, recomprobamos y parece que las variables predictoras no estan significativamente correladas entre si
+
+### Ejercicio 5 (1.75 puntos)
+
+> Realiza una selección de modelos en base a los criterios BIC y AIC. Recuerda que para evitar incompatibilidad con otros paquetes, no debes hAcer library(MASS) sino MASS::... Comenta e interpreta todo lo que sepas de las salidas generadas. ¿Cuál penaliza más? ¿Por qué? ¿Qué ventajas tiene la selección de BIC? Interpreta los coeficientes de ambos modelos y comenta las diferencias (en caso de que existiesen)
+
+```{r}
+#| eval: true
+
+
+#BIC
+MASS::stepAIC(ajuste_saturado2, direction='both',k=log(nrow(train2)))
+# salida ultima iteracion:lm(formula = deathRate ~ medIncome + PercentMarried + PctHS25_Over + PctUnemployed16_Over + West + South, data = train2)
+ajuste_BIC <-lm(formula = deathRate ~ medIncome + PercentMarried + PctHS25_Over + 
+    PctUnemployed16_Over + West + South, 
+    data = train2)
+ajuste_BIC |> summary()
+#AIC
+MASS::stepAIC(ajuste_saturado2, direction='both',k=2)
+# salida ultima iteracion:lm(formula = deathRate ~ medIncome + PercentMarried + PctHS25_Over + PctUnemployed16_Over + BirthRate + West + South + Midwest, data = train2)
+ajuste_AIC <- lm(formula = deathRate ~ medIncome + PercentMarried + PctHS25_Over + PctUnemployed16_Over + BirthRate + West + South + Midwest, 
+    data = train2)
+ajuste_AIC |> summary()
+
+```
+
+BIC:
+
+deathRate = 1.541e+02+-2.141e-04\*medIncome + -4.624e-01\*PercentMarried + 1.233e+00\*PctHS25_Over +1.694e+00\* PctUnemployed16_Over + -1.072e+01\*West + 8.706e+00\*South
+
+AIC:
+
+```         
+deathRate =           1.536e+02 +
+medIncome          *  -2.012e-04  +
+PercentMarried      * -4.713e-01  +
+PctHS25_Over         * 1.238e+00  +
+PctUnemployed16_Over *  1.705e+00  +
+BirthRate           * -4.851e-01  + 
+West                * -7.770e+00  +
+South               *  1.149e+01  +
+Midwest             *  3.564e+00  + 
+```
+
+Como vemos enl BIC penaliza más, quita dos predictoras mas que AIC, las predictoras birthrate y midwest , que no son buenas: cambia precision por senicillez.
+
+### Ejercicio 6 (1.5 puntos)
+
+> Compara la calidad de los 3 modelos (saturado, BIC y AIC) en train. Quédate con uno (justifica) y comprueba si se cumplen las hipotesis necesarias (fase de diagnosis SOLO en ese elegido). ¿Se cumplen las hipótesis? Argumenta porqué, más allá de lo que valga luego la bondad de ajuste, es importante que se cumplan.
+
+```{r}
+#| eval: true
+compare_performance(ajuste_saturado2, ajuste_AIC,ajuste_BIC)
+
+```
+
+Obviamente el AIC ofrece menor AIC y el BIC menor BIC y el saturado presenta el mayor AIC y BIC.
+
+Como es de esperar tambien el saturado ofrece mayor R2 (infromación eplicada) que AIC y BIC y AIC mayor R2 que BIC.
+
+El BIC penaliza más, con menos variables pero el AIC ofrece mas informacion (apenas) a mas parametros aunque estos sean malos y por lo general es preferible elegir un modelo mas simple, especialmente la diferencia de informacion explicada es tan pequeña (0.002 ó 0.001 en R2 adj).
+
+--\>BIC es el mejor en este caso (sencillo a similar precisión)
+
+Es necesario realizar inferencia estadística delos estimadores de los parámetros para comprobar que no solo funcionan en esta muestra, si no en otra y se pueda aplicar a toda la población
+
+1.  test linealidad -\> OK
+
+    ```{r}
+    check_model(ajuste_BIC)
+
+    chisq.test(ajuste_BIC$residuals,ajuste_BIC$fitted.values, simulate.p.value = TRUE, B=250)
+    ```
+
+2.  test homocedasticidad -\> NO
+
+    necesitamos que la **varianza del error sea finita y constante**, tal que no varíe según aumenta o disminuye la X.
+
+    ```{r}
+    performance::check_heteroscedasticity(ajuste_BIC)
+    ```
+
+3.  test normalidad de erroes -\> NO
+
+    ε∼N(0,σ2r)
+
+```{r}
+performance::check_normality(ajuste_BIC)
+
+```
+
+4.  independencia de errores -\> OK
+
+    ```{r}
+    performance::check_autocorrelation(ajuste_BIC)
+    ```
+
+### Ejercicio 7 (0.75 puntos)
+
+> Asume que se cumplen las hipótesis (en caso de que no se cumpliesen) e interpreta todo lo que sepas sobre la segunda tabla de la salida de la regresión (la de inferencia de los parámetros). Elimina variables si su efecto no fuese significativo.
+
+```{r}
+ajuste_saturado2 |> summary()
+```
+
+Ahora que se 'cumplen las hipótesis' podemos interpretar el p-valor, R2 y otros estadisticos
+
+### Ejercicio 8 (1.5 puntos)
+
+> Por último, utiliza el dataset test para, aplicando los 3 modelos entrenados (saturado, AIC y BIC), predecir las observaciones de test (con cada uno de los modelos. Con las observaciones de test construye un nuevo dataset de TRES columnas: la variable objetivo, la variable predictora, la predicción y el modelo usado (saturado, BIC, AIC). Calcula el $R^2$ en el dataset de test para cada modelo. ¿Cuál funciona mejor en test? ¿Qué % de información explica cada modelo? ¿Cuánto vale su varianza residual?
+
+```{r}
+#| eval: TRUE
+pred_test_S <-
+  tibble("objetivo" = test$deathRate,
+         "prediccion" = predict(ajuste_saturado2, newdata = test),
+         "split" = "test")
+pred_test_A <-
+  tibble("objetivo" = test$deathRate,
+         "prediccion" = predict(ajuste_AIC, newdata = test),
+         "split" = "test")
+pred_test_B <-
+  tibble("objetivo" = test$deathRate,
+         "prediccion" = predict(ajuste_BIC, newdata = test),
+         "split" = "test")
+
+pred_train_S <-
+  tibble("objetivo" = train$deathRate,
+         "prediccion" = ajuste_saturado2$fitted.values,
+         "split" = "train")
+pred_train_A <-
+  tibble("objetivo" = train$deathRate,
+         "prediccion" = ajuste_AIC$fitted.values,
+         "split" = "train")
+pred_train_B <-
+  tibble("objetivo" = train$deathRate,
+         "prediccion" = ajuste_BIC$fitted.values,
+         "split" = "train")
+prediccion <- bind_rows(pred_test_S, pred_test_A, pred_test_B, pred_train_S, pred_train_A, pred_train_B)
+
+prediccion
+```
